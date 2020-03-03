@@ -18,7 +18,7 @@ class User extends Component {
 
   callbackFunction(user) {
       this.setState({userHandle: user.userHandle})
-		}
+  }
 
   componentDidMount() {
     fetch('https://api-dev.couchsports.ca/users/current', {
