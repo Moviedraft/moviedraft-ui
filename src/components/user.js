@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import '../styles/user.css'
+import UserHandle from './userHandle.js'
 
 class User extends Component {
   constructor(props){
@@ -9,9 +10,14 @@ class User extends Component {
       lastName: '',
       picture: '',
       userHandle: '',
-      email: '',
-      imageLoaded: false
+      email: ''
     }
+
+    this.callbackFunction = this.callbackFunction.bind(this)
+  }
+
+  callbackFunction(user) {
+      this.setState({userHandle: user.userHandle})
   }
 
   componentDidMount() {
@@ -20,14 +26,14 @@ class User extends Component {
         Authorization: "Bearer " + localStorage.getItem("token")
       }
     })
-      .then(res => res.json())
-      .then((data) => {
-        this.setState({firstName: data.firstName})
-        this.setState({lastName: data.lastName})
-        this.setState({userHandle: data.userHandle})
-        this.setState({email: data.email})
-        this.setState({picture: data.picture})
-      })
+    .then(res => res.json())
+    .then((data) => {
+      this.setState({firstName: data.firstName})
+      this.setState({lastName: data.lastName})
+      this.setState({userHandle: data.userHandle})
+      this.setState({email: data.email})
+      this.setState({picture: data.picture})
+    })
   }
 
   render() {
@@ -41,7 +47,10 @@ class User extends Component {
             alt='Profile' />
           <ul id='userTitle'>
             <li>
-              <div id='userHandle'>{this.state.userHandle}</div>
+              <UserHandle
+                parentCallback={this.callbackFunction}
+                userHandle={this.state.userHandle}
+              />
             </li>
             <li>
               <div>{this.state.email}</div>
