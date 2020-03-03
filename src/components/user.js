@@ -33,7 +33,7 @@ class User extends Component {
       this.setState({userHandle: data.userHandle})
       this.setState({email: data.email})
       this.setState({picture: data.picture})
-      })
+    })
   }
 
   render() {
