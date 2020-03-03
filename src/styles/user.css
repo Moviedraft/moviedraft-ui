@@ -1,0 +1,39 @@
+#userPage {
+  margin: 5em 0;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0.5em;
+  right: 0.5em;
+}
+
+#profilePic {
+  overflow: auto;
+}
+
+#userTitle {
+  padding: 4em;
+  margin-left: 10em;
+}
+
+#userHandle {
+  font-size: 2em;
+  font-weight: bold;
+}
+
+#userInfo {
+  float: left;
+  display: inline-block;
+}
+
+img {
+  display: inline-block;
+  border-radius: 50%;
+  float: left;
+}
+
+ul {
+  padding: 0;
+  list-style: none;
+  height: 100%;
+}
