@@ -11,6 +11,7 @@ class UserHandle extends Component {
 
     this.sendData = this.sendData.bind(this)
     this.updateInputValue = this.updateInputValue.bind(this)
+    this.handleKeyPress = this.handleKeyPress.bind(this)
     this.onClick = this.onClick.bind(this)
     this.patchUserHandle = this.patchUserHandle.bind(this)
   }
@@ -21,6 +22,12 @@ class UserHandle extends Component {
 
   updateInputValue(evt) {
     this.setState({newUserHandle: evt.target.value});
+  }
+
+  handleKeyPress(evt) {
+    if (evt.key === 'Enter') {
+      this.patchUserHandle()
+    }
   }
 
   onClick() {
@@ -39,6 +46,7 @@ class UserHandle extends Component {
     .then(res => res.json())
     .then(async (data) => {
       await this.sendData(data)
+      this.setState({newUserHandle: ''})
       this.setState({editMode: !this.state.editMode})
     })
     .catch(error => console.log(error))
@@ -57,6 +65,7 @@ class UserHandle extends Component {
                   placeholder={this.props.userHandle}
                   value={this.state.newUserHandle}
                   onChange={evt => this.updateInputValue(evt)}
+                  onKeyPress={this.handleKeyPress}
                 />
               ) : (
                 <div className='userHandle'>{this.props.userHandle}</div>
