@@ -16,11 +16,6 @@
   margin-left: 10em;
 }
 
-#userHandle {
-  font-size: 2em;
-  font-weight: bold;
-}
-
 #userInfo {
   float: left;
   display: inline-block;
@@ -36,4 +31,9 @@ ul {
   padding: 0;
   list-style: none;
   height: 100%;
+}
+
+#editButton {
+  position: inherit;
+  float: left;
 }
