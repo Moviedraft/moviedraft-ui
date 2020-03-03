@@ -17,7 +17,6 @@ class Login extends Component {
     }
 
     const responseGoogle = (response) => {
-      console.log(response.tokenId)
       fetch('https://api-dev.couchsports.ca/login/validate?id_token=' + response.tokenId)
         .then(res => res.json())
         .then((data) => {
