@@ -1,0 +1,45 @@
+#userGames {
+  clear: both;
+  height: 25em;
+  width: 100%;
+  display: table;
+}
+
+#userGames div {
+  display: table-row;
+}
+
+#playingGameHeader {
+  width: 50%;
+  display: table-cell;
+  height: 2em;
+}
+
+#invitedGameHeader {
+  width: 100%;
+  display: table-cell;
+  height: 2em;
+}
+
+.userGamesData {
+  display: table-row;
+  border: 1px solid blue;
+}
+
+.playingGame {
+  display: table-cell !important;
+}
+
+#invitedGameRow {
+  display: table-row;
+}
+
+.invitedGame {
+  display: table-cell !important;
+}
+
+#joinButton {
+  display: inline-block !important;
+  position: inherit;
+  margin-left: 1em;
+}
