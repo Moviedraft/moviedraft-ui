@@ -57,7 +57,7 @@ class UserHandle extends Component {
       <table>
         <tbody>
           <tr>
-            <td id='userHandleCell'>
+            <td>
               {this.state.editMode ? (
                 <input
                   autoFocus
