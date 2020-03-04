@@ -44,7 +44,7 @@ class User extends Component {
       this.setState({email: data.email})
       this.setState({picture: data.picture})
 
-      data.games.map((game) => {
+      data.games.forEach((game) => {
         this.state.userGames.push(game)
       });
     })
