@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import '../styles/user.css'
 import UserHandle from './userHandle.js'
 import UserGames from './userGames.js'
+import CreateGame from './createGame.js'
 
 class User extends Component {
   constructor(props){
@@ -12,11 +13,18 @@ class User extends Component {
       picture: '',
       userHandle: '',
       email: '',
-      userGames: []
+      userGames: [],
+      modalOpen: false
     }
 
+    this.onClick = this.onClick.bind(this)
     this.userHandlecallbackFunction = this.userHandlecallbackFunction.bind(this)
     this.userGamesCallbackFunction = this.userGamesCallbackFunction.bind(this)
+    this.createGameCallbackFunction = this.createGameCallbackFunction.bind(this)
+  }
+
+  onClick() {
+    this.setState({modalOpen: true})
   }
 
   userHandlecallbackFunction(userHandle) {
@@ -28,6 +36,10 @@ class User extends Component {
     userGames = [...this.state.userGames]
     userGames[index].joined = true
     this.setState({userGames: userGames})
+  }
+
+  createGameCallbackFunction(modalOpen) {
+    this.setState({modalOpen: modalOpen})
   }
 
   componentDidMount() {
@@ -79,12 +91,21 @@ class User extends Component {
             <li>
               <span>Last Name: {this.state.lastName}</span>
             </li>
+            <li>
+              <button
+                id='createGameButton'
+                onClick={() => this.onClick()}>
+                <b>CREATE GAME</b>
+              </button>
+            </li>
           </ul>
         </div>
         <UserGames
           parentCallback={this.userGamesCallbackFunction}
-          userGames={this.state.userGames}
-        />
+          userGames={this.state.userGames} />
+        <CreateGame
+          parentCallback={this.createGameCallbackFunction}
+          modalOpen={this.state.modalOpen} />
       </div>
     )
   }
