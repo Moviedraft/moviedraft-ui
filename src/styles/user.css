@@ -37,3 +37,9 @@ ul {
   position: inherit;
   float: left;
 }
+
+#createGameButton {
+  display: inline-block !important;
+  position: inherit !important;
+  margin-top: 1em;
+}
