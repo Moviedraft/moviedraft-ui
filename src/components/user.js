@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import '../styles/user.css'
 import UserHandle from './userHandle.js'
+import UserGames from './userGames.js'
 
 class User extends Component {
   constructor(props){
@@ -10,14 +11,23 @@ class User extends Component {
       lastName: '',
       picture: '',
       userHandle: '',
-      email: ''
+      email: '',
+      userGames: []
     }
 
-    this.callbackFunction = this.callbackFunction.bind(this)
+    this.userHandlecallbackFunction = this.userHandlecallbackFunction.bind(this)
+    this.userGamesCallbackFunction = this.userGamesCallbackFunction.bind(this)
   }
 
-  callbackFunction(user) {
-      this.setState({userHandle: user.userHandle})
+  userHandlecallbackFunction(userHandle) {
+      this.setState({userHandle: userHandle})
+  }
+
+  userGamesCallbackFunction(gameId) {
+    const index = this.state.userGames.findIndex(userGame => userGame.game_id === gameId),
+    userGames = [...this.state.userGames]
+    userGames[index].joined = true
+    this.setState({userGames: userGames})
   }
 
   componentDidMount() {
@@ -33,6 +43,10 @@ class User extends Component {
       this.setState({userHandle: data.userHandle})
       this.setState({email: data.email})
       this.setState({picture: data.picture})
+
+      data.games.map((game) => {
+        this.state.userGames.push(game)
+      });
     })
   }
 
@@ -48,7 +62,7 @@ class User extends Component {
           <ul id='userTitle'>
             <li>
               <UserHandle
-                parentCallback={this.callbackFunction}
+                parentCallback={this.userHandlecallbackFunction}
                 userHandle={this.state.userHandle}
               />
             </li>
@@ -67,6 +81,10 @@ class User extends Component {
             </li>
           </ul>
         </div>
+        <UserGames
+          parentCallback={this.userGamesCallbackFunction}
+          userGames={this.state.userGames}
+        />
       </div>
     )
   }

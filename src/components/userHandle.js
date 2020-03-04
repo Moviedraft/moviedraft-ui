@@ -17,7 +17,7 @@ class UserHandle extends Component {
   }
 
   async sendData(user) {
-    this.props.parentCallback(user);
+    this.props.parentCallback(user.userHandle);
   }
 
   updateInputValue(evt) {
@@ -60,6 +60,7 @@ class UserHandle extends Component {
             <td>
               {this.state.editMode ? (
                 <input
+                  autoFocus
                   className='userHandle'
                   type="text"
                   placeholder={this.props.userHandle}
