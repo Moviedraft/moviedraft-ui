@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
+import moment from 'moment';
 import '../styles/createGameStep2.css'
+import Movies from './movies.js'
 
 class CreateGameStep2 extends Component {
     constructor(props){
@@ -15,7 +17,7 @@ class CreateGameStep2 extends Component {
 
     return(
       <div id='createGameStep2Div' className='form-group'>
-        <p>Choose the start and end date for your game.</p>
+        <p>Choose the start, end and auction dates for your game as well as the movies.</p>
         <div id='startDateDiv'>
           <label htmlFor='startDate'>
             Start Date:
@@ -26,12 +28,13 @@ class CreateGameStep2 extends Component {
             name='startDate'
             type='date'
             placeholder='YYYY-MM-DD'
+            min={moment().format('YYYY-MM-DD')}
             value={this.props.startDate}
             onChange={this.props.handleChange} />
         </div>
         <div id='endDateDiv'>
           <label htmlFor='endDate'>
-            End Date:
+            End Date (at least three months after start date):
           </label>
           <input
             className='form-control'
@@ -39,9 +42,32 @@ class CreateGameStep2 extends Component {
             name='endDate'
             type='date'
             placeholder='YYYY-MM-DD'
+            min={moment().add(3, 'M').format('YYYY-MM-DD')}
             value={this.props.endDate}
             onChange={this.props.handleChange} />
         </div>
+        <div id='auctionDateDiv'>
+          <label htmlFor='auctionDate'>
+            Auction Date (must be before start date):
+          </label>
+          <input
+            className='form-control'
+            id='auctionDate'
+            name='auctionDate'
+            type='datetime-local'
+            min={moment().format('YYYY-MM-DDTHH:mm')}
+            max={moment(this.props.startDate).format('YYYY-MM-DDTHH:mm')}
+            value={this.props.auctionDate}
+            defaultValue={moment().format('YYYY-MM-DDTHH:mm')}
+            onChange={this.props.handleChange} />
+        </div>
+        <label htmlFor='Movies'>
+          Select movies for your game:
+        </label>
+        <Movies
+          startDate={this.props.startDate}
+          endDate={this.props.endDate}
+          movies={this.props.movies} />
       </div>
     )
   }

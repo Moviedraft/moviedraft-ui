@@ -1,0 +1,11 @@
+#moviesWrapper {
+  height: max-content;
+  width: max-content;
+  overflow-x: auto;
+  overflow-y: auto;
+}
+
+.movie {
+  max-height: inherit;
+  max-width: inherit;
+}
