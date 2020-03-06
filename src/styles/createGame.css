@@ -3,11 +3,14 @@
   margin-left: auto;
   margin-right: auto;
   margin-top: 5em;
-  width: 50%;
-  height: 50%;
   background-color: white;
   border: 2px solid black;
   outline: none;
+  width: max-content;
+  max-height: 50em;
+  overflow-y: auto;
+  overflow-x: auto;
+  bottom: 0;
 }
 
 .modal * {

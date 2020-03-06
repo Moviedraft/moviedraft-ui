@@ -11,7 +11,9 @@ class CreateGame extends Component {
       currentStep: 1,
       gameName: '',
       startDate: '',
-      endDate: ''
+      endDate: '',
+      auctionDate: '',
+      movies: []
     }
 
     this.handleKeyPress = this.handleKeyPress.bind(this)
@@ -29,6 +31,8 @@ class CreateGame extends Component {
       this.setState({gameName: ''})
       this.setState({startDate: ''})
       this.setState({endDate: ''})
+      this.setState({auctionDate: ''})
+      this.setState({movies: []})
       this.props.parentCallback(false)
     }
   }
@@ -45,20 +49,26 @@ class CreateGame extends Component {
     this.setState({gameName: ''})
     this.setState({startDate: ''})
     this.setState({endDate: ''})
+    this.setState({auctionDate: ''})
+    this.setState({movies: []})
     this.props.parentCallback(false)
   }
 
   handleSubmit = (event) => {
     event.preventDefault()
-    const { gameName, startDate, endDate } = this.state
-    alert(`Your registration detail: \n
+    const { gameName, startDate, endDate, auctionDate, movies } = this.state
+    alert(`Your game details: \n
       Game Name: ${gameName} \n
       Start Date: ${startDate} \n
-      End Date: ${endDate}`)
+      End Date: ${endDate} \n
+      Auction Date: ${auctionDate} \n
+      Movies: ${movies.map(movie => movie.title)}`)
     this.setState({currentStep: 1})
     this.setState({gameName: ''})
     this.setState({startDate: ''})
     this.setState({endDate: ''})
+    this.setState({auctionDate: ''})
+    this.setState({movies: []})
     this.props.parentCallback(false)
   }
 
@@ -131,7 +141,8 @@ class CreateGame extends Component {
                 currentStep={this.state.currentStep}
                 handleChange={this.handleChange}
                 startDate={this.state.startDate}
-                endDate={this.state.endDate} />
+                endDate={this.state.endDate}
+                movies={this.state.movies} />
             </div>
             <div id='buttonsDiv'>
               {this.previousButton()}
