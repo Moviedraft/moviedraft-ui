@@ -17,6 +17,10 @@
   padding: 0.5em;
 }
 
+#createGameHeader {
+  padding: 0;
+}
+
 #closeModalButton {
   position: inherit !important;
   float: right;
