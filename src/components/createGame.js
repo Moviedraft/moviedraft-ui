@@ -43,6 +43,7 @@ class CreateGame extends Component {
     this.prev = this.prev.bind(this)
     this.previousButton = this.previousButton.bind(this)
     this.nextButton = this.nextButton.bind(this)
+    this.checkDisabled = this.checkDisabled.bind(this)
   }
 
   handleChange(event) {
@@ -143,10 +144,22 @@ class CreateGame extends Component {
        (<button
           id='submitButton'
           type='button'
-          onClick={this.handleSubmit}>
+          onClick={this.handleSubmit}
+          disabled={this.checkDisabled()}>
           CREATE GAME
         </button> )
       : null
+    )
+  }
+
+  checkDisabled() {
+    return (
+      this.state.gameName === '' ||
+      this.state.startDate === '' ||
+      this.state.endDate === '' ||
+      this.auctionDate === '' ||
+      this.movies === [] ||
+      this.playerEmails === []
     )
   }
 
@@ -161,8 +174,9 @@ class CreateGame extends Component {
           onClick={this.handleCloseModal}>
           Close Modal
         </button>
-        <h1>Create Game</h1>
+        <h1 id='createGameHeader'>Create Game</h1>
         <p>Step {this.state.currentStep}</p>
+        <p>All fields are required to create a game.</p>
           <form
           onSubmit={e => { e.preventDefault(); }}>
             <div>
