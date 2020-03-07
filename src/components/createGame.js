@@ -3,6 +3,7 @@ import '../styles/createGame.css'
 import Modal from 'react-modal';
 import CreateGameStep1 from './createGameStep1.js'
 import CreateGameStep2 from './createGameStep2.js'
+import CreateGameStep3 from './createGameStep3.js'
 
 class CreateGame extends Component {
   constructor(props){
@@ -10,31 +11,36 @@ class CreateGame extends Component {
     this.state = {
       currentStep: 1,
       gameName: '',
+      auctionDollars: 100,
       startDate: '',
       endDate: '',
       auctionDate: '',
-      movies: []
+      movies: [],
+      playWithRules: false,
+      grossCapRule: {
+        active: false,
+        ruleName: 'grossCap',
+        capValue: 224999999,
+        centsOnDollar: 0.4,
+        baseValue: 135200000
+      },
+      valueMultiplierRule: {
+        active: false,
+        ruleName: 'valueMultiplier',
+        lowerThreshold: 8000000,
+        upperThreshold: 13000000
+      }
     }
 
-    this.handleKeyPress = this.handleKeyPress.bind(this)
     this.handleChange = this.handleChange.bind(this)
+    this.handleKeyPress = this.handleKeyPress.bind(this)
     this.handleCloseModal = this.handleCloseModal.bind(this)
+    this.resetValues = this.resetValues.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
     this.next = this.next.bind(this)
     this.prev = this.prev.bind(this)
     this.previousButton = this.previousButton.bind(this)
     this.nextButton = this.nextButton.bind(this)
-  }
-
-  handleKeyPress(event) {
-    if (event.key === 'Escape') {
-      this.setState({currentStep: 1})
-      this.setState({gameName: ''})
-      this.setState({startDate: ''})
-      this.setState({endDate: ''})
-      this.setState({auctionDate: ''})
-      this.setState({movies: []})
-      this.props.parentCallback(false)
-    }
   }
 
   handleChange(event) {
@@ -44,43 +50,65 @@ class CreateGame extends Component {
     })
   }
 
+  handleKeyPress(event) {
+    if (event.key === 'Escape') {
+      this.resetValues()
+    }
+  }
+
   handleCloseModal() {
+    this.resetValues()
+  }
+
+  resetValues() {
     this.setState({currentStep: 1})
     this.setState({gameName: ''})
+    this.setState({auctionDollars: 100})
     this.setState({startDate: ''})
     this.setState({endDate: ''})
     this.setState({auctionDate: ''})
     this.setState({movies: []})
+    this.setState({playWithRules: false})
+    this.setState({grossCapRule: {active: false, ruleName: 'grossCap', capValue: 224999999, centsOnDollar: 0.4, baseValue: 135200000}})
+    this.setState({valueMultiplierRule: {active: false, ruleName: 'valueMultiplier', lowerThreshold: 8000000, upperThreshold: 13000000}})
     this.props.parentCallback(false)
   }
 
-  handleSubmit = (event) => {
+  handleSubmit(event) {
     event.preventDefault()
-    const { gameName, startDate, endDate, auctionDate, movies } = this.state
+    const { gameName, auctionDollars, startDate, endDate, auctionDate, movies, playWithRules, grossCapRule, valueMultiplierRule } = this.state
     alert(`Your game details: \n
       Game Name: ${gameName} \n
+      Auction Dollars: ${auctionDollars} \n
       Start Date: ${startDate} \n
       End Date: ${endDate} \n
       Auction Date: ${auctionDate} \n
-      Movies: ${movies.map(movie => movie.title)}`)
+      Movies: ${movies.map(movie => movie.title)} \n
+      Play With Rules: ${playWithRules} \n
+      Gross cap rule: ${JSON.stringify(grossCapRule)} \n
+      Value multiplier rule: ${JSON.stringify(valueMultiplierRule)}`)
     this.setState({currentStep: 1})
     this.setState({gameName: ''})
+    this.setState({auctionDollars: 100})
     this.setState({startDate: ''})
     this.setState({endDate: ''})
     this.setState({auctionDate: ''})
     this.setState({movies: []})
+    this.setState({playWithRules: false})
+    this.setState({grossCapRule: {active: false, ruleName: 'grossCap', capValue: 224999999, centsOnDollar: 0.4, baseValue: 135200000}})
+    this.setState({valueMultiplierRule: {active: false, ruleName: 'valueMultiplier', lowerThreshold: 8000000, upperThreshold: 13000000}})
     this.props.parentCallback(false)
   }
 
   next() {
     let currentStep = this.state.currentStep
-    currentStep = currentStep >= 2 ? 2: currentStep + 1
+    currentStep = currentStep >= 3 ? 3 : currentStep + 1
     this.setState({ currentStep: currentStep})
   }
 
   prev() {
     let currentStep = this.state.currentStep
-    currentStep = currentStep <= 1 ? 1: currentStep - 1
+    currentStep = currentStep <= 1 ? 1 : currentStep - 1
     this.setState({ currentStep: currentStep })
   }
 
@@ -99,14 +127,14 @@ class CreateGame extends Component {
 
   nextButton(){
     return (
-      this.state.currentStep < 2 ?
+      this.state.currentStep < 3 ?
         (<button
 			     id='nextButton'
            type='button'
            onClick={this.next}>
            Next
          </button>)
-       : this.state.currentStep === 2 ?
+       : this.state.currentStep === 3 ?
        (<button
           id='submitButton'
           type='button'
@@ -136,13 +164,20 @@ class CreateGame extends Component {
               <CreateGameStep1
                 currentStep={this.state.currentStep}
                 handleChange={this.handleChange}
-                email={this.state.gameName} />
+                gameName={this.state.gameName}
+                auctionDollars={this.state.auctionDollars} />
               <CreateGameStep2
                 currentStep={this.state.currentStep}
                 handleChange={this.handleChange}
                 startDate={this.state.startDate}
                 endDate={this.state.endDate}
                 movies={this.state.movies} />
+              <CreateGameStep3
+                currentStep={this.state.currentStep}
+                handleChange={this.handleChange}
+                playWithRules={this.state.playWithRules}
+                grossCapRule={this.state.grossCapRule}
+                valueMultiplierRule={this.state.valueMultiplierRule} />
             </div>
             <div id='buttonsDiv'>
               {this.previousButton()}

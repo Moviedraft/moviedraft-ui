@@ -1,0 +1,30 @@
+.rulesTitle {
+  font-weight: bold;
+}
+
+.rulesHeader {
+  display: table-row;
+}
+
+.rulesHeaderCell {
+  display: table-cell;
+  font-weight: bold;
+}
+
+.rulesValues {
+  display: table-row;
+}
+
+.rulesCurrencyInput {
+  width: max-content;
+}
+
+.rulesCell {
+  display: table-cell;
+}
+
+.valueMultiplierNumberInput {
+  width: 100px;
+  outline: none;
+  border: none;
+}

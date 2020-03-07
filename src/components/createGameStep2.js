@@ -28,7 +28,7 @@ class CreateGameStep2 extends Component {
             name='startDate'
             type='date'
             placeholder='YYYY-MM-DD'
-            min={moment().format('YYYY-MM-DD')}
+            min={moment().add(1, 'days').format('YYYY-MM-DD')}
             value={this.props.startDate}
             onChange={this.props.handleChange} />
         </div>
@@ -55,14 +55,14 @@ class CreateGameStep2 extends Component {
             id='auctionDate'
             name='auctionDate'
             type='datetime-local'
-            min={moment().format('YYYY-MM-DDTHH:mm')}
+            min={moment().add(1, 'days').format('YYYY-MM-DDTHH:mm')}
             max={moment(this.props.startDate).format('YYYY-MM-DDTHH:mm')}
             value={this.props.auctionDate}
-            defaultValue={moment().format('YYYY-MM-DDTHH:mm')}
+            defaultValue={moment().add(1, 'days').format('YYYY-MM-DDTHH:mm')}
             onChange={this.props.handleChange} />
         </div>
         <label htmlFor='Movies'>
-          Select movies for your game:
+          Select movies for your game (based on game start and end dates):
         </label>
         <Movies
           startDate={this.props.startDate}
