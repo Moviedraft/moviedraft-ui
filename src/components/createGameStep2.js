@@ -71,6 +71,7 @@ class CreateGameStep2 extends Component {
             type='number'
             min='30'
             value={this.props.auctionItemExpiry}
+            defaultValue='30'
             onChange={this.props.handleChange} />
         </div>
         <label htmlFor='Movies'>

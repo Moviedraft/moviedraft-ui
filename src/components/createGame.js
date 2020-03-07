@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import moment from 'moment';
 import '../styles/createGame.css'
 import Modal from 'react-modal';
 import CreateGameStep1 from './createGameStep1.js'
@@ -15,7 +16,7 @@ class CreateGame extends Component {
       auctionDollars: 100,
       startDate: '',
       endDate: '',
-      auctionDate: '',
+      auctionDate: moment().add(7, 'days').format('YYYY-MM-DDTHH:mm'),
       auctionItemExpiryTimeSeconds: 60,
       movies: [],
       playWithRules: false,
@@ -76,27 +77,69 @@ class CreateGame extends Component {
     this.setState({auctionItemExpiryTimeSeconds: ''})
     this.setState({movies: []})
     this.setState({playWithRules: false})
-    this.setState({grossCapRule: {active: false, ruleName: 'grossCap', capValue: 224999999, centsOnDollar: 0.4, baseValue: 135200000}})
-    this.setState({valueMultiplierRule: {active: false, ruleName: 'valueMultiplier', lowerThreshold: 8000000, upperThreshold: 13000000}})
+    this.setState({grossCapRule: {grossCapActive: false, ruleName: 'grossCap', capValue: 224999999, centsOnDollar: 0.4, baseValue: 135200000}})
+    this.setState({valueMultiplierRule: {valueMultiplierActive: false, ruleName: 'valueMultiplier', lowerThreshold: 8000000, upperThreshold: 13000000}})
     this.setState({playerEmails: []})
     this.props.parentCallback(false)
   }
 
   handleSubmit(event) {
     event.preventDefault()
-    const { gameName, auctionDollars, startDate, endDate, auctionDate, auctionItemExpiryTimeSeconds, movies, playWithRules, grossCapRule, valueMultiplierRule, playerEmails } = this.state
-    alert(`Your game details: \n
-      Game Name: ${gameName} \n
-      Auction Dollars: ${auctionDollars} \n
-      Start Date: ${startDate} \n
-      End Date: ${endDate} \n
-      Auction Date: ${auctionDate} \n
-      Auction Item Expiry Time Seconds: ${auctionItemExpiryTimeSeconds} \n
-      Movies: ${movies.map(movie => movie.title)} \n
-      Play With Rules: ${playWithRules} \n
-      Gross cap rule: ${JSON.stringify(grossCapRule)} \n
-      Value multiplier rule: ${JSON.stringify(valueMultiplierRule)} \n
-      Player emails: ${playerEmails}`)
+
+    let requestAuctionDate = moment(this.state.auctionDate)
+    if (!requestAuctionDate.isValid()) {
+      requestAuctionDate = moment.max()
+    }
+
+    let rules = []
+    if (this.state.playWithRules && this.state.grossCapRule.grossCapActive) {
+      rules.push({
+        ruleName: this.state.grossCapRule.ruleName,
+        rules: {
+          capValue: parseInt(this.state.grossCapRule.capValue),
+          centsOnDollar: parseFloat(this.state.grossCapRule.centsOnDollar),
+          baseValue: parseInt(this.state.grossCapRule.baseValue)
+        }
+      })
+    }
+    if (this.state.playWithRules && this.state.valueMultiplierRule.valueMultiplierActive) {
+      rules.push({
+        ruleName: this.state.valueMultiplierRule.ruleName,
+        rules: {
+          lowerThreshold: this.state.valueMultiplierRule.lowerThreshold,
+          upperThreshold: this.state.valueMultiplierRule.upperThreshold
+        }
+      })
+    }
+
+    let body = JSON.stringify({
+      playerIds: this.state.playerEmails,
+      dollarSpendingCap: this.state.auctionDollars,
+      playerBuyIn: 0,
+      rules: rules,
+      auctionItemsExpireInSeconds: this.state.auctionItemExpiryTimeSeconds,
+      movies: this.state.movies.map((movie) => movie.id),
+      startDate: moment(this.state.startDate).format(),
+      endDate: moment(this.state.endDate).format(),
+      gameName: this.state.gameName,
+      auctionDate: requestAuctionDate.format()
+    })
+
+    fetch('https://api-dev.couchsports.ca/games', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + localStorage.getItem('token')
+      },
+      body: body
+    })
+    .then(res => res.json())
+    .then((data) => {
+
+    })
+    .catch(console.log)
+
     this.resetValues()
     this.props.parentCallback(false)
   }
