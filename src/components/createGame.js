@@ -16,18 +16,21 @@ class CreateGame extends Component {
       startDate: '',
       endDate: '',
       auctionDate: '',
+      auctionItemExpiryTimeSeconds: 60,
       movies: [],
       playWithRules: false,
       grossCapRule: {
-        active: false,
+        grossCapActive: false,
         ruleName: 'grossCap',
-        capValue: 224999999,
+        displayTitle: 'GROSS CAP',
+        capValue: 225000000,
         centsOnDollar: 0.4,
         baseValue: 135200000
       },
       valueMultiplierRule: {
-        active: false,
+        valueMultiplierActive: false,
         ruleName: 'valueMultiplier',
+        displayTitle: 'VALUE MULTIPLIER',
         lowerThreshold: 8000000,
         upperThreshold: 13000000
       },
@@ -70,6 +73,7 @@ class CreateGame extends Component {
     this.setState({startDate: ''})
     this.setState({endDate: ''})
     this.setState({auctionDate: ''})
+    this.setState({auctionItemExpiryTimeSeconds: ''})
     this.setState({movies: []})
     this.setState({playWithRules: false})
     this.setState({grossCapRule: {active: false, ruleName: 'grossCap', capValue: 224999999, centsOnDollar: 0.4, baseValue: 135200000}})
@@ -80,29 +84,20 @@ class CreateGame extends Component {
 
   handleSubmit(event) {
     event.preventDefault()
-    const { gameName, auctionDollars, startDate, endDate, auctionDate, movies, playWithRules, grossCapRule, valueMultiplierRule, playerEmails } = this.state
+    const { gameName, auctionDollars, startDate, endDate, auctionDate, auctionItemExpiryTimeSeconds, movies, playWithRules, grossCapRule, valueMultiplierRule, playerEmails } = this.state
     alert(`Your game details: \n
       Game Name: ${gameName} \n
       Auction Dollars: ${auctionDollars} \n
       Start Date: ${startDate} \n
       End Date: ${endDate} \n
       Auction Date: ${auctionDate} \n
+      Auction Item Expiry Time Seconds: ${auctionItemExpiryTimeSeconds} \n
       Movies: ${movies.map(movie => movie.title)} \n
       Play With Rules: ${playWithRules} \n
       Gross cap rule: ${JSON.stringify(grossCapRule)} \n
       Value multiplier rule: ${JSON.stringify(valueMultiplierRule)} \n
       Player emails: ${playerEmails}`)
-    this.setState({currentStep: 1})
-    this.setState({gameName: ''})
-    this.setState({auctionDollars: 100})
-    this.setState({startDate: ''})
-    this.setState({endDate: ''})
-    this.setState({auctionDate: ''})
-    this.setState({movies: []})
-    this.setState({playWithRules: false})
-    this.setState({grossCapRule: {active: false, ruleName: 'grossCap', capValue: 224999999, centsOnDollar: 0.4, baseValue: 135200000}})
-    this.setState({valueMultiplierRule: {active: false, ruleName: 'valueMultiplier', lowerThreshold: 8000000, upperThreshold: 13000000}})
-    this.setState({playerEmails: []})
+    this.resetValues()
     this.props.parentCallback(false)
   }
 
@@ -189,6 +184,8 @@ class CreateGame extends Component {
                 handleChange={this.handleChange}
                 startDate={this.state.startDate}
                 endDate={this.state.endDate}
+                auctionDate={this.state.auctionDate}
+                auctionItemExpiryTimeSeconds={this.state.auctionItemExpiryTimeSeconds}
                 movies={this.state.movies} />
               <CreateGameStep3
                 currentStep={this.state.currentStep}

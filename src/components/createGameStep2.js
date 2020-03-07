@@ -57,8 +57,20 @@ class CreateGameStep2 extends Component {
             type='datetime-local'
             min={moment().add(1, 'days').format('YYYY-MM-DDTHH:mm')}
             max={moment(this.props.startDate).format('YYYY-MM-DDTHH:mm')}
-            value={this.props.auctionDate}
-            defaultValue={moment().add(1, 'days').format('YYYY-MM-DDTHH:mm')}
+            defaultValue={moment().add(7, 'days').format('YYYY-MM-DDTHH:mm')}
+            onChange={this.props.handleChange} />
+        </div>
+        <div id='auctionItemExpiryDiv'>
+          <label htmlFor='auctionItemExpiryTimeSeconds'>
+            How long (in seconds) do you want the auction to last for each movie?
+          </label>
+          <input
+            className='form-control'
+            id='auctionItemExpiryTimeSeconds'
+            name='auctionItemExpiryTimeSeconds'
+            type='number'
+            min='30'
+            value={this.props.auctionItemExpiry}
             onChange={this.props.handleChange} />
         </div>
         <label htmlFor='Movies'>
