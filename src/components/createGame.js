@@ -158,8 +158,7 @@ class CreateGame extends Component {
       this.state.startDate === '' ||
       this.state.endDate === '' ||
       this.auctionDate === '' ||
-      this.movies === [] ||
-      this.playerEmails === []
+      this.movies === []
     )
   }
 
