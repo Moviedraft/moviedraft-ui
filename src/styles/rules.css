@@ -1,0 +1,6 @@
+#rulesWrapper {
+  display: table;
+  padding: 0;
+  width: 100%;
+  height: max-content;
+}

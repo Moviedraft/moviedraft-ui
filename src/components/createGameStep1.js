@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import '../styles/createGameStep1.css'
 
 class CreateGameStep1 extends Component {
     constructor(props){
@@ -24,6 +25,17 @@ class CreateGameStep1 extends Component {
           placeholder="Enter game name"
           value={this.props.gameName}
           onChange={this.props.handleChange} />
+        <p>Select the amount of fake dollars each player can auction with:</p>
+        <label htmlFor="auctionDollars">Auction Dollars:</label>
+        <span className="currencyinput">$
+          <input
+            className="form-control"
+            id="auctionDollars"
+            name="auctionDollars"
+            type="number"
+            value={this.props.auctionDollars}
+            onChange={this.props.handleChange} />
+        </span>
       </div>
     )
   }
