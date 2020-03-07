@@ -48,7 +48,6 @@ class valueMultiplierRule extends Component {
       : movieValue < upperThreshold && movieValue >= lowerThreshold
         ? 2
         : 1
-
   }
 
   calculateValueMultiplierEarnings(movieValue, valueMultiplier) {
