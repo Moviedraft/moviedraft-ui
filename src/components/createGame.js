@@ -19,15 +19,17 @@ class CreateGame extends Component {
       movies: [],
       playWithRules: false,
       grossCapRule: {
-        active: false,
+        grossCapActive: false,
         ruleName: 'grossCap',
-        capValue: 224999999,
+        displayTitle: 'GROSS CAP',
+        capValue: 225000000,
         centsOnDollar: 0.4,
         baseValue: 135200000
       },
       valueMultiplierRule: {
-        active: false,
+        valueMultiplierActive: false,
         ruleName: 'valueMultiplier',
+        displayTitle: 'VALUE MULTIPLIER',
         lowerThreshold: 8000000,
         upperThreshold: 13000000
       },

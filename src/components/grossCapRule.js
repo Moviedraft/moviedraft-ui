@@ -19,7 +19,7 @@ class GrossCapRule extends Component {
   }
 
   handleCheckbox(event) {
-    event.target = {type:'boolean', value:!this.props.grossCapRule.active, name:event.target.name}
+    event.target = {type:'boolean', value:!this.props.grossCapRule.grossCapActive, name:event.target.name}
     this.updateGrossCapRule(event)
   }
 
@@ -35,7 +35,7 @@ class GrossCapRule extends Component {
   updateGrossCapRule(event) {
     let grossCapRule = this.props.grossCapRule
 
-    grossCapRule[event.target.name] = event.target.type === "number" ?
+    grossCapRule[event.target.name] = event.target.type === 'number' ?
         event.target.value.includes('.') ?
         parseFloat(event.target.value) :
         parseInt(event.target.value) :
@@ -46,7 +46,7 @@ class GrossCapRule extends Component {
   }
 
   renderGrossCapRule() {
-    return !this.props.grossCapRule.active ?
+    return !this.props.grossCapRule.grossCapActive ?
       null :
       <div>
         <div className='rulesHeader'>
@@ -65,23 +65,27 @@ class GrossCapRule extends Component {
         </div>
         <div className='rulesValues'>
           <div className='rulesCell'>
-            <span className="rulesCurrencyInput">$
+            <span className='rulesCurrencyInput'>$
               <input
-                className="rulesCell grossCapNumberInput"
-                id="movieGross"
-                name="movieGross"
-                type="number"
+                className='rulesCell grossCapNumberInput'
+                id='movieGross'
+                name='movieGross'
+                type='number'
+                min='0'
+                step='1000000'
                 value={this.state.movieGross}
                 onChange={this.updateMovieGross} />
             </span>
           </div>
           <div className='rulesCell'>
-            <span className="rulesCurrencyInput">$
+            <span className='rulesCurrencyInput'>$
               <input
-                className="rulesCell grossCapNumberInput"
-                id="capValue"
-                name="capValue"
-                type="number"
+                className='rulesCell grossCapNumberInput'
+                id='capValue'
+                name='capValue'
+                type='number'
+                min='0'
+                step='1000000'
                 defaultValue={this.props.grossCapRule.capValue}
                 onChange={event => {
                   event.target = {type:event.target.type, value:event.target.value, name:'capValue'}
@@ -90,12 +94,14 @@ class GrossCapRule extends Component {
             </span>
             </div>
           <div className='rulesCell'>
-            <span className="rulesCurrencyInput">$
+            <span className='rulesCurrencyInput'>$
               <input
-                className="rulesCell grossCapNumberInput"
-                id="centsOnDollar"
-                name="centsOnDollar"
-                type="number"
+                className='rulesCell grossCapNumberInput'
+                id='centsOnDollar'
+                name='centsOnDollar'
+                type='number'
+                min='0'
+                step='0.01'
                 defaultValue={this.props.grossCapRule.centsOnDollar}
                 onChange={event => {
                   event.target = {type:event.target.type, value:event.target.value, name:'centsOnDollar'}
@@ -104,7 +110,7 @@ class GrossCapRule extends Component {
             </span>
           </div>
           <div className='rulesCell'>
-            <span className="rulesCurrencyInput">
+            <span className='rulesCurrencyInput'>
               ${this.calculateGrossCapEarnings()}
             </span>
           </div>
@@ -118,11 +124,13 @@ class GrossCapRule extends Component {
         <div className='rulesTitle'>
           <input
             type='checkbox'
-            id='active'
-            name='active'
-            checked={this.props.grossCapRule.active}
+            id='grossCapActive'
+            name='grossCapActive'
+            checked={this.props.grossCapRule.grossCapActive}
             onChange={this.handleCheckbox} />
-          {this.props.grossCapRule.ruleName.toUpperCase()}
+          <label htmlFor='grossCapActive'>
+            {this.props.grossCapRule.displayTitle}
+          </label>
         </div>
         {this.renderGrossCapRule()}
       </div>

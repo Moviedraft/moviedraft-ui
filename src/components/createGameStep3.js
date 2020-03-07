@@ -39,7 +39,7 @@ class CreateGameStep3 extends Component {
           name='playWithRules'
           checked={this.props.playWithRules}
           onChange={this.handleCheckbox} />
-        <label htmlFor='rules'>
+        <label htmlFor='playWithRules'>
           Do you want to play with additional rules?
         </label>
         {this.renderRules()}

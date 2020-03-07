@@ -29,7 +29,7 @@ class valueMultiplierRule extends Component {
   }
 
   handleCheckbox(event) {
-    event.target = {type:'boolean', value:!this.props.valueMultiplierRule.active, name:event.target.name}
+    event.target = {type:'boolean', value:!this.props.valueMultiplierRule.valueMultiplierActive, name:event.target.name}
     this.updateValueMultiplierRule(event)
   }
 
@@ -58,7 +58,7 @@ class valueMultiplierRule extends Component {
   updateValueMultiplierRule(event) {
     let valueMultiplierRule = this.props.valueMultiplierRule
 
-    valueMultiplierRule[event.target.name] = event.target.type === "number" ?
+    valueMultiplierRule[event.target.name] = event.target.type === 'number' ?
         event.target.value.includes('.') ?
         parseFloat(event.target.value) :
         parseInt(event.target.value) :
@@ -73,7 +73,7 @@ class valueMultiplierRule extends Component {
     const valueMultiplier = this.calculateValueMultiplier(movieValue)
     const totalEarnings = this.calculateValueMultiplierEarnings(movieValue, valueMultiplier)
 
-    return !this.props.valueMultiplierRule.active ?
+    return !this.props.valueMultiplierRule.valueMultiplierActive ?
       null :
       <div>
         <div className='rulesHeader'>
@@ -101,39 +101,45 @@ class valueMultiplierRule extends Component {
         </div>
         <div className='rulesValues'>
           <div className='rulesCell'>
-            <span className="rulesCurrencyInput">$
+            <span className='rulesCurrencyInput'>$
               <input
-                className="rulesCell valueMultiplierNumberInput"
-                id="movieGross"
-                name="movieGross"
-                type="number"
+                className='rulesCell valueMultiplierNumberInput'
+                id='movieGross'
+                name='movieGross'
+                type='number'
+                min='0'
+                step='1000000'
                 value={this.state.movieGross}
                 onChange={this.updateMovieGross} />
             </span>
           </div>
           <div className='rulesCell'>
-            <span className="rulesCurrencyInput">$
+            <span className='rulesCurrencyInput'>$
               <input
-                className="rulesCell valueMultiplierNumberInput"
-                id="purchasePrice"
-                name="purchasePrice"
-                type="number"
+                className='rulesCell valueMultiplierNumberInput'
+                id='purchasePrice'
+                name='purchasePrice'
+                type='number'
+                min='1'
+                step='0.5'
                 defaultValue={this.state.purchasePrice}
                 onChange={this.updatePurchasePrice} />
             </span>
           </div>
           <div className='rulesCell'>
-            <span className="rulesCurrencyInput">
+            <span className='rulesCurrencyInput'>
               ${movieValue}
             </span>
           </div>
           <div className='rulesCell'>
-            <span className="rulesCurrencyInput">$
+            <span className='rulesCurrencyInput'>$
               <input
-                className="rulesCell valueMultiplierNumberInput"
-                id="lowerThreshold"
-                name="lowerThreshold"
-                type="number"
+                className='rulesCell valueMultiplierNumberInput'
+                id='lowerThreshold'
+                name='lowerThreshold'
+                type='number'
+                min='0'
+                step='1000000'
                 defaultValue={this.props.valueMultiplierRule.lowerThreshold}
                 onChange={event => {
                   event.target = {type:event.target.type, value:event.target.value, name:'lowerThreshold'}
@@ -142,12 +148,14 @@ class valueMultiplierRule extends Component {
             </span>
           </div>
           <div className='rulesCell'>
-            <span className="rulesCurrencyInput">$
+            <span className='rulesCurrencyInput'>$
               <input
-                className="rulesCell valueMultiplierNumberInput"
-                id="upperThreshold"
-                name="upperThreshold"
-                type="number"
+                className='rulesCell valueMultiplierNumberInput'
+                id='upperThreshold'
+                name='upperThreshold'
+                type='number'
+                min='0'
+                step='1000000'
                 defaultValue={this.props.valueMultiplierRule.upperThreshold}
                 onChange={event => {
                   event.target = {type:event.target.type, value:event.target.value, name:'upperThreshold'}
@@ -159,7 +167,7 @@ class valueMultiplierRule extends Component {
             {valueMultiplier}
           </div>
           <div className='rulesCell'>
-            <span className="rulesCurrencyInput">
+            <span className='rulesCurrencyInput'>
               ${totalEarnings}
             </span>
           </div>
@@ -173,11 +181,13 @@ class valueMultiplierRule extends Component {
         <div className='rulesTitle'>
           <input
             type='checkbox'
-            id='active'
-            name='active'
-            checked={this.props.valueMultiplierRule.active}
+            id='valueMultiplierActive'
+            name='valueMultiplierActive'
+            checked={this.props.valueMultiplierRule.valueMultiplierActive}
             onChange={this.handleCheckbox} />
-          {this.props.valueMultiplierRule.ruleName.toUpperCase()}
+          <label htmlFor='valueMultiplierActive'>
+            {this.props.valueMultiplierRule.displayTitle}
+          </label>
         </div>
         {this.renderValueMultiplierRule()}
       </div>

@@ -58,7 +58,7 @@ class CreateGameStep2 extends Component {
             min={moment().add(1, 'days').format('YYYY-MM-DDTHH:mm')}
             max={moment(this.props.startDate).format('YYYY-MM-DDTHH:mm')}
             value={this.props.auctionDate}
-            defaultValue={moment().add(1, 'days').format('YYYY-MM-DDTHH:mm')}
+            defaultValue={moment().add(7, 'days').format('YYYY-MM-DDTHH:mm')}
             onChange={this.props.handleChange} />
         </div>
         <label htmlFor='Movies'>
