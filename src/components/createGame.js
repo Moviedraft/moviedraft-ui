@@ -4,6 +4,7 @@ import Modal from 'react-modal';
 import CreateGameStep1 from './createGameStep1.js'
 import CreateGameStep2 from './createGameStep2.js'
 import CreateGameStep3 from './createGameStep3.js'
+import CreateGameStep4 from './createGameStep4.js'
 
 class CreateGame extends Component {
   constructor(props){
@@ -29,7 +30,8 @@ class CreateGame extends Component {
         ruleName: 'valueMultiplier',
         lowerThreshold: 8000000,
         upperThreshold: 13000000
-      }
+      },
+      playerEmails: []
     }
 
     this.handleChange = this.handleChange.bind(this)
@@ -71,12 +73,13 @@ class CreateGame extends Component {
     this.setState({playWithRules: false})
     this.setState({grossCapRule: {active: false, ruleName: 'grossCap', capValue: 224999999, centsOnDollar: 0.4, baseValue: 135200000}})
     this.setState({valueMultiplierRule: {active: false, ruleName: 'valueMultiplier', lowerThreshold: 8000000, upperThreshold: 13000000}})
+    this.setState({playerEmails: []})
     this.props.parentCallback(false)
   }
 
   handleSubmit(event) {
     event.preventDefault()
-    const { gameName, auctionDollars, startDate, endDate, auctionDate, movies, playWithRules, grossCapRule, valueMultiplierRule } = this.state
+    const { gameName, auctionDollars, startDate, endDate, auctionDate, movies, playWithRules, grossCapRule, valueMultiplierRule, playerEmails } = this.state
     alert(`Your game details: \n
       Game Name: ${gameName} \n
       Auction Dollars: ${auctionDollars} \n
@@ -86,7 +89,8 @@ class CreateGame extends Component {
       Movies: ${movies.map(movie => movie.title)} \n
       Play With Rules: ${playWithRules} \n
       Gross cap rule: ${JSON.stringify(grossCapRule)} \n
-      Value multiplier rule: ${JSON.stringify(valueMultiplierRule)}`)
+      Value multiplier rule: ${JSON.stringify(valueMultiplierRule)} \n
+      Player emails: ${playerEmails}`)
     this.setState({currentStep: 1})
     this.setState({gameName: ''})
     this.setState({auctionDollars: 100})
@@ -97,12 +101,13 @@ class CreateGame extends Component {
     this.setState({playWithRules: false})
     this.setState({grossCapRule: {active: false, ruleName: 'grossCap', capValue: 224999999, centsOnDollar: 0.4, baseValue: 135200000}})
     this.setState({valueMultiplierRule: {active: false, ruleName: 'valueMultiplier', lowerThreshold: 8000000, upperThreshold: 13000000}})
+    this.setState({playerEmails: []})
     this.props.parentCallback(false)
   }
 
   next() {
     let currentStep = this.state.currentStep
-    currentStep = currentStep >= 3 ? 3 : currentStep + 1
+    currentStep = currentStep >= 4 ? 4 : currentStep + 1
     this.setState({ currentStep: currentStep})
   }
 
@@ -127,14 +132,14 @@ class CreateGame extends Component {
 
   nextButton(){
     return (
-      this.state.currentStep < 3 ?
+      this.state.currentStep < 4 ?
         (<button
 			     id='nextButton'
            type='button'
            onClick={this.next}>
            Next
          </button>)
-       : this.state.currentStep === 3 ?
+       : this.state.currentStep === 4 ?
        (<button
           id='submitButton'
           type='button'
@@ -178,6 +183,10 @@ class CreateGame extends Component {
                 playWithRules={this.state.playWithRules}
                 grossCapRule={this.state.grossCapRule}
                 valueMultiplierRule={this.state.valueMultiplierRule} />
+              <CreateGameStep4
+                currentStep={this.state.currentStep}
+                handleChange={this.handleChange}
+                playerEmails={this.state.playerEmails} />
             </div>
             <div id='buttonsDiv'>
               {this.previousButton()}
