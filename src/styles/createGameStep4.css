@@ -1,0 +1,41 @@
+#email {
+  width: 400px;
+  height: 45px;
+  padding: 0 1rem;
+  margin-top: 1rem;
+  box-sizing: border-box;
+  font: inherit;
+  border-radius: 0.2rem;
+  border: 2px solid #d4d5d6;
+  color: #565656;
+}
+
+.emailDivWrapper {
+  background-color: #d4d5d6;
+  font-size: 14px;
+  border-radius: 30px;
+  height: 30px;
+  width: 300px;
+  align-items: center;
+  margin: 0 0.3rem 0.3rem 0;
+}
+
+.emailDiv {
+  float: left;
+}
+
+.deleteEmailButton {
+  float: right;
+  background-color: white;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  font: inherit;
+  margin-left: 10px;
+  font-weight: bold;
+  padding: 0;
+  line-height: 1;
+  position: relative;
+}
