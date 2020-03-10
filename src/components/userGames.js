@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from "@reach/router"
 import '../styles/userGames.css'
 
 class UserGames extends Component {
@@ -37,7 +38,15 @@ class UserGames extends Component {
     return array.map(item =>
       item.joined ? (
         <div key={item.id} className='userGamesData'>
-          <div className='playingGame'>{item.gameName}</div>
+          <div className='playingGame'>
+            <Link
+              to={`/games/${item.game_id}`}
+              state={{
+                gameId: `${item.game_id}`,
+                userHandle: `${this.state.userHandle}`}}>
+              {item.gameName}
+            </Link>
+          </div>
           <div className='invitedGame'></div>
         </div>
       ) : (

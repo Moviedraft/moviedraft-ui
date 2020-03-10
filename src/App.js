@@ -4,6 +4,7 @@ import Modal from 'react-modal';
 import Header from './components/header.js'
 import Home from './components/home.js'
 import User from './components/user.js'
+import Game from './components/game.js'
 
 Modal.setAppElement('body')
 
@@ -14,6 +15,7 @@ function App() {
       <Router>
         <Home path="/" />
         <User path="/user" component={ User }/>
+        <Game path="/games/:gameId" component={Game} />
       </Router>
     </div>
   );

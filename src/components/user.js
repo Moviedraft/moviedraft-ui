@@ -102,7 +102,8 @@ class User extends Component {
         </div>
         <UserGames
           parentCallback={this.userGamesCallbackFunction}
-          userGames={this.state.userGames} />
+          userGames={this.state.userGames}
+          userHandle={this.state.userHandle} />
         <CreateGame
           parentCallback={this.createGameCallbackFunction}
           modalOpen={this.state.modalOpen} />
