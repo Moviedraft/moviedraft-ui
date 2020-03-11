@@ -1,0 +1,27 @@
+#chatBox {
+  position:absolute;
+  bottom:0;
+  width:99%;
+  height:300px;
+  border: 2px solid black;
+  margin-left: 0.5em;
+  margin-bottom: 0.5em;
+  overflow: auto;
+}
+
+#messageInputDiv {
+  overflow: auto;
+  padding: 0.5em;
+  bottom: 0;
+  position: absolute;
+  width: 98%
+}
+
+#messageWrapper {
+  height: 250px;
+  overflow: auto;
+}
+
+#messageInput {
+  width: 400px;
+}

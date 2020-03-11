@@ -20,7 +20,7 @@ class Login extends Component {
       fetch('https://api-dev.couchsports.ca/login/validate?id_token=' + response.tokenId)
         .then(res => res.json())
         .then((data) => {
-          localStorage.setItem('token', data.access_token);
+          localStorage.setItem('CouchSportsToken', data.access_token);
           this.setState({loggedIn: true})
         })
         .catch(console.log)

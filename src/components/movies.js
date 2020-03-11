@@ -43,7 +43,7 @@ class Movies extends Component {
       if (this.props.startDate && this.props.endDate && (prevProps.startDate !== this.props.startDate || prevProps.endDate !== this.props.endDate)){
         fetch(`https://api-dev.couchsports.ca/movies?startDate=${this.props.startDate}&endDate=${this.props.endDate}`, {
           headers: {
-            Authorization: "Bearer " + localStorage.getItem("token")
+            Authorization: 'Bearer ' + localStorage.getItem('CouchSportsToken')
           }
         })
         .then(res => res.json())

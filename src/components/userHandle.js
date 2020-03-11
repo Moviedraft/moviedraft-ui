@@ -38,7 +38,7 @@ class UserHandle extends Component {
     fetch('https://api-dev.couchsports.ca/users/current', {
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': "Bearer " + localStorage.getItem("token")
+        'Authorization': 'Bearer ' + localStorage.getItem('CouchSportsToken')
       },
       method: 'PATCH',
       body: JSON.stringify( { userHandle: this.state.newUserHandle } )
@@ -46,6 +46,9 @@ class UserHandle extends Component {
     .then(res => res.json())
     .then(async (data) => {
       await this.sendData(data)
+
+      localStorage.setItem('CouchSportsHandle', data.userHandle)
+
       this.setState({newUserHandle: ''})
       this.setState({editMode: !this.state.editMode})
     })
@@ -62,7 +65,7 @@ class UserHandle extends Component {
                 <input
                   autoFocus
                   className='userHandle'
-                  type="text"
+                  type='text'
                   placeholder={this.props.userHandle}
                   value={this.state.newUserHandle}
                   onChange={evt => this.updateInputValue(evt)}
@@ -78,19 +81,19 @@ class UserHandle extends Component {
                 <button
                 id='editButton'
                 onClick={this.onClick}>
-                  <i className="material-icons">clear</i>
+                  <i className='material-icons'>clear</i>
                 </button>
                 <button
                 id='editButton'
                 onClick={this.patchUserHandle}>
-                  <i className="material-icons">done</i>
+                  <i className='material-icons'>done</i>
                 </button>
                 </div>
               ) : (
                 <button
                 id='editButton'
                 onClick={this.onClick}>
-                  <i className="material-icons">border_color</i>
+                  <i className='material-icons'>border_color</i>
                 </button>
               )}
             </td>
