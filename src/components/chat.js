@@ -14,8 +14,8 @@ class Chat extends Component {
     }
 
     this.pubnub = new PubNub({
-      publishKey: process.env.PUBNUB_PUBLISH_KEY,
-      subscribeKey: process.env.PUBNUB_SUBSCRIBE_KEY,
+      publishKey: process.env.REACT_APP_PUBNUB_PUBLISH_KEY,
+      subscribeKey: process.env.REACT_APP_PUBNUB_SUBSCRIBE_KEY,
       uuid: this.props.gameId + this.props.gameId
     });
 
