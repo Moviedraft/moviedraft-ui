@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import AuctionItem from './auctionItem.js'
 import Chat from './chat.js'
+import '../styles/auctionHome.css'
 
 class AuctionHome extends Component {
   constructor(props){
@@ -23,7 +24,9 @@ class AuctionHome extends Component {
   render() {
     return (
       <div>
-        {this.renderAuctionPage()}
+        <div id="auctionHomeDiv">
+          {this.renderAuctionPage()}
+        </div>
         <Chat
           gameId={this.props.gameId} />
       </div>
