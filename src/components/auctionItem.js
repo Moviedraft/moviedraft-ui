@@ -15,18 +15,18 @@ class AuctionItem extends Component {
   }
 
   componentDidMount(){
-    document.addEventListener("click", this.setState({error: ''}))
+    document.addEventListener('click', this.setState({error: ''}))
   }
 
   componentWillUnmount(){
-   document.removeEventListener("click", this.setState({error: ''}))
+   document.removeEventListener('click', this.setState({error: ''}))
  }
 
 
   beginAuction(movieId) {
     fetch('https://api-dev.couchsports.ca/movies/bid/' + this.props.gameId + '/' + movieId, {
       headers: {
-        Authorization: "Bearer " + localStorage.getItem("token")
+        Authorization: 'Bearer ' + localStorage.getItem('CouchSportsToken')
       }
     })
     .then(res => res.json())

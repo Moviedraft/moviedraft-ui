@@ -17,7 +17,7 @@ class Game extends Component {
   componentDidMount() {
     fetch('https://api-dev.couchsports.ca/games/' + this.state.gameId, {
       headers: {
-        Authorization: "Bearer " + localStorage.getItem("token")
+        Authorization: 'Bearer ' + localStorage.getItem('CouchSportsToken')
       }
     })
     .then(res => res.json())
@@ -31,8 +31,7 @@ class Game extends Component {
     if(moment() < this.state.auctionDate){
       return <AuctionHome
         movies={this.state.movies}
-        gameId={this.state.gameId}
-        userHandle={this.props.location.state.userHandle}/>
+        gameId={this.state.gameId} />
     }
   }
 

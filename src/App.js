@@ -1,5 +1,5 @@
 import React from 'react';
-import { Router } from "@reach/router"
+import { Router } from '@reach/router'
 import Modal from 'react-modal';
 import Header from './components/header.js'
 import Home from './components/home.js'
@@ -13,9 +13,9 @@ function App() {
     <div>
       <Header />
       <Router>
-        <Home path="/" />
-        <User path="/user" component={ User }/>
-        <Game path="/games/:gameId" component={Game} />
+        <Home path='/' />
+        <User path='/user' component={ User }/>
+        <Game path='/games/:gameId' component={Game} />
       </Router>
     </div>
   );

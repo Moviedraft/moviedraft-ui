@@ -45,11 +45,13 @@ class User extends Component {
   componentDidMount() {
     fetch('https://api-dev.couchsports.ca/users/current', {
       headers: {
-        Authorization: "Bearer " + localStorage.getItem("token")
+        Authorization: 'Bearer ' + localStorage.getItem('CouchSportsToken')
       }
     })
     .then(res => res.json())
     .then((data) => {
+      localStorage.setItem('CouchSportsHandle', data.userHandle)
+
       this.setState({firstName: data.firstName})
       this.setState({lastName: data.lastName})
       this.setState({userHandle: data.userHandle})
@@ -102,8 +104,7 @@ class User extends Component {
         </div>
         <UserGames
           parentCallback={this.userGamesCallbackFunction}
-          userGames={this.state.userGames}
-          userHandle={this.state.userHandle} />
+          userGames={this.state.userGames} />
         <CreateGame
           parentCallback={this.createGameCallbackFunction}
           modalOpen={this.state.modalOpen} />

@@ -25,8 +25,7 @@ class AuctionHome extends Component {
       <div>
         {this.renderAuctionPage()}
         <Chat
-          gameId={this.props.gameId}
-          userHandle={this.props.userHandle}/>
+          gameId={this.props.gameId} />
       </div>
     )
   }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from "@reach/router"
+import { Link } from '@reach/router'
 import '../styles/userGames.css'
 
 class UserGames extends Component {
@@ -21,7 +21,7 @@ class UserGames extends Component {
     fetch(`https://api-dev.couchsports.ca/games/${gameId}/join`, {
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': "Bearer " + localStorage.getItem("token")
+        'Authorization': 'Bearer ' + localStorage.getItem('CouchSportsToken')
       },
       method: 'POST',
       body: ''
@@ -41,9 +41,7 @@ class UserGames extends Component {
           <div className='playingGame'>
             <Link
               to={`/games/${item.game_id}`}
-              state={{
-                gameId: `${item.game_id}`,
-                userHandle: `${this.state.userHandle}`}}>
+              state={{gameId: `${item.game_id}`}}>
               {item.gameName}
             </Link>
           </div>

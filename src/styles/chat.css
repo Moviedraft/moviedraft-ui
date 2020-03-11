@@ -21,3 +21,7 @@
   height: 250px;
   overflow: auto;
 }
+
+#messageInput {
+  width: 400px;
+}
