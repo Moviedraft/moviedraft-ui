@@ -24,3 +24,7 @@
 .auctionButton {
   position: relative;
 }
+
+.bidInput {
+  width: 50px;
+}

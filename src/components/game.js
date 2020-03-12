@@ -28,11 +28,14 @@ class Game extends Component {
   }
 
   renderGamePage() {
-    if(moment() < this.state.auctionDate){
+    /*if(moment() < this.state.auctionDate){
       return <AuctionHome
         movies={this.state.movies}
         gameId={this.state.gameId} />
-    }
+    */
+    return <AuctionHome
+      movies={this.state.movies}
+      gameId={this.state.gameId} />
   }
 
   render() {

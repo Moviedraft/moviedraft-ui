@@ -1,18 +1,65 @@
 import React, { Component } from 'react';
-import moment from 'moment'
-import '../styles/auctionItem.css'
+import moment from 'moment';
+import PubNub from 'pubnub';
+import '../styles/auctionItem.css';
+import Timer from './timer.js';
 
 class AuctionItem extends Component {
   constructor(props){
     super(props)
     this.state = {
+      auctionStarted: false,
+      auctionExpiry: '',
+      dollarSpendingCap: 0,
+      minBid: 0,
+      currentHighBid: 0,
+      highestBidder: '',
+      bid: 1,
+      timerDone: false,
       error: ''
-
     }
 
+    this.pubnub = new PubNub({
+      publishKey: process.env.REACT_APP_PUBNUB_PUBLISH_KEY,
+      subscribeKey: process.env.REACT_APP_PUBNUB_SUBSCRIBE_KEY,
+      uuid: this.props.gameId + this.props.gameId
+    });
+
+    this.callbackFunction = this.callbackFunction.bind(this)
+    this.updateBid = this.updateBid.bind(this)
     this.beginAuction = this.beginAuction.bind(this)
+    this.submitBid = this.submitBid.bind(this)
     this.renderAuctionPage = this.renderAuctionItem.bind(this)
   }
+
+  callbackFunction(timerDone) {
+      this.setState({timerDone: timerDone})
+      this.setState({auctionStarted: false})
+
+      let message = this.state.highestBidder == '' && this.state.currentHighBid == 0 ?
+        (
+          'System: No bid was placed for "' +
+          this.props.movie.title +
+          '"'
+        ) : (
+          'System: ' +
+          'The winner of the auction for "' +
+          this.props.movie.title +
+          '" was ' +
+          this.state.highestBidder +
+          ' with a bid of $' +
+          this.state.currentHighBid
+        )
+
+      console.log(message)
+
+      this.pubnub.publish(
+        {
+          channel: this.props.gameId,
+          message: message
+        }
+      );
+		}
 
   componentDidMount(){
     document.addEventListener('click', this.setState({error: ''}))
@@ -22,6 +69,9 @@ class AuctionItem extends Component {
    document.removeEventListener('click', this.setState({error: ''}))
  }
 
+ updateBid(event) {
+   this.setState({bid: event.target.value})
+ }
 
   beginAuction(movieId) {
     fetch('https://api-dev.couchsports.ca/movies/bid/' + this.props.gameId + '/' + movieId, {
@@ -33,29 +83,109 @@ class AuctionItem extends Component {
     .then((data) => {
       if(!data.auctionExpirySet) {
         this.setState({error: 'The auction for this item has not begun yet.'})
+      } else if (moment() < moment(data.auctionExpiry)) {
+        this.setState({error: ''})
+        this.setState({auctionExpiry: moment(data.auctionExpiry)})
+        this.setState({dollarSpendingCap: data.dollarSpendingCap})
+        if (data.bid && data.userHandle) {
+          this.setState({currentHighBid: data.bid})
+          this.setState({minBid: data.bid + 1})
+          this.setState({bid: data.bid + 1})
+          this.setState({highestBidder: data.userHandle})
+        }
+        this.setState({auctionStarted: true})
       }
     })
-    .catch(console.log);
+    .catch(error => console.log(error));
+  }
+
+  submitBid() {
+    if (moment() > moment(this.state.auctionExpiry)) {
+      this.setState({error: 'The auction for this item has completed.'})
+    } else if (this.state.bid <= this.state.currentHighBid) {
+      this.setState({error: 'Your bid must be higher than the current bid.'})
+      this.setState({bid: this.state.currentHighBid + 1})
+    } else if (this.state.bid > this.state.dollarSpendingCap){
+      this.setState({error: 'You may not bid higher than the maximum: $' + this.state.dollarSpendingCap})
+      this.setState({bid: this.state.currentHighBid + 1})
+    } else {
+      fetch('https://api-dev.couchsports.ca/movies/bid', {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + localStorage.getItem('CouchSportsToken')
+        },
+        method: 'POST',
+        body: JSON.stringify( { gameId: this.props.gameId, movieId: this.props.movie.id, bid: this.state.bid } )
+      })
+      .then(async res => {
+        let jsonRes = await res.json()
+        if (!res.ok) {
+          let message = jsonRes.message
+          if (message.includes('closed')) {
+            this.setState({error: 'Auction is closed for this item.'})
+          }
+        }
+        this.setState({error: ''})
+        if (jsonRes.bid) {
+          this.setState({currentHighBid: jsonRes.bid})
+          this.setState({minBid: jsonRes.bid + 1})
+          this.setState({bid: jsonRes.bid + 1})
+          this.setState({highestBidder: jsonRes.userHandle})
+        }
+      })
+      .catch(error => console.log(error))
+    }
   }
 
   renderAuctionItem() {
-      return (
-        <div className='movieParent'>
-          <div className='posterWrapper'>
-            <img
-              src={this.props.movie.posterUrl}
-              className='posterImage'
-              alt='movie poster' />
+      return this.state.auctionStarted ?
+        (
+          <div className='movieParent'>
+            <div className='posterWrapper'>
+              <img
+                src={this.props.movie.posterUrl}
+                className='posterImage'
+                alt='movie poster' />
+            </div>
+            <p>{this.props.movie.title}</p>
+            <Timer
+              parentCallback={this.callbackFunction}
+              auctionExpiry={this.state.auctionExpiry} />
+            <p>Current bid: {this.state.highestBidder} ${this.state.currentHighBid}</p>
+            <input
+              className='bidInput'
+              id='bid'
+              name='bid'
+              type='number'
+              min={this.state.minBid}
+              step='1'
+              value={this.state.bid}
+              onChange={(event) => this.updateBid(event)}
+              />
+            <button
+              className='auctionButton'
+              onClick={() => this.submitBid()}>
+              SUBMIT BID
+            </button>
+            <p>{this.state.error}</p>
           </div>
-          <p>{this.props.movie.title}</p>
-          <p>{moment(this.props.movie.releaseDate).format('dddd, MMMM Do YYYY')}</p>
-          <button
-            className='auctionButton'
-            onClick={() => this.beginAuction(this.props.movie.id)}>
-            BEGIN AUCTION
-          </button>
-          <p>{this.state.error}</p>
-        </div>
+        ) : (
+          <div className='movieParent'>
+            <div className='posterWrapper'>
+              <img
+                src={this.props.movie.posterUrl}
+                className='posterImage'
+                alt='movie poster' />
+            </div>
+            <p>{this.props.movie.title}</p>
+            <p>{moment(this.props.movie.releaseDate).format('dddd, MMMM Do YYYY')}</p>
+            <button
+              className='auctionButton'
+              onClick={() => this.beginAuction(this.props.movie.id)}>
+              BEGIN AUCTION
+            </button>
+            <p>{this.state.error}</p>
+          </div>
       )
   }
 
