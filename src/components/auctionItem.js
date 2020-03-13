@@ -27,39 +27,17 @@ class AuctionItem extends Component {
 
     this.callbackFunction = this.callbackFunction.bind(this)
     this.updateBid = this.updateBid.bind(this)
+    this.checkWinner = this.checkWinner.bind(this)
     this.beginAuction = this.beginAuction.bind(this)
     this.submitBid = this.submitBid.bind(this)
     this.renderAuctionPage = this.renderAuctionItem.bind(this)
+    this.setStates = this.setStates.bind(this)
   }
 
   callbackFunction(timerDone) {
       this.setState({timerDone: timerDone})
       this.setState({auctionStarted: false})
-
-      let message = this.state.highestBidder == '' && this.state.currentHighBid == 0 ?
-        (
-          'System: No bid was placed for "' +
-          this.props.movie.title +
-          '"'
-        ) : (
-          'System: ' +
-          'The winner of the auction for "' +
-          this.props.movie.title +
-          '" was ' +
-          this.state.highestBidder +
-          ' with a bid of $' +
-          this.state.currentHighBid
-        )
-
-      console.log(message)
-
-      this.pubnub.publish(
-        {
-          channel: this.props.gameId,
-          message: message
-        }
-      );
-		}
+	}
 
   componentDidMount(){
     document.addEventListener('click', this.setState({error: ''}))
@@ -73,6 +51,30 @@ class AuctionItem extends Component {
    this.setState({bid: event.target.value})
  }
 
+ checkWinner() {
+   let message = this.state.highestBidder == '' && this.state.currentHighBid == 0 ?
+     (
+       'System: No bid was placed for "' +
+       this.props.movie.title +
+       '"'
+     ) : (
+       'System: ' +
+       'The winner of the auction for "' +
+       this.props.movie.title +
+       '" was ' +
+       this.state.highestBidder +
+       ' with a bid of $' +
+       this.state.currentHighBid
+     )
+
+   this.pubnub.publish(
+     {
+       channel: this.props.gameId,
+       message: message
+     }
+   );
+ }
+
   beginAuction(movieId) {
     fetch('https://api-dev.couchsports.ca/movies/bid/' + this.props.gameId + '/' + movieId, {
       headers: {
@@ -84,19 +86,26 @@ class AuctionItem extends Component {
       if(!data.auctionExpirySet) {
         this.setState({error: 'The auction for this item has not begun yet.'})
       } else if (moment() < moment(data.auctionExpiry)) {
-        this.setState({error: ''})
-        this.setState({auctionExpiry: moment(data.auctionExpiry)})
-        this.setState({dollarSpendingCap: data.dollarSpendingCap})
-        if (data.bid && data.userHandle) {
-          this.setState({currentHighBid: data.bid})
-          this.setState({minBid: data.bid + 1})
-          this.setState({bid: data.bid + 1})
-          this.setState({highestBidder: data.userHandle})
-        }
+        this.setStates(data)
         this.setState({auctionStarted: true})
+      } else {
+        this.setStates(data)
+        this.setState({error: 'The auction has completed for this item.'})
       }
     })
     .catch(error => console.log(error));
+  }
+
+  setStates(data) {
+    this.setState({error: ''})
+    this.setState({auctionExpiry: moment(data.auctionExpiry)})
+    this.setState({dollarSpendingCap: data.dollarSpendingCap})
+    if (data.bid && data.userHandle) {
+      this.setState({currentHighBid: data.bid})
+      this.setState({minBid: data.bid + 1})
+      this.setState({bid: data.bid + 1})
+      this.setState({highestBidder: data.userHandle})
+    }
   }
 
   submitBid() {
@@ -138,7 +147,7 @@ class AuctionItem extends Component {
   }
 
   renderAuctionItem() {
-      return this.state.auctionStarted ?
+      return this.state.auctionStarted && moment() < moment(this.state.auctionExpiry) ?
         (
           <div className='movieParent'>
             <div className='posterWrapper'>
@@ -169,23 +178,41 @@ class AuctionItem extends Component {
             </button>
             <p>{this.state.error}</p>
           </div>
-        ) : (
-          <div className='movieParent'>
-            <div className='posterWrapper'>
-              <img
-                src={this.props.movie.posterUrl}
-                className='posterImage'
-                alt='movie poster' />
+        ) : moment() > moment(this.state.auctionExpiry) ?
+          (
+            <div className='movieParent'>
+              <div className='posterWrapper'>
+                <img
+                  src={this.props.movie.posterUrl}
+                  className='posterImage'
+                  alt='movie poster' />
+              </div>
+              <p>{this.props.movie.title}</p>
+              <p>{moment(this.props.movie.releaseDate).format('dddd, MMMM Do YYYY')}</p>
+              <button
+                className='auctionButton'
+                onClick={() => this.checkWinner()}>
+                CHECK WINNER
+              </button>
+              <p>{this.state.error}</p>
             </div>
-            <p>{this.props.movie.title}</p>
-            <p>{moment(this.props.movie.releaseDate).format('dddd, MMMM Do YYYY')}</p>
-            <button
-              className='auctionButton'
-              onClick={() => this.beginAuction(this.props.movie.id)}>
-              BEGIN AUCTION
-            </button>
-            <p>{this.state.error}</p>
-          </div>
+          ) : (
+            <div className='movieParent'>
+              <div className='posterWrapper'>
+                <img
+                  src={this.props.movie.posterUrl}
+                  className='posterImage'
+                  alt='movie poster' />
+              </div>
+              <p>{this.props.movie.title}</p>
+              <p>{moment(this.props.movie.releaseDate).format('dddd, MMMM Do YYYY')}</p>
+              <button
+                className='auctionButton'
+                onClick={() => this.beginAuction(this.props.movie.id)}>
+                BEGIN AUCTION
+              </button>
+              <p>{this.state.error}</p>
+            </div>
       )
   }
 
