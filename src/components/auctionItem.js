@@ -36,6 +36,7 @@ class AuctionItem extends Component {
 
   callbackFunction(timerDone) {
       this.setState({timerDone: timerDone})
+      this.setState({error: ''})
       this.setState({auctionStarted: false})
 	}
 
@@ -76,7 +77,7 @@ class AuctionItem extends Component {
  }
 
   beginAuction(movieId) {
-    fetch('https://api-dev.couchsports.ca/movies/bid/' + this.props.gameId + '/' + movieId, {
+    fetch('https://api-dev.couchsports.ca/bids/' + this.props.gameId + '/' + movieId, {
       headers: {
         Authorization: 'Bearer ' + localStorage.getItem('CouchSportsToken')
       }
@@ -109,6 +110,8 @@ class AuctionItem extends Component {
   }
 
   submitBid() {
+    this.setState({error: ''})
+
     if (moment() > moment(this.state.auctionExpiry)) {
       this.setState({error: 'The auction for this item has completed.'})
     } else if (this.state.bid <= this.state.currentHighBid) {
@@ -118,7 +121,7 @@ class AuctionItem extends Component {
       this.setState({error: 'You may not bid higher than the maximum: $' + this.state.dollarSpendingCap})
       this.setState({bid: this.state.currentHighBid + 1})
     } else {
-      fetch('https://api-dev.couchsports.ca/movies/bid', {
+      fetch('https://api-dev.couchsports.ca/bids', {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ' + localStorage.getItem('CouchSportsToken')
@@ -128,13 +131,16 @@ class AuctionItem extends Component {
       })
       .then(async res => {
         let jsonRes = await res.json()
+        console.log(res)
         if (!res.ok) {
           let message = jsonRes.message
           if (message.includes('closed')) {
             this.setState({error: 'Auction is closed for this item.'})
           }
+          if (res.status === 400) {
+            this.setState({error: message})
+          }
         }
-        this.setState({error: ''})
         if (jsonRes.bid) {
           this.setState({currentHighBid: jsonRes.bid})
           this.setState({minBid: jsonRes.bid + 1})
