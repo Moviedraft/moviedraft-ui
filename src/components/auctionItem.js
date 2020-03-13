@@ -52,7 +52,7 @@ class AuctionItem extends Component {
  }
 
  checkWinner() {
-   let message = this.state.highestBidder == '' && this.state.currentHighBid == 0 ?
+   let message = this.state.highestBidder === '' && this.state.currentHighBid === 0 ?
      (
        'System: No bid was placed for "' +
        this.props.movie.title +
@@ -188,7 +188,7 @@ class AuctionItem extends Component {
                   alt='movie poster' />
               </div>
               <p>{this.props.movie.title}</p>
-              <p>{moment(this.props.movie.releaseDate).format('dddd, MMMM Do YYYY')}</p>
+              <p>{moment.utc(this.props.movie.releaseDate).format('dddd, MMMM Do YYYY')}</p>
               <button
                 className='auctionButton'
                 onClick={() => this.checkWinner()}>
@@ -205,7 +205,7 @@ class AuctionItem extends Component {
                   alt='movie poster' />
               </div>
               <p>{this.props.movie.title}</p>
-              <p>{moment(this.props.movie.releaseDate).format('dddd, MMMM Do YYYY')}</p>
+              <p>{moment.utc(this.props.movie.releaseDate).format('dddd, MMMM Do YYYY')}</p>
               <button
                 className='auctionButton'
                 onClick={() => this.beginAuction(this.props.movie.id)}>
