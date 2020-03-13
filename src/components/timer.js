@@ -27,7 +27,7 @@ class Timer extends Component {
       this.setState({
         time: this.state.time - 1
       })
-      if (this.state.time === 0){
+      if (this.state.time <= 0){
         this.stopTimer();
         this.sendData();
       }
