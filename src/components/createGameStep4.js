@@ -12,6 +12,7 @@ class CreateGameStep4 extends Component {
     this.handleKeyDown = this.handleKeyDown.bind(this)
     this.handleDelete = this.handleDelete.bind(this)
     this.handlePaste = this.handlePaste.bind(this)
+    this.blurInput = this.blurInput.bind(this)
     this.isEmail = this.isEmail.bind(this)
     this.renderEmails = this.renderEmails.bind(this)
   }
@@ -35,14 +36,22 @@ class CreateGameStep4 extends Component {
     event.preventDefault();
     let paste = event.clipboardData.getData('text');
     let emails = paste.match(/[\w\d.-]+@[\w\d.-]+[\w\d-]+/g);
-    let emailsToBeAdded = emails.filter(email => !this.props.playerEmails.includes(email))
+    if(emails) {
+      let emailsToBeAdded = emails.filter(email => !this.props.playerEmails.includes(email) &&
+        (email.includes('gmail.com') || email.includes('googlemail.com') || email.includes('google.com')))
 
-    emailsToBeAdded.forEach((email) => {
-      this.props.playerEmails.push(email)
-    });
+      emailsToBeAdded.forEach((email) => {
+        this.props.playerEmails.push(email)
+      });
+    }
 
     this.setState({value: ''})
+    this.blurInput()
   }
+
+  blurInput(){
+    this.refs.emailInput.blur()
+ }
 
   handleDelete(email) {
     const index = this.props.playerEmails.findIndex((x) => x === email);
@@ -79,7 +88,9 @@ class CreateGameStep4 extends Component {
 
     return (
       <div id='emailWrapper'>
+        <p>Emails must use the following Google domains: 'gmail.com', 'googlemail.com', or 'google.com'</p>
         <input
+          ref="emailInput"
           placeholder="Type or paste email addresses and press `Enter`"
           id='email'
           name='email'
