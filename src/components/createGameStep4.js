@@ -88,6 +88,7 @@ class CreateGameStep4 extends Component {
 
     return (
       <div id='emailWrapper'>
+        <p>Emails must use the following Google domains: 'gmail.com', 'googlemail.com', or 'google.com'</p>
         <input
           ref="emailInput"
           placeholder="Type or paste email addresses and press `Enter`"
