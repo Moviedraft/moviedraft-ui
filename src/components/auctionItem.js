@@ -131,7 +131,6 @@ class AuctionItem extends Component {
       })
       .then(async res => {
         let jsonRes = await res.json()
-        console.log(res)
         if (!res.ok) {
           let message = jsonRes.message
           if (message.includes('closed')) {
