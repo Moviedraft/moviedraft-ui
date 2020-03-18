@@ -8,13 +8,25 @@ class Game extends Component {
     this.state = {
       gameId: this.props.gameId,
       auctionDate: '',
-      movies: []
+      movies: [],
+      commissionerId: '',
+      auctionComplete: false
     }
 
+    this.completeAuction = this.completeAuction.bind(this)
+    this.fetchGame = this.fetchGame.bind(this)
     this.renderGamePage = this.renderGamePage.bind(this)
   }
 
   componentDidMount() {
+    this.fetchGame()
+  }
+
+  completeAuction(auctionComplete) {
+    this.setState({auctionComplete: auctionComplete})
+  }
+
+  fetchGame() {
     fetch('https://api-dev.couchsports.ca/games/' + this.state.gameId, {
       headers: {
         Authorization: 'Bearer ' + localStorage.getItem('CouchSportsToken')
@@ -24,18 +36,24 @@ class Game extends Component {
     .then((data) => {
       this.setState({auctionDate: moment(data.auctionDate)})
       this.setState({movies: data.movies})
+      this.setState({commissionerId: data.commissionerId})
+      this.setState({auctionComplete: data.auctionComplete})
       });
   }
 
   renderGamePage() {
-    /*if(moment() < this.state.auctionDate){
-      return <AuctionHome
-        movies={this.state.movies}
-        gameId={this.state.gameId} />
-    */
-    return <AuctionHome
-      movies={this.state.movies}
-      gameId={this.state.gameId} />
+    return this.state.auctionComplete ?
+      (
+        <div>
+          THIS IS THE GAME PAGE!!!!!
+        </div>
+      ) : (
+        <AuctionHome
+          parentCallback={this.completeAuction}
+          movies={this.state.movies}
+          gameId={this.state.gameId}
+          commissionerId={this.state.commissionerId} />
+      )
   }
 
   render() {
