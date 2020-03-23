@@ -1,29 +1,22 @@
 import React, { Component } from 'react';
 import moment from 'moment';
 import AuctionHome from './auctionHome.js'
+import GameHome from './gameHome.js'
 
 class Game extends Component {
+  _gameRetrieved = false
+  _loaded = false
   constructor(props){
     super(props)
     this.state = {
       gameId: this.props.gameId,
       auctionDate: '',
       movies: [],
-      commissionerId: '',
       auctionComplete: false
     }
 
-    this.completeAuction = this.completeAuction.bind(this)
     this.fetchGame = this.fetchGame.bind(this)
-    this.renderGamePage = this.renderGamePage.bind(this)
-  }
-
-  componentDidMount() {
-    this.fetchGame()
-  }
-
-  completeAuction(auctionComplete) {
-    this.setState({auctionComplete: auctionComplete})
+    this.renderAuctionHome = this.renderAuctionHome.bind(this)
   }
 
   fetchGame() {
@@ -36,32 +29,44 @@ class Game extends Component {
     .then((data) => {
       this.setState({auctionDate: moment(data.auctionDate)})
       this.setState({movies: data.movies})
-      this.setState({commissionerId: data.commissionerId})
       this.setState({auctionComplete: data.auctionComplete})
+      this._gameRetrieved = true
+      this._loaded = true
       });
   }
 
-  renderGamePage() {
-    return this.state.auctionComplete ?
-      (
-        <div>
-          THIS IS THE GAME PAGE!!!!!
-        </div>
-      ) : (
-        <AuctionHome
-          parentCallback={this.completeAuction}
-          movies={this.state.movies}
-          gameId={this.state.gameId}
-          commissionerId={this.state.commissionerId} />
-      )
+  renderAuctionHome() {
+    return <AuctionHome
+      movies={this.state.movies}
+      gameId={this.state.gameId} />
+  }
+
+  renderGameHome() {
+    return <GameHome
+      movies={this.state.movies}
+      gameId={this.state.gameId} />
   }
 
   render() {
-    return (
-      <div>
-        {this.renderGamePage()}
-      </div>
-    )
+    if (!this._gameRetrieved) {
+      this.fetchGame()
+    }
+
+    if (this._loaded) {
+      return this.state.auctionComplete ?
+      (
+        <div>
+          {this.renderGameHome()}
+        </div>
+      ) :
+      (
+        <div>
+          {this.renderAuctionHome()}
+        </div>
+      )
+    }
+
+    return null
   }
 }
 
