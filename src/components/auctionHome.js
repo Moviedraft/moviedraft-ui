@@ -79,7 +79,7 @@ class AuctionHome extends Component {
           </button>
         </div>
       ) : (
-        <div></div>
+        null
       )
   }
 
