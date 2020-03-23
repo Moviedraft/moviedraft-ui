@@ -60,7 +60,7 @@ class CreateGameStep4 extends Component {
   }
 
   isEmail(email) {
-    return /^[a-zA-Z0-9]+@[a-zA-Z0-9]+.[A-Za-z]+$/.test(email);
+    return /^[\w\d.-]+@[\w\d.-]+.[\w\d-]+$/.test(email);
 
   }
 
@@ -91,7 +91,7 @@ class CreateGameStep4 extends Component {
         <p>Emails must use the following Google domains: 'gmail.com', 'googlemail.com', or 'google.com'</p>
         <input
           ref="emailInput"
-          placeholder="Type or paste email addresses and press `Enter`"
+          placeholder="Type or paste email addresses"
           id='email'
           name='email'
           value={this.state.value}
