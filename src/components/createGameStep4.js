@@ -25,7 +25,8 @@ class CreateGameStep4 extends Component {
     if (['Enter', 'Tab', ','].includes(event.key)) {
       event.preventDefault();
       let email = this.state.value.trim();
-      if (email && !this.props.playerEmails.includes(email) && this.isEmail(email)) {
+      if (email && !this.props.playerEmails.includes(email) && this.isEmail(email) &&
+        (email.includes('gmail.com') || email.includes('googlemail.com') || email.includes('google.com'))) {
         this.props.playerEmails.push(email)
       }
       this.setState({value: ''})
