@@ -1,0 +1,82 @@
+#playerTable {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+#playerTable thead {
+    visibility: hidden;
+    background: #fafafa;
+  }
+
+  @media screen and (min-width: 600px) {
+    #playerTable thead {
+      visibility: visible;
+    }
+  }
+
+  #playerTable tr {
+    border: 1px solid #ddd;
+    border-bottom: 2px solid #ddd;
+    padding: 5px;
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  @media screen and (min-width: 600px) {
+    #playerTable tr {
+      display: table-row;
+      border-bottom-width: 1px;
+      margin-bottom: 0;
+    }
+  }
+
+  #playerTable tr:nth-child(even) {
+    background: #fafafa;
+  }
+
+  #playerTable th, td {
+    padding: 10px;
+    text-align: left;
+  }
+
+  #playerTable th {
+    text-transform: uppercase;
+    font-size: 11px;
+  }
+
+#playerTable td {
+    display: block;
+    text-align: right;
+    font-size: 13px;
+    border-bottom: 1px dotted #ddd;
+  }
+
+@media screen and (min-width: 600px) {
+  #playerTable td{
+    display: table-cell;
+    text-align: left;
+    font-size: 14px;
+    border-bottom: none;
+  }
+}
+
+#playerTable td:last-child {
+  border-bottom: none;
+}
+
+#playerTable td::before {
+    content: attr(title);
+    float: left;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+@media screen and (min-width: 600px) {
+  #playerTable td::before {
+    content: '';
+    display: none;
+  }
+}
