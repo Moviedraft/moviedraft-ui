@@ -44,8 +44,7 @@ class GameHome extends Component {
         <thead>
           <tr>
             {this._columnNames.map((columnName, i) => (
-              <th
-                key={i}>
+              <th key={i}>
                 {columnName}
               </th>
             ))}
