@@ -52,7 +52,6 @@ class Game extends Component {
 
   renderGameHome() {
     return <GameHome
-      movies={this.state.movies}
       gameId={this.state.gameId} />
   }
 
