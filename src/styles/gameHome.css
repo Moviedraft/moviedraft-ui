@@ -1,23 +1,34 @@
-#playerTable {
+#gameHomeDiv {
+  padding: 0.5em;
+}
+
+.playerTable {
   width: 100%;
   margin: 0;
+  margin-top: -4em;
   padding: 0;
   border-collapse: collapse;
   border-spacing: 0;
 }
 
-#playerTable thead {
+@media screen and (min-width: 600px) {
+  .playerTable {
+    margin-top: 0;
+  }
+}
+
+.playerTable thead {
     visibility: hidden;
     background: #fafafa;
   }
 
   @media screen and (min-width: 600px) {
-    #playerTable thead {
+    .playerTable thead {
       visibility: visible;
     }
   }
 
-  #playerTable tr {
+  .playerTable tr {
     border: 1px solid #ddd;
     border-bottom: 2px solid #ddd;
     padding: 5px;
@@ -26,28 +37,28 @@
   }
 
   @media screen and (min-width: 600px) {
-    #playerTable tr {
+    .playerTable tr {
       display: table-row;
       border-bottom-width: 1px;
       margin-bottom: 0;
     }
   }
 
-  #playerTable tr:nth-child(even) {
+  .playerTable tr:nth-child(even) {
     background: #fafafa;
   }
 
-  #playerTable th, td {
+  .playerTable th, td {
     padding: 10px;
     text-align: left;
   }
 
-  #playerTable th {
+  .playerTable th {
     text-transform: uppercase;
     font-size: 11px;
   }
 
-#playerTable td {
+.playerTable td {
     display: block;
     text-align: right;
     font-size: 13px;
@@ -55,7 +66,7 @@
   }
 
 @media screen and (min-width: 600px) {
-  #playerTable td{
+  .playerTable td{
     display: table-cell;
     text-align: left;
     font-size: 14px;
@@ -63,11 +74,11 @@
   }
 }
 
-#playerTable td:last-child {
+.playerTable td:last-child {
   border-bottom: none;
 }
 
-#playerTable td::before {
+.playerTable td::before {
     content: attr(title);
     float: left;
     text-transform: uppercase;
@@ -75,8 +86,18 @@
 }
 
 @media screen and (min-width: 600px) {
-  #playerTable td::before {
+  .playerTable td::before {
     content: '';
     display: none;
+  }
+}
+
+#valueTable {
+  width: 100%;
+}
+
+@media screen and (min-width: 600px) {
+  #valueTable {
+    width: 40%;
   }
 }
