@@ -3,7 +3,8 @@ import '../styles/gameHome.css'
 
 class GameHome extends Component {
   _dataLoaded = false
-  _columnNames = ['Rank', 'Player', 'Total Gross', 'Total Spent', 'Movies Purchased']
+  _playerColumnNames = ['Rank', 'Player', 'Total Gross', 'Total Spent', 'Movies Purchased']
+  _valueColumnNames = ['Rank', 'Player', 'Value']
   _formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
@@ -40,17 +41,19 @@ class GameHome extends Component {
 
   renderPlayers() {
     return (
-      <table id='playerTable'>
-        <thead>
-          <tr>
-            {this._columnNames.map((columnName, i) => (
-              <th key={i}>
-                {columnName}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
+      <div>
+        <h2>Player Rankings</h2>
+        <table className='playerTable'>
+          <thead>
+            <tr>
+              {this._playerColumnNames.map((columnName, i) => (
+                <th key={i}>
+                  {columnName}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
             {this.state.players.map((player, i) => (
               <tr key={player.id}>
                 <td title='rank'>{++i}</td>
@@ -59,8 +62,32 @@ class GameHome extends Component {
                 <td title='total spent'>{this._formatter.format(player.totalSpent)}</td>
                 <td title='movies purchased'>{player.moviesPurchasedTitles.join(', ')}</td>
               </tr>))}
-        </tbody>
-      </table>
+          </tbody>
+        </table>
+        <br/>
+        <h2>Value Rankings</h2>
+        <table
+          className='playerTable'
+          id='valueTable'>
+          <thead>
+            <tr>
+              {this._valueColumnNames.map((columnName, i) => (
+                <th key={i}>
+                  {columnName}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {this.state.players.map((player, i) => (
+              <tr key={player.id}>
+                <td title='rank'>{++i}</td>
+                <td title='player'>{player.userHandle}</td>
+                <td title='value'>{this._formatter.format(player.value)}</td>
+              </tr>))}
+          </tbody>
+        </table>
+      </div>
     )
   }
 
@@ -72,7 +99,7 @@ class GameHome extends Component {
 
     if (this._dataLoaded) {
       return (
-        <div>
+        <div id='gameHomeDiv'>
           {this.renderPlayers()}
         </div>
       )
