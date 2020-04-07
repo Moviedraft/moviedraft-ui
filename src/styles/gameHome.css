@@ -2,33 +2,34 @@
   padding: 0.5em;
 }
 
-.playerTable {
+.gameTable {
   width: 100%;
   margin: 0;
   margin-top: -4em;
   padding: 0;
   border-collapse: collapse;
   border-spacing: 0;
+  empty-cells: show;
 }
 
 @media screen and (min-width: 600px) {
-  .playerTable {
+  .gameTable {
     margin-top: 0;
   }
 }
 
-.playerTable thead {
+.gameTable thead {
     visibility: hidden;
     background: #fafafa;
   }
 
   @media screen and (min-width: 600px) {
-    .playerTable thead {
+    .gameTable thead {
       visibility: visible;
     }
   }
 
-  .playerTable tr {
+  .gameTable tr {
     border: 1px solid #ddd;
     border-bottom: 2px solid #ddd;
     padding: 5px;
@@ -37,28 +38,28 @@
   }
 
   @media screen and (min-width: 600px) {
-    .playerTable tr {
+    .gameTable tr {
       display: table-row;
       border-bottom-width: 1px;
       margin-bottom: 0;
     }
   }
 
-  .playerTable tr:nth-child(even) {
+  .gameTable tr:nth-child(even) {
     background: #fafafa;
   }
 
-  .playerTable th, td {
+  .gameTable th, td {
     padding: 10px;
     text-align: left;
   }
 
-  .playerTable th {
+  .gameTable th {
     text-transform: uppercase;
     font-size: 11px;
   }
 
-.playerTable td {
+.gameTable td {
     display: block;
     text-align: right;
     font-size: 13px;
@@ -66,7 +67,7 @@
   }
 
 @media screen and (min-width: 600px) {
-  .playerTable td{
+  .gameTable td{
     display: table-cell;
     text-align: left;
     font-size: 14px;
@@ -74,11 +75,11 @@
   }
 }
 
-.playerTable td:last-child {
+.gameTable td:last-child {
   border-bottom: none;
 }
 
-.playerTable td::before {
+.gameTable td::before {
     content: attr(title);
     float: left;
     text-transform: uppercase;
@@ -86,7 +87,7 @@
 }
 
 @media screen and (min-width: 600px) {
-  .playerTable td::before {
+  .gameTable td::before {
     content: '';
     display: none;
   }
