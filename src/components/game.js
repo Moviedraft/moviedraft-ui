@@ -5,7 +5,6 @@ import GameHome from './gameHome.js'
 
 class Game extends Component {
   _gameRetrieved = false
-  _loaded = false
   constructor(props){
     super(props)
     this.state = {
@@ -37,8 +36,6 @@ class Game extends Component {
       this.setState({movies: data.movies})
       this.setState({auctionComplete: data.auctionComplete})
       this.setState({commissionerId: data.commissionerId})
-      this._gameRetrieved = true
-      this._loaded = true
       });
   }
 
@@ -58,9 +55,10 @@ class Game extends Component {
   render() {
     if (!this._gameRetrieved) {
       this.fetchGame()
+      this._gameRetrieved = true
     }
 
-    if (this._loaded) {
+    if (this._gameRetrieved) {
       return this.state.auctionComplete ?
       (
         <div>
