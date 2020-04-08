@@ -3,7 +3,7 @@ import '../styles/weekendBoxOffice.css'
 
 class WeekendBoxOffice extends Component {
   _weekendBoxOfficeLoaded = false
-  _weekendBoxOfficeColumnNames = ['Rank', 'Title', 'Weekend Gross', 'Owner', 'Purchase Price', 'Total Gross', 'Note']
+  _weekendBoxOfficeColumnNames = ['Rank', 'Title', 'Weekend Gross', 'Owner', 'Purchase Price', 'Total Gross']
   _formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
@@ -61,7 +61,6 @@ class WeekendBoxOffice extends Component {
                 <td title='owner'>{movie.owner ?? '-'}</td>
                 <td title='purchase price'>{this._formatter.format(movie.purchasePrice)}</td>
                 <td title='total gross'>{this._formatter.format(movie.totalGross)}</td>
-                <td title='note'>{movie.note ?? '-'}</td>
               </tr>))}
           </tbody>
         </table>
