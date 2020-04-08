@@ -12,7 +12,8 @@ class Game extends Component {
       auctionDate: '',
       movies: [],
       commissionerId: '',
-      auctionComplete: false
+      auctionComplete: false,
+      loaded: false
     }
 
     this.setAuctionComplete = this.setAuctionComplete.bind(this)
@@ -36,6 +37,7 @@ class Game extends Component {
       this.setState({movies: data.movies})
       this.setState({auctionComplete: data.auctionComplete})
       this.setState({commissionerId: data.commissionerId})
+      this.setState({loaded: true})
       });
   }
 
@@ -58,7 +60,7 @@ class Game extends Component {
       this._gameRetrieved = true
     }
 
-    if (this._gameRetrieved) {
+    if (this._gameRetrieved && this.state.loaded) {
       return this.state.auctionComplete ?
       (
         <div>
