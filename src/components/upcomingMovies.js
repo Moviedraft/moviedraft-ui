@@ -26,7 +26,7 @@ class UpcomingMovies extends Component {
     let startDate = moment().format();
     let endDate = moment().startOf('isoWeek').add(1, 'week').format();
 
-    fetch('https://api-dev.couchsports.ca/movies/?startDate=' + startDate + '&endDate=' + endDate, {
+    fetch('https://api-dev.couchsports.ca/movies?startDate=' + startDate + '&endDate=' + endDate, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: 'Bearer ' + localStorage.getItem('CouchSportsToken')
