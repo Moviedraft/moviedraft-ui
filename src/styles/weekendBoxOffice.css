@@ -88,3 +88,7 @@
     display: none;
   }
 }
+
+[openingweekend="true"] {
+    background-color: #FFFF66;
+}

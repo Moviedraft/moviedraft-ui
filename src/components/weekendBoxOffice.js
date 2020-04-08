@@ -54,7 +54,10 @@ class WeekendBoxOffice extends Component {
           </thead>
           <tbody>
             {this.state.weekend.map((movie, i) => (
-              <tr key={movie.id}>
+              <tr
+                key={movie.id}
+                openingweekend={movie.openingWeekend.toString()}
+              >
                 <td title='rank'>{++i}</td>
                 <td title='title'>{movie.title}</td>
                 <td title='weekend gross'>{this._formatter.format(movie.weekendGross)}</td>
