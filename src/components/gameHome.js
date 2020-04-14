@@ -3,6 +3,7 @@ import '../styles/gameHome.css'
 import GamePlayers from './gamePlayers.js'
 import WeekendBoxOffice from './weekendBoxOffice.js'
 import UpcomingMovies from './upcomingMovies.js'
+import Poll from './poll.js'
 
 class GameHome extends Component {
   constructor(props){
@@ -20,6 +21,8 @@ class GameHome extends Component {
           gameId={this.props.gameId} />
         <UpcomingMovies
           gameId={this.props.gameId} />
+        <Poll
+          gameId={this.props.gameId}/>
       </div>
     )
   }
