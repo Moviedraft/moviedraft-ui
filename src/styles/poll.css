@@ -1,0 +1,11 @@
+#voteButton {
+  position: relative;
+}
+
+#resultsButton {
+  position: relative;
+}
+
+#pollBox {
+  padding: 0.5em;
+}
