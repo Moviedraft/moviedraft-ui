@@ -15,6 +15,12 @@ class Header extends Component {
     this.loggedIn = this.loggedIn.bind(this)
   }
 
+  componentDidMount() {
+    if (localStorage.getItem('CouchSportsToken')) {
+      this.setState({loggedIn: true})
+    }
+  }
+
   onClick() {
     navigate('/user')
   }
