@@ -14,7 +14,7 @@ class Header extends Component {
   }
 
   onClick() {
-    navigate('/')
+    navigate('/user')
   }
 
   render() {
