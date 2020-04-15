@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { navigate } from '@reach/router';
 import '../styles/account.css'
 import DownArrow from '../downArrow.png';
+import GenericPerson from '../genericPerson.jpeg';
 
 class Account extends Component {
   constructor(props){
@@ -51,7 +52,7 @@ class Account extends Component {
          onClick={() => this.showMenu()}>
          <img
           id='AccountButtonProfilePic'
-          src={localStorage.getItem('CouchSportsProfilePic')}
+          src={GenericPerson}
           alt='Profile Pic' />
          <img
            id='DownArrow'
