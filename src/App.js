@@ -5,6 +5,7 @@ import Header from './components/header.js'
 import Home from './components/home.js'
 import User from './components/user.js'
 import Game from './components/game.js'
+import PrivateRoute from './components/privateRoute.js'
 
 Modal.setAppElement('body')
 
@@ -14,8 +15,8 @@ function App() {
       <Header />
       <Router>
         <Home path='/' />
-        <User path='/user' component={ User }/>
-        <Game path='/games/:gameId' component={Game} />
+        <PrivateRoute path='/user' component={User} />
+        <PrivateRoute path='/games/:gameId' component={Game} />
       </Router>
     </div>
   );
