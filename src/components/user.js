@@ -57,6 +57,7 @@ class User extends Component {
       this.setState({userHandle: data.userHandle})
       this.setState({email: data.email})
       this.setState({picture: data.picture})
+      localStorage.setItem('CouchSportsProfilePic', data.picture)
 
       data.games.forEach((game) => {
         this.state.userGames.push(game)
