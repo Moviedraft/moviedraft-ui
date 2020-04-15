@@ -102,6 +102,9 @@ class Poll extends Component {
 
     return (
       <div>
+        <h4>
+          {this.renderQuestion()}
+        </h4>
         <BarChart data={data}/>
       </div>
     )
