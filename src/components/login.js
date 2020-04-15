@@ -22,6 +22,7 @@ class Login extends Component {
         .then((data) => {
           localStorage.setItem('CouchSportsToken', data.access_token);
           this.setState({loggedIn: true})
+          this.props.parentCallback(this.state.loggedIn)
         })
         .catch(console.log)
 
