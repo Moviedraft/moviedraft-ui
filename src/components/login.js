@@ -21,6 +21,7 @@ class Login extends Component {
         .then(res => res.json())
         .then((data) => {
           localStorage.setItem('CouchSportsToken', data.access_token);
+          localStorage.setItem('CouchSportsTokenExpiry', data.expiresAt)
           this.setState({loggedIn: true})
           this.props.parentCallback(this.state.loggedIn)
         })

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import '../styles/home.css'
+import Header from '../components/header.js'
 
 class Home extends Component {
   constructor(props){
@@ -10,7 +11,10 @@ class Home extends Component {
 
   render() {
     return (
-      <div className='shia'></div>
+      <div>
+        <Header />
+        <div className='shia'></div>
+      </div>
     );
   }
 }

@@ -37,7 +37,7 @@ class Account extends Component {
       }
     })
     .then(() => {
-      localStorage.removeItem('CouchSportsToken')
+      localStorage.clear()
       this.props.parentCallback(false)
       navigate('/')
     })
