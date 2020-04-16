@@ -3,6 +3,7 @@ import { navigate } from "@reach/router"
 import '../styles/header.css'
 import Login from './login.js'
 import Account from './account.js'
+import moment from 'moment'
 
 class Header extends Component {
   constructor(props){
@@ -16,7 +17,7 @@ class Header extends Component {
   }
 
   componentDidMount() {
-    if (localStorage.getItem('CouchSportsToken')) {
+    if (localStorage.getItem('CouchSportsToken') && moment() < moment(localStorage.getItem('CouchSportsTokenExpiry'))) {
       this.setState({loggedIn: true})
     }
   }

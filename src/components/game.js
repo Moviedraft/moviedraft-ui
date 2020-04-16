@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import moment from 'moment';
+import Header from '../components/header.js'
 import AuctionHome from './auctionHome.js'
 import GameHome from './gameHome.js'
 
@@ -64,12 +65,18 @@ class Game extends Component {
       return this.state.auctionComplete ?
       (
         <div>
-          {this.renderGameHome()}
+          <Header />
+          <div>
+            {this.renderGameHome()}
+          </div>
         </div>
       ) :
       (
         <div>
-          {this.renderAuctionHome()}
+          <Header />
+          <div>
+            {this.renderAuctionHome()}
+          </div>
         </div>
       )
     }

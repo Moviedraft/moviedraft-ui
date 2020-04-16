@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import '../styles/user.css'
+import Header from '../components/header.js'
 import UserHandle from './userHandle.js'
 import UserGames from './userGames.js'
 import CreateGame from './createGame.js'
@@ -67,6 +68,7 @@ class User extends Component {
   render() {
     return (
       <div id='userPage'>
+        <Header />
         <div id='profilePic'>
           <img
             style={this.state.imageLoaded ? {} : {display: 'none'}}
