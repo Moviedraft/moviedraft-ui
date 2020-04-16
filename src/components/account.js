@@ -70,7 +70,12 @@ class Account extends Component {
                 this.dropdownMenu = element;
               }}>
               <button
-                id='Logout'
+                className='DropDownButton'
+                onClick={() => navigate('/user')}>
+                Account
+              </button>
+              <button
+                className='DropDownButton'
                 onClick={() => this.logOut()}>
                 Logout
               </button>

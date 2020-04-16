@@ -7,7 +7,7 @@
 }
 
 #profilePic {
-  overflow: auto;
+  overflow: visible;
 }
 
 #userTitle {

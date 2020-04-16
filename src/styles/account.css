@@ -35,11 +35,12 @@
   margin-top: 50px;
 }
 
-#Logout {
-  width: 100px;
+.DropDownButton {
+  width: 100%;
   padding: 10px;
   border-radius: 5px;
   border: 1px solid #333;
   background-color: white;
   cursor: pointer;
+  position: relative;
 }
