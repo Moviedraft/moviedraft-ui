@@ -9,6 +9,7 @@ class User extends Component {
   constructor(props){
     super(props)
     this.state = {
+      userId: '',
       firstName: '',
       lastName: '',
       picture: '',
@@ -22,6 +23,7 @@ class User extends Component {
     this.userHandlecallbackFunction = this.userHandlecallbackFunction.bind(this)
     this.userGamesCallbackFunction = this.userGamesCallbackFunction.bind(this)
     this.createGameCallbackFunction = this.createGameCallbackFunction.bind(this)
+    this.deleteGameCallbackFunction = this.deleteGameCallbackFunction.bind(this)
   }
 
   onClick() {
@@ -43,6 +45,15 @@ class User extends Component {
     this.setState({modalOpen: modalOpen})
   }
 
+  deleteGameCallbackFunction(gameId) {
+    var userGames = [...this.state.userGames]
+    var index = userGames.findIndex(x => x.game_id === gameId);
+    if (index !== -1) {
+      userGames.splice(index, 1);
+      this.setState({userGames: userGames});
+    }
+  }
+
   componentDidMount() {
     fetch('https://api-dev.couchsports.ca/users/current', {
       headers: {
@@ -53,6 +64,7 @@ class User extends Component {
     .then((data) => {
       localStorage.setItem('CouchSportsHandle', data.userHandle)
 
+      this.setState({userId: data.id})
       this.setState({firstName: data.firstName})
       this.setState({lastName: data.lastName})
       this.setState({userHandle: data.userHandle})
@@ -106,6 +118,8 @@ class User extends Component {
         </div>
         <UserGames
           parentCallback={this.userGamesCallbackFunction}
+          deleteGameCallbackFunction={this.deleteGameCallbackFunction}
+          userId={this.state.userId}
           userGames={this.state.userGames} />
         <CreateGame
           parentCallback={this.createGameCallbackFunction}

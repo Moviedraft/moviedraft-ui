@@ -10,6 +10,7 @@ class UserGames extends Component {
 
     this.sendData = this.sendData.bind(this)
     this.onClick = this.onClick.bind(this)
+    this.deleteGame = this.deleteGame.bind(this)
     this.renderGameDivs = this.renderGameDivs.bind(this)
   }
 
@@ -34,6 +35,35 @@ class UserGames extends Component {
     .catch(error => console.log(error))
   }
 
+  deleteGame(gameId) {
+    fetch(`https://api-dev.couchsports.ca/games/${gameId}`, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + localStorage.getItem('CouchSportsToken')
+      },
+      method: 'DELETE'
+    })
+    .then(res => {
+      if (res.ok) {
+        this.props.deleteGameCallbackFunction(gameId)
+      }
+    })
+    .catch(error => console.log(error))
+  }
+
+  renderDeleteButton(commissionerId, gameId) {
+    return this.props.userId === commissionerId ?
+      (
+        <button
+        id='deleteButton'
+        onClick={() => this.deleteGame(gameId)}>
+          <b>DELETE GAME</b>
+        </button>
+      ) : (
+        null
+      )
+  }
+
   renderGameDivs(array) {
     return array.map(item =>
       item.joined ? (
@@ -44,6 +74,7 @@ class UserGames extends Component {
               state={{gameId: `${item.game_id}`}}>
               {item.gameName}
             </Link>
+            {this.renderDeleteButton(item.commissioner_id, item.game_id)}
           </div>
           <div className='invitedGame'></div>
         </div>

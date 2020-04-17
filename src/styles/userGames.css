@@ -43,3 +43,9 @@
   position: inherit;
   margin-left: 1em;
 }
+
+#deleteButton {
+  display: inline-block !important;
+  position: relative;
+  margin-left: 1em;
+}
