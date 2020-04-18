@@ -33,6 +33,7 @@ class Poll extends Component {
         let jsonResponse = await res.json()
         this.setState({question: jsonResponse.question})
         this.setState({choices: jsonResponse.choices})
+        this._pollLoaded = true
       }
     })
     .catch(error => console.log(error))
@@ -140,16 +141,16 @@ class Poll extends Component {
   render() {
     if (!this._pollLoaded) {
       this.fetchPoll()
-      this._pollLoaded = true
     }
 
-    if (this._pollLoaded) {
-      return (
+    return this._pollLoaded ?
+      (
         <div>
           {this.renderPoll()}
         </div>
+      ) : (
+        null
       )
-    }
   }
 }
 
