@@ -18,7 +18,6 @@ class AuctionItem extends Component {
       bid: 1,
       timerDone: false,
       error: '',
-      highBidMessage: '',
       auctionItemChannelId: this.props.gameId + this.props.movie.id
     }
 
@@ -76,7 +75,7 @@ class AuctionItem extends Component {
       (status, response) => {
         if (response.channels && this.state.auctionItemChannelId in response.channels) {
           response.channels[this.state.auctionItemChannelId].forEach((message) => {
-            let splitMessage = this.state.highBidMessage.split(' ')
+            let splitMessage = message.message.split(' ')
             this.setState({highestBidder: splitMessage[0]});
             this.setState({minBid: parseInt(splitMessage[1], 10) + 1});
             this.setState({bid: parseInt(splitMessage[1], 10) + 1});
