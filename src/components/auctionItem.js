@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import moment from 'moment';
 import PubNub from 'pubnub';
+import { PubNubProvider } from 'pubnub-react';
 import '../styles/auctionItem.css';
 import Timer from './timer.js';
 
@@ -16,13 +17,21 @@ class AuctionItem extends Component {
       highestBidder: '',
       bid: 1,
       timerDone: false,
-      error: ''
+      error: '',
+      highBidMessage: '',
+      auctionItemChannelId: this.props.gameId + this.props.movie.id
     }
 
     this.pubnub = new PubNub({
       publishKey: process.env.REACT_APP_PUBNUB_PUBLISH_KEY,
       subscribeKey: process.env.REACT_APP_PUBNUB_SUBSCRIBE_KEY,
       uuid: this.props.gameId + this.props.gameId
+    });
+
+    this.auctionItemPubNub = new PubNub({
+      publishKey: process.env.REACT_APP_PUBNUB_PUBLISH_KEY,
+      subscribeKey: process.env.REACT_APP_PUBNUB_SUBSCRIBE_KEY,
+      uuid: this.props.gameId + this.props.gameId + this.props.movie.id
     });
 
     this.callbackFunction = this.callbackFunction.bind(this)
@@ -32,6 +41,7 @@ class AuctionItem extends Component {
     this.submitBid = this.submitBid.bind(this)
     this.renderAuctionPage = this.renderAuctionItem.bind(this)
     this.setStates = this.setStates.bind(this)
+    this.publishHighBid = this.publishHighBid.bind(this)
   }
 
   callbackFunction(timerDone) {
@@ -42,10 +52,45 @@ class AuctionItem extends Component {
 
   componentDidMount(){
     document.addEventListener('click', this.setState({error: ''}))
+
+    this.auctionItemPubNub.addListener({
+      message: messageEvent => {
+        let splitMessage = messageEvent.message.split(' ')
+        this.setState({highestBidder: splitMessage[0]});
+        this.setState({minBid: parseInt(splitMessage[1], 10) + 1});
+        this.setState({bid: parseInt(splitMessage[1], 10) + 1});
+        this.setState({currentHighBid: splitMessage[1]});
+      }
+    });
+
+    this.auctionItemPubNub.subscribe({
+      channels: [this.state.auctionItemChannelId],
+      withPresence: true
+    });
+
+    this.auctionItemPubNub.fetchMessages(
+      {
+        channels: [this.state.auctionItemChannelId],
+        count: 1
+      },
+      (status, response) => {
+        if (response.channels && this.state.auctionItemChannelId in response.channels) {
+          response.channels[this.state.auctionItemChannelId].forEach((message) => {
+            let splitMessage = this.state.highBidMessage.split(' ')
+            this.setState({highestBidder: splitMessage[0]});
+            this.setState({minBid: parseInt(splitMessage[1], 10) + 1});
+            this.setState({bid: parseInt(splitMessage[1], 10) + 1});
+            this.setState({currentHighBid: splitMessage[1]});
+          });
+        }
+      }
+    );
   }
 
   componentWillUnmount(){
    document.removeEventListener('click', this.setState({error: ''}))
+
+   this.pubnub.unsubscribe({ channels: [this.state.auctionItemChannelId] });
  }
 
  updateBid(event) {
@@ -103,7 +148,7 @@ class AuctionItem extends Component {
     this.setState({dollarSpendingCap: data.dollarSpendingCap})
     if (data.bid && data.userHandle) {
       this.setState({currentHighBid: data.bid})
-      this.setState({minBid: data.bid + 1})
+      this.setState({minBid: parseInt(data.bid, 10) + 1})
       this.setState({bid: data.bid + 1})
       this.setState({highestBidder: data.userHandle})
     }
@@ -116,10 +161,10 @@ class AuctionItem extends Component {
       this.setState({error: 'The auction for this item has completed.'})
     } else if (this.state.bid <= this.state.currentHighBid) {
       this.setState({error: 'Your bid must be higher than the current bid.'})
-      this.setState({bid: this.state.currentHighBid + 1})
+      this.setState({bid: parseInt(this.state.currentHighBid, 10) + 1})
     } else if (this.state.bid > this.state.dollarSpendingCap){
       this.setState({error: 'You may not bid higher than the maximum: $' + this.state.dollarSpendingCap})
-      this.setState({bid: this.state.currentHighBid + 1})
+      this.setState({bid: parseInt(this.state.currentHighBid, 10) + 1})
     } else {
       fetch('https://api-dev.couchsports.ca/bids', {
         headers: {
@@ -142,13 +187,21 @@ class AuctionItem extends Component {
         }
         if (jsonRes.bid) {
           this.setState({currentHighBid: jsonRes.bid})
-          this.setState({minBid: jsonRes.bid + 1})
+          this.setState({minBid: parseInt(jsonRes.bid, 10) + 1})
           this.setState({bid: jsonRes.bid + 1})
           this.setState({highestBidder: jsonRes.userHandle})
+
+          this.publishHighBid()
         }
       })
       .catch(error => console.log(error))
     }
+  }
+
+  publishHighBid() {
+    let channel = this.state.auctionItemChannelId
+    let message = this.state.highestBidder + ' ' + this.state.currentHighBid
+    this.auctionItemPubNub.publish( {channel, message } );
   }
 
   renderAuctionItem() {
@@ -165,7 +218,11 @@ class AuctionItem extends Component {
             <Timer
               parentCallback={this.callbackFunction}
               auctionExpiry={this.state.auctionExpiry} />
-            <p>Current bid: {this.state.highestBidder} ${this.state.currentHighBid}</p>
+            <PubNubProvider client={this.auctionItemPubNub}>
+              <p>
+                {'Current bid: ' + this.state.highestBidder + ' $' + this.state.currentHighBid}
+              </p>
+            </PubNubProvider>
             <input
               className='bidInput'
               id='bid'
