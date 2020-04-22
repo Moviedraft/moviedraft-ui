@@ -59,8 +59,8 @@ class AuctionItem extends Component {
         this.setState({minBid: parseInt(splitMessage[1], 10) + 1});
         this.setState({bid: parseInt(splitMessage[1], 10) + 1});
         this.setState({currentHighBid: splitMessage[1]});
-
         this.setState({auctionExpiry: moment(splitMessage[2])})
+        
         this.refs.timer.resetTimer(splitMessage[2])
       }
     });
