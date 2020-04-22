@@ -17,7 +17,6 @@ class AuctionItem extends Component {
       highestBidder: '',
       bid: 1,
       timerDone: false,
-      timeDiff: 0,
       error: '',
       auctionItemChannelId: this.props.gameId + this.props.movie.id
     }
