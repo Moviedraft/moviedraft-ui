@@ -38,6 +38,7 @@ class Game extends Component {
       this.setState({movies: data.movies})
       this.setState({auctionComplete: data.auctionComplete})
       this.setState({commissionerId: data.commissionerId})
+      this.setState({auctionItemsExpireInSeconds: data.auctionItemsExpireInSeconds})
       this.setState({loaded: true})
       });
   }
@@ -47,7 +48,8 @@ class Game extends Component {
       parentCallback={this.setAuctionComplete}
       movies={this.state.movies}
       gameId={this.state.gameId}
-      commissionerId={this.state.commissionerId} />
+      commissionerId={this.state.commissionerId}
+      auctionItemsExpireInSeconds={this.state.auctionItemsExpireInSeconds} />
   }
 
   renderGameHome() {
