@@ -59,6 +59,9 @@ class AuctionItem extends Component {
         this.setState({minBid: parseInt(splitMessage[1], 10) + 1});
         this.setState({bid: parseInt(splitMessage[1], 10) + 1});
         this.setState({currentHighBid: splitMessage[1]});
+        this.setState({auctionExpiry: moment(splitMessage[2])})
+        
+        this.refs.timer.resetTimer(splitMessage[2])
       }
     });
 
@@ -190,16 +193,16 @@ class AuctionItem extends Component {
           this.setState({bid: jsonRes.bid + 1})
           this.setState({highestBidder: jsonRes.userHandle})
 
-          this.publishHighBid()
+          this.publishHighBid(jsonRes.auctionExpiry)
         }
       })
       .catch(error => console.log(error))
     }
   }
 
-  publishHighBid() {
+  publishHighBid(auctionExpiry) {
     let channel = this.state.auctionItemChannelId
-    let message = this.state.highestBidder + ' ' + this.state.currentHighBid
+    let message = this.state.highestBidder + ' ' + this.state.currentHighBid + ' ' + auctionExpiry
     this.auctionItemPubNub.publish( {channel, message } );
   }
 
@@ -214,9 +217,10 @@ class AuctionItem extends Component {
                 alt='movie poster' />
             </div>
             <p>{this.props.movie.title}</p>
-            <Timer
+            <Timer ref='timer'
               parentCallback={this.callbackFunction}
-              auctionExpiry={this.state.auctionExpiry} />
+              auctionExpiry={this.state.auctionExpiry}
+              auctionItemsExpireInSeconds={this.props.auctionItemsExpireInSeconds} />
             <PubNubProvider client={this.auctionItemPubNub}>
               <p>
                 {'Current bid: ' + this.state.highestBidder + ' $' + this.state.currentHighBid}

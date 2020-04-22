@@ -65,7 +65,8 @@ class AuctionHome extends Component {
       return <AuctionItem
         key={movie.id}
         movie={movie}
-        gameId={this.props.gameId}/>
+        gameId={this.props.gameId}
+        auctionItemsExpireInSeconds={this.props.auctionItemsExpireInSeconds}/>
     })
   }
 

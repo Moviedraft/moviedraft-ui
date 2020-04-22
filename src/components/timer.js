@@ -6,12 +6,23 @@ class Timer extends Component {
     super(props)
     this.state = {
       time: 0,
-      resetTriggered: false
+      timerId: ''
     }
 
     this.sendData = this.sendData.bind(this)
     this.startTimer = this.startTimer.bind(this)
     this.stopTimer = this.stopTimer.bind(this)
+    this.resetTimer = this.resetTimer.bind(this)
+  }
+
+  componentDidMount() {
+    document.body.style.overflow = 'hidden';
+    this.setState({time: moment(this.props.auctionExpiry).diff(moment(), 'seconds')})
+    this.startTimer();
+  }
+
+  componentWillUnmount() {
+    this.stopTimer()
   }
 
   sendData() {
@@ -19,11 +30,7 @@ class Timer extends Component {
   }
 
   startTimer() {
-    this.setState({
-      time: moment(this.props.auctionExpiry).diff(moment(), 'seconds'),
-      start: this.state.start - this.state.time
-    })
-    this.timer = setInterval(() => {
+    let timerId = setInterval(() => {
       this.setState({
         time: this.state.time - 1
       })
@@ -32,16 +39,23 @@ class Timer extends Component {
         this.sendData();
       }
     }, 1000);
+
+    this.setState({timerId: timerId})
   }
 
   stopTimer() {
-    clearInterval(this.timer)
+    clearInterval(this.state.timerId)
   }
 
-  componentDidMount() {
-      document.body.style.overflow = 'hidden';
-      this.startTimer();
-    }
+  resetTimer(time) {
+    let newTime = moment(time).diff(moment(), 'seconds') > this.props.auctionItemsExpireInSeconds ?
+      this.props.auctionItemsExpireInSeconds :
+      moment(time).diff(moment(), 'seconds')
+
+    this.setState({time: newTime})
+    this.stopTimer()
+    this.startTimer()
+  }
 
   render() {
     return(
