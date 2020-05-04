@@ -19,14 +19,14 @@ class AuctionHome extends Component {
     this.renderAuctionEndButton = this.renderAuctionEndButton.bind(this)
   }
 
-  webSocket = new WebSocket('wss://bqq55pqgj9.execute-api.us-east-2.amazonaws.com/Test')
+  webSocket = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL)
 
   componentDidMount() {
     this.fetchCurrentUser()
     this._isMounted = true
 
     this.webSocket.onclose = () => {
-      this.webSocket = new WebSocket('wss://bqq55pqgj9.execute-api.us-east-2.amazonaws.com/Test')
+      this.webSocket = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL)
     }
   }
 
