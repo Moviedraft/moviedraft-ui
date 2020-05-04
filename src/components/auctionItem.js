@@ -17,7 +17,7 @@ class AuctionItem extends Component {
       bid: 1,
       timerDone: false,
       error: '',
-      auctionItemChannelId: this.props.gameId + this.props.movie.id
+      auctionID: this.props.gameId + this.props.movie.id
     }
 
     this.pubnub = new PubNub({
@@ -27,6 +27,7 @@ class AuctionItem extends Component {
     });
 
     this.callbackFunction = this.callbackFunction.bind(this)
+    this.joinAuction = this.joinAuction.bind(this)
     this.updateBid = this.updateBid.bind(this)
     this.checkWinner = this.checkWinner.bind(this)
     this.beginAuction = this.beginAuction.bind(this)
@@ -42,11 +43,29 @@ class AuctionItem extends Component {
     this.setState({auctionStarted: false})
 	}
 
-  componentWillUnmount(){
-   if (this.eventSource !== undefined) {
-     this.eventSource.close()
-   }
- }
+  componentWillUnmount() {
+    let message = {
+      'message': 'leaveauction',
+      'auctionID': this.state.auctionID
+    }
+    this.props.webSocket.send(JSON.stringify(message))
+  }
+
+  joinAuction() {
+    let message = {
+      'message': 'joinauction',
+      'auctionID': this.state.auctionID
+    }
+    this.props.webSocket.send(JSON.stringify(message))
+
+    this.props.webSocket.onmessage = (event) => {
+      let eventData = JSON.parse(event.data)
+
+      if(eventData.message.hasOwnProperty('auctionExpiry')) {
+        this.updateHighBid(eventData.message)
+      }
+    }
+  }
 
  updateBid(event) {
    this.setState({bid: event.target.value})
@@ -89,13 +108,7 @@ class AuctionItem extends Component {
       } else if (moment() < moment(data.auctionExpiry)) {
         this.setStates(data)
         this.setState({auctionStarted: true})
-
-        this.eventSource = new EventSource(
-          'https://api-dev.couchsports.ca/bids/' + this.props.gameId + '/' + this.props.movie.id + '/stream');
-
-        this.eventSource.addEventListener('message', (messageEvent) => {
-            this.updateHighBid(JSON.parse(messageEvent.data))
-          })
+        this.joinAuction()
       } else {
         this.setStates(data)
         this.setState({error: 'The auction has completed for this item.'})
@@ -139,7 +152,17 @@ class AuctionItem extends Component {
       })
       .then(async res => {
         let jsonRes = await res.json()
-        if (!res.ok) {
+        if (res.ok) {
+          let message = {
+            'message': 'postbid',
+            'auctionID': this.state.auctionID,
+            'bid': jsonRes.bid,
+            'userHandle': jsonRes.userHandle,
+            'auctionExpiry': jsonRes.auctionExpiry
+          }
+          this.props.webSocket.send(JSON.stringify(message))
+        }
+        else {
           let message = jsonRes.message
           if (message.includes('closed')) {
             this.setState({error: 'Auction is closed for this item.'})
@@ -154,15 +177,11 @@ class AuctionItem extends Component {
   }
 
   updateHighBid(bid) {
-    if (moment() > moment(bid.auctionExpiry)) {
-      this.eventSource.close()
-    }
-
     this.setState({highestBidder: bid.userHandle});
     this.setState({minBid: parseInt(bid.bid, 10) + 1});
     this.setState({bid: parseInt(bid.bid, 10) + 1});
     this.setState({currentHighBid: bid.bid});
-    this.setState({auctionExpiry: bid.auctionExpiry})
+    this.setState({auctionExpiry: moment(bid.auctionExpiry.toUpperCase())})
 
     if (this.refs.timer !== undefined) {
       this.refs.timer.resetTimer(this.state.auctionExpiry)
