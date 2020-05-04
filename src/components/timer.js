@@ -30,7 +30,7 @@ class Timer extends Component {
 
   startTimer() {
     this.setState({time: moment(this.props.auctionExpiry).diff(moment(), 'seconds')})
-    
+
     let timerId = setInterval(() => {
       this.setState({
         time: this.state.time - 1
@@ -50,15 +50,6 @@ class Timer extends Component {
 
   resetTimer(time) {
     this.setState({time: moment(time).diff(moment(), 'seconds')})
-  }
-
-  componentDidMount() {
-    document.body.style.overflow = 'hidden';
-    this.startTimer()
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.state.timerId)
   }
 
   render() {

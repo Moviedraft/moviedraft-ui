@@ -5,10 +5,12 @@ import '../styles/auctionHome.css'
 
 class AuctionHome extends Component {
   _isMounted = false;
+
   constructor(props){
     super(props)
     this.state = {
-      currentUser: ''
+      currentUser: '',
+      webSocket: null
     }
 
     this.fetchCurrentUser = this.fetchCurrentUser.bind(this)
@@ -17,9 +19,15 @@ class AuctionHome extends Component {
     this.renderAuctionEndButton = this.renderAuctionEndButton.bind(this)
   }
 
+  webSocket = new WebSocket('wss://bqq55pqgj9.execute-api.us-east-2.amazonaws.com/Test')
+
   componentDidMount() {
-    this._isMounted = true
     this.fetchCurrentUser()
+    this._isMounted = true
+
+    this.webSocket.onclose = () => {
+      this.webSocket = new WebSocket('wss://bqq55pqgj9.execute-api.us-east-2.amazonaws.com/Test')
+    }
   }
 
   componentWillUnmount() {
@@ -66,7 +74,8 @@ class AuctionHome extends Component {
         key={movie.id}
         movie={movie}
         gameId={this.props.gameId}
-        auctionItemsExpireInSeconds={this.props.auctionItemsExpireInSeconds}/>
+        auctionItemsExpireInSeconds={this.props.auctionItemsExpireInSeconds}
+        webSocket={this.webSocket}/>
     })
   }
 
