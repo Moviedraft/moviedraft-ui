@@ -17,7 +17,8 @@ class AuctionItem extends Component {
       bid: 1,
       timerDone: false,
       error: '',
-      auctionID: this.props.gameId + this.props.movie.id
+      auctionID: this.props.gameId + this.props.movie.id,
+      connectedToWebSocket: false
     }
 
     this.pubnub = new PubNub({
@@ -43,12 +44,20 @@ class AuctionItem extends Component {
     this.setState({auctionStarted: false})
 	}
 
-  componentWillUnmount() {
-    let message = {
-      'message': 'leaveauction',
-      'auctionID': this.state.auctionID
+  componentDidMount() {
+    this.props.webSocket.onopen = () => {
+      this.setState({connectedToWebSocket: true})
     }
-    this.props.webSocket.send(JSON.stringify(message))
+  }
+
+  componentWillUnmount() {
+    if (this.state.connectedToWebSocket) {
+      let message = {
+        'message': 'leaveauction',
+        'auctionID': this.state.auctionID
+      }
+      this.props.webSocket.send(JSON.stringify(message))
+    }
   }
 
   joinAuction() {
