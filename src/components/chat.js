@@ -49,14 +49,9 @@ class Chat extends Component {
             this.setState(previousState => ({messages: [...previousState.messages, message.message]}));
           });
         }
+        this.scrollToBottom()
       }
     );
-
-    this.scrollToBottom();
-  }
-
-  componentDidUpdate() {
-    this.scrollToBottom();
   }
 
   componentWillUnmount() {
