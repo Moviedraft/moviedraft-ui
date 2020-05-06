@@ -3,6 +3,14 @@
   overflow:auto;
 }
 
+#auctionDateDiv {
+  margin-left: 1em;
+}
+
+.auctionCountdownSpan {
+  color: red;
+}
+
 #auctionEndButton {
   min-height: 75px;
   overflow: hidden;

@@ -1,18 +1,23 @@
 import React, { Component } from 'react';
+import moment from 'moment';
 import AuctionItem from './auctionItem.js'
 import Chat from './chat.js'
 import '../styles/auctionHome.css'
 
 class AuctionHome extends Component {
   _isMounted = false;
+  _auctionDurationLoaded = false;
 
   constructor(props){
     super(props)
     this.state = {
       currentUser: '',
-      webSocket: null
+      webSocket: null,
+      auctionCountdownIntervalId: '',
+      auctionDuration: null
     }
 
+    this.setDuration = this.setDuration.bind(this)
     this.fetchCurrentUser = this.fetchCurrentUser.bind(this)
     this.endAuction = this.endAuction.bind(this)
     this.renderAuctionPage = this.renderAuctionPage.bind(this)
@@ -23,6 +28,10 @@ class AuctionHome extends Component {
 
   componentDidMount() {
     this.fetchCurrentUser()
+
+    let intervalId = setInterval(() => this.setDuration(), 1000);
+    this.setState({auctionCountdownIntervalId: intervalId})
+
     this._isMounted = true
 
     this.webSocket.onclose = () => {
@@ -32,6 +41,15 @@ class AuctionHome extends Component {
 
   componentWillUnmount() {
     this._isMounted = false
+    clearInterval(this.state.auctionCountdownIntervalId)
+  }
+
+  setDuration() {
+    let timeDifference = moment(this.props.auctionDate).diff(moment())
+    this.setState({auctionDuration: moment.duration(timeDifference)})
+    if (this.state.auctionDuration !== null) {
+      this._auctionDurationLoaded = true
+    }
   }
 
   fetchCurrentUser() {
@@ -68,6 +86,37 @@ class AuctionHome extends Component {
     .catch(error => console.log(error))
   }
 
+  renderAuctionDate() {
+    if (this.state.auctionDuration === null) {
+      return <div></div>
+    }
+
+    let days = Math.abs(moment(this.props.auctionDate).diff(moment(), 'days'))
+    let hours = this.state.auctionDuration.hours()
+    let minutes = this.state.auctionDuration.minutes()
+    let seconds = this.state.auctionDuration.seconds()
+
+    return moment() > moment(this.props.auctionDate) ?
+      <h3>
+        Auction will be held on {moment(this.props.auctionDate).format('LLLL')}
+        <span className='auctionCountdownSpan'>
+          &nbsp;
+          (now)
+        </span>
+      </h3> :
+      <h3>
+        Auction will be held on {moment(this.props.auctionDate).format('LLLL')}
+        <span className='auctionCountdownSpan'>
+          &nbsp;
+          ({days === 0 ? '' : days + ' days, '}
+          {hours === 0 ? '' : hours + ' hours, '}
+          {minutes === 0 ? '' : seconds === 0 ? minutes + ' minutes ' : minutes + ' minutes, '}
+          {seconds === 0 ? '' : seconds + ' seconds '}
+          from now)
+        </span>
+      </h3>
+  }
+
   renderAuctionPage() {
     return this.props.movies.map((movie) => {
       return <AuctionItem
@@ -94,9 +143,16 @@ class AuctionHome extends Component {
   }
 
   render() {
+    if (!this._auctionDurationLoaded) {
+      return <div></div>
+    }
+
     return (
       <div>
-        <div id="auctionHomeDiv">
+        <div id='auctionDateDiv'>
+          {this.renderAuctionDate()}
+        </div>
+        <div id='auctionHomeDiv'>
           {this.renderAuctionPage()}
         </div>
         <div>
