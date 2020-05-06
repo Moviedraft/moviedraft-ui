@@ -108,7 +108,10 @@ class AuctionHome extends Component {
         Auction will be held on {moment(this.props.auctionDate).format('LLLL')}
         <span className='auctionCountdownSpan'>
           &nbsp;
-          ({days === 0 ? '' : days + 'd '}{hours}:{minutes}.{seconds} from now)
+          ({days === 0 ? '' : days + 'd '}
+          {hours < 10 ? '0' + hours : hours}:
+          {minutes < 10 ? '0' + minutes : minutes}.
+          {seconds < 10 ? '0' + seconds : seconds} from now)
         </span>
       </h3>
   }
