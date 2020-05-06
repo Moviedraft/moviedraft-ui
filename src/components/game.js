@@ -49,7 +49,8 @@ class Game extends Component {
       movies={this.state.movies}
       gameId={this.state.gameId}
       commissionerId={this.state.commissionerId}
-      auctionItemsExpireInSeconds={this.state.auctionItemsExpireInSeconds} />
+      auctionItemsExpireInSeconds={this.state.auctionItemsExpireInSeconds}
+      auctionDate={this.state.auctionDate} />
   }
 
   renderGameHome() {
