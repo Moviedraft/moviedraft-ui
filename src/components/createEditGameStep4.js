@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import '../styles/createGameStep4.css'
+import '../styles/createEditGameStep4.css'
 
-class CreateGameStep4 extends Component {
+class CreateEditGameStep4 extends Component {
   constructor(props){
     super(props)
     this.state = {
@@ -105,4 +105,4 @@ class CreateGameStep4 extends Component {
   }
 }
 
-export default CreateGameStep4
+export default CreateEditGameStep4

@@ -7,17 +7,18 @@ import CreateEditGameStep2 from './createEditGameStep2.js'
 import CreateEditGameStep3 from './createEditGameStep3.js'
 import CreateEditGameStep4 from './createEditGameStep4.js'
 
-class CreateGame extends Component {
+class EditGame extends Component {
   constructor(props){
     super(props)
     this.state = {
       currentStep: 1,
+      gameId: '',
       gameName: '',
-      auctionDollars: 100,
+      auctionDollars: 0,
       startDate: '',
       endDate: '',
-      auctionDate: moment().add(7, 'days').format('YYYY-MM-DDTHH:mm'),
-      auctionItemExpiryTimeSeconds: 30,
+      auctionDate: '',
+      auctionItemExpiryTimeSeconds: 0,
       movies: [],
       playWithRules: false,
       grossCapRule: {
@@ -41,7 +42,6 @@ class CreateGame extends Component {
     this.handleChange = this.handleChange.bind(this)
     this.handleKeyPress = this.handleKeyPress.bind(this)
     this.handleCloseModal = this.handleCloseModal.bind(this)
-    this.resetValues = this.resetValues.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.next = this.next.bind(this)
     this.prev = this.prev.bind(this)
@@ -59,28 +59,51 @@ class CreateGame extends Component {
 
   handleKeyPress(event) {
     if (event.key === 'Escape') {
-      this.resetValues()
+      this.handleCloseModal()
     }
   }
 
   handleCloseModal() {
-    this.resetValues()
+    this.props.parentCallback(false)
   }
 
-  resetValues() {
+  componentDidMount() {
     this.setState({currentStep: 1})
-    this.setState({gameName: ''})
-    this.setState({auctionDollars: 100})
-    this.setState({startDate: ''})
-    this.setState({endDate: ''})
-    this.setState({auctionDate: ''})
-    this.setState({auctionItemExpiryTimeSeconds: ''})
-    this.setState({movies: []})
-    this.setState({playWithRules: false})
-    this.setState({grossCapRule: {grossCapActive: false, ruleName: 'grossCap', capValue: 224999999, centsOnDollar: 0.4, baseValue: 135200000}})
-    this.setState({valueMultiplierRule: {valueMultiplierActive: false, ruleName: 'valueMultiplier', lowerThreshold: 8000000, upperThreshold: 13000000}})
-    this.setState({playerEmails: []})
-    this.props.parentCallback(false)
+    this.setState({gameId: this.props.game._id})
+    this.setState({gameName: this.props.game.gameName})
+    this.setState({auctionDollars: this.props.game.dollarSpendingCap})
+    this.setState({startDate: moment(this.props.game.startDate).format('YYYY-MM-DD')})
+    this.setState({endDate: moment(this.props.game.endDate).format('YYYY-MM-DD')})
+    this.setState({auctionDate: this.props.game.auctionDate})
+    this.setState({auctionItemExpiryTimeSeconds: this.props.game.auctionItemsExpireInSeconds})
+    this.setState({movies: this.props.game.movies})
+    this.setState({playWithRules: this.props.game.rules.length})
+
+    let grossCapRule = this.props.game.rules.find(rule => rule.ruleName === this.state.grossCapRule.ruleName)
+    if (grossCapRule) {
+      let grossCapRuleState = this.state.grossCapRule
+
+      grossCapRuleState.grossCapActive = true
+      grossCapRuleState.capValue = grossCapRule.rules.capValue
+      grossCapRuleState.centsOnDollar = grossCapRule.rules.centsOnDollar
+      grossCapRuleState.baseValue = grossCapRule.rules.baseValue
+
+      this.setState({grossCapRule: grossCapRuleState})
+    }
+
+    let valueMultiplierRule = this.props.game.rules.find(rule => rule.ruleName === this.state.valueMultiplierRule.ruleName)
+    if (valueMultiplierRule) {
+      let valueMultiplierRuleState = this.state.valueMultiplierRule
+
+      valueMultiplierRuleState.valueMultiplierActive = true
+      valueMultiplierRuleState.lowerThreshold = valueMultiplierRule.rules.lowerThreshold
+      valueMultiplierRuleState.upperThreshold = valueMultiplierRule.rules.upperThreshold
+
+      this.setState({valueMultiplierRule: valueMultiplierRuleState})
+    }
+
+
+    this.setState({playerEmails: this.props.game.playerIds})
   }
 
   handleSubmit(event) {
@@ -106,8 +129,8 @@ class CreateGame extends Component {
       rules.push({
         ruleName: this.state.valueMultiplierRule.ruleName,
         rules: {
-          lowerThreshold: this.state.valueMultiplierRule.lowerThreshold,
-          upperThreshold: this.state.valueMultiplierRule.upperThreshold
+          lowerThreshold: parseInt(this.state.valueMultiplierRule.lowerThreshold),
+          upperThreshold: parseInt(this.state.valueMultiplierRule.upperThreshold)
         }
       })
     }
@@ -122,11 +145,12 @@ class CreateGame extends Component {
       startDate: moment(this.state.startDate).format(),
       endDate: moment(this.state.endDate).format(),
       gameName: this.state.gameName,
-      auctionDate: requestAuctionDate.format()
+      auctionDate: requestAuctionDate.format(),
+      auctionComplete: false
     })
 
-    fetch('https://api-dev.couchsports.ca/games', {
-      method: 'POST',
+    fetch('https://api-dev.couchsports.ca/games/' + this.state.gameId, {
+      method: 'PUT',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
@@ -140,7 +164,6 @@ class CreateGame extends Component {
     })
     .catch(console.log)
 
-    this.resetValues()
     this.props.parentCallback(false)
   }
 
@@ -184,7 +207,7 @@ class CreateGame extends Component {
           type='button'
           onClick={this.handleSubmit}
           disabled={this.checkDisabled()}>
-          CREATE GAME
+          SAVE GAME
         </button> )
       : null
     )
@@ -211,9 +234,8 @@ class CreateGame extends Component {
           onClick={this.handleCloseModal}>
           Close Modal
         </button>
-        <h1 id='createGameHeader'>Create Game</h1>
+        <h1 id='createGameHeader'>Edit Game</h1>
         <p>Step {this.state.currentStep}</p>
-        <p>All fields are required to create a game.</p>
           <form
           onSubmit={e => { e.preventDefault(); }}>
             <div>
@@ -251,4 +273,4 @@ class CreateGame extends Component {
   }
 }
 
-export default CreateGame;
+export default EditGame;
