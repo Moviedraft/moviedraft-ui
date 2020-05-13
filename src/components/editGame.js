@@ -17,7 +17,7 @@ class EditGame extends Component {
       auctionDollars: 0,
       startDate: '',
       endDate: '',
-      auctionDate: null,
+      auctionDate: '',
       auctionItemExpiryTimeSeconds: 0,
       movies: [],
       playWithRules: false,
