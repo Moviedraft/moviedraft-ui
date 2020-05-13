@@ -44,7 +44,7 @@
   margin-left: 1em;
 }
 
-#deleteButton {
+.adminButtons {
   display: inline-block !important;
   position: relative;
   margin-left: 1em;

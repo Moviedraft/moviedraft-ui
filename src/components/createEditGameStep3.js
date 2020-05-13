@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Rules from './rules.js'
 
-class CreateGameStep3 extends Component {
+class CreateEditGameStep3 extends Component {
   constructor(props){
     super(props)
     this.state = {
@@ -48,4 +48,4 @@ class CreateGameStep3 extends Component {
   }
 }
 
-export default CreateGameStep3
+export default CreateEditGameStep3

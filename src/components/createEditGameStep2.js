@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import moment from 'moment';
-import '../styles/createGameStep2.css'
+import '../styles/createEditGameStep2.css'
 import Movies from './movies.js'
 
-class CreateGameStep2 extends Component {
+class CreateEditGameStep2 extends Component {
     constructor(props){
       super(props)
       this.state = {
@@ -70,8 +70,7 @@ class CreateGameStep2 extends Component {
             name='auctionItemExpiryTimeSeconds'
             type='number'
             min='30'
-            value={this.props.auctionItemExpiry}
-            defaultValue='30'
+            value={this.props.auctionItemExpiryTimeSeconds}
             onChange={this.props.handleChange} />
         </div>
         <label htmlFor='Movies'>
@@ -86,4 +85,4 @@ class CreateGameStep2 extends Component {
   }
 }
 
-export default CreateGameStep2
+export default CreateEditGameStep2

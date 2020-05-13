@@ -13,6 +13,34 @@ class Movies extends Component {
       this.renderMovieDivs = this.renderMovieDivs.bind(this)
     }
 
+    componentDidMount() {
+      if (this.props.movies && this.props.startDate && this.props.endDate) {
+        fetch(`https://api-dev.couchsports.ca/movies?startDate=${this.props.startDate}&endDate=${this.props.endDate}`, {
+          headers: {
+            Authorization: 'Bearer ' + localStorage.getItem('CouchSportsToken')
+          }
+        })
+        .then(res => res.json())
+        .then((data) => {
+          this.setState({movieList: data.movies})
+        })
+      }
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+      if (this.props.startDate && this.props.endDate && (prevProps.startDate !== this.props.startDate || prevProps.endDate !== this.props.endDate)){
+        fetch(`https://api-dev.couchsports.ca/movies?startDate=${this.props.startDate}&endDate=${this.props.endDate}`, {
+          headers: {
+            Authorization: 'Bearer ' + localStorage.getItem('CouchSportsToken')
+          }
+        })
+        .then(res => res.json())
+        .then((data) => {
+          this.setState({movieList: data.movies})
+        })
+      }
+    }
+
     handleCheckbox(event, movie) {
       if(event.target.checked) {
         this.props.movies.push(movie)
@@ -30,30 +58,13 @@ class Movies extends Component {
             value={movie.id}
             id={movie.title}
             name={movie.title}
-            defaultChecked
+            defaultChecked={this.props.movies && this.props.movies.some(propMovie => movie.id === propMovie.id)}
             onChange={(event) => this.handleCheckbox(event, movie)} />
           <label htmlFor={movie.title}>
             {movie.title} - {moment(movie.releaseDate).format('ll')}
           </label>
         </div>
         )
-    }
-
-    componentDidUpdate(prevProps, prevState) {
-      if (this.props.startDate && this.props.endDate && (prevProps.startDate !== this.props.startDate || prevProps.endDate !== this.props.endDate)){
-        fetch(`https://api-dev.couchsports.ca/movies?startDate=${this.props.startDate}&endDate=${this.props.endDate}`, {
-          headers: {
-            Authorization: 'Bearer ' + localStorage.getItem('CouchSportsToken')
-          }
-        })
-        .then(res => res.json())
-        .then((data) => {
-          this.setState({movieList: data.movies})
-          data.movies.forEach((movie) => {
-            this.props.movies.push(movie)
-          });
-        })
-      }
     }
 
     render() {
