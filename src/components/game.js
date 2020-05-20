@@ -55,7 +55,8 @@ class Game extends Component {
 
   renderGameHome() {
     return <GameHome
-      gameId={this.state.gameId} />
+      gameId={this.state.gameId}
+      commissionerId={this.state.commissionerId} />
   }
 
   render() {
