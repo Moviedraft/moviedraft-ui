@@ -6,6 +6,7 @@ import '../styles/poll.css'
 
 class Poll extends Component {
   _pollLoaded = false
+  _noPoll = false
 
   constructor(props){
     super(props)
@@ -83,10 +84,13 @@ class Poll extends Component {
         this.setState({choices: jsonResponse.choices})
       }
     })
+    .then(() => {
+      this._pollLoaded = false
+      this._noPoll = false
+      this.setState({voteSubmitted: false})
+      this.handleCloseCreatePollModal()
+    })
     .catch(error => console.log(error))
-
-    this.setState({voteSubmitted: false})
-    this.handleCloseCreatePollModal()
   }
 
   fetchPoll() {
@@ -103,6 +107,8 @@ class Poll extends Component {
         this.setState({question: jsonResponse.question})
         this.setState({choices: jsonResponse.choices})
         this._pollLoaded = true
+      } else {
+        this._noPoll = true
       }
     })
     .catch(error => console.log(error))
@@ -235,7 +241,7 @@ class Poll extends Component {
   }
 
   render() {
-    if (!this._pollLoaded) {
+    if (!this._pollLoaded && !this._noPoll) {
       this.fetchPoll()
     }
 
