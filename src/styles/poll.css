@@ -6,7 +6,31 @@
   position: relative;
 }
 
-#pollBox {
+#createPollButtonDiv {
+  position: relative;
+  height: 2.5em;
+  margin-top: -2em;
+}
+
+#createPollButton {
+  position: relative;
+}
+
+.pollBox {
   padding: 0.5em;
   margin-bottom: 1em;
+}
+
+#createPollModal {
+  overflow: hidden;
+}
+
+#pollResults {
+  width: 100%
+}
+
+@media screen and (min-width: 600px) {
+  #pollResults {
+    width: 75%;
+  }
 }
