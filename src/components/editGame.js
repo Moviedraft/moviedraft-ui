@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
-import moment from 'moment';
+import React, { Component } from 'react'
+import moment from 'moment'
+import { apiPut } from '../utilities/apiUtility.js'
 import '../styles/createGame.css'
-import Modal from 'react-modal';
+import Modal from 'react-modal'
 import CreateEditGameStep1 from './createEditGameStep1.js'
 import CreateEditGameStep2 from './createEditGameStep2.js'
 import CreateEditGameStep3 from './createEditGameStep3.js'
@@ -135,7 +136,7 @@ class EditGame extends Component {
       })
     }
 
-    let body = JSON.stringify({
+    let body = {
       playerIds: this.state.playerEmails,
       dollarSpendingCap: this.state.auctionDollars,
       playerBuyIn: 0,
@@ -147,22 +148,14 @@ class EditGame extends Component {
       gameName: this.state.gameName,
       auctionDate: requestAuctionDate.format(),
       auctionComplete: false
-    })
+    }
 
-    fetch('https://api-dev.couchsports.ca/games/' + this.state.gameId, {
-      method: 'PUT',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + localStorage.getItem('CouchSportsToken')
-      },
-      body: body
+    apiPut('games/' + this.state.gameId, body)
+    .then(data => {
+      if (data === null) {
+        this.props.handleError('Unable to edit game. Please try again.')
+      }
     })
-    .then(res => res.json())
-    .then((data) => {
-
-    })
-    .catch(console.log)
 
     this.props.parentCallback(false)
   }

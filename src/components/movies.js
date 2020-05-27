@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
-import moment from 'moment';
+import React, { Component } from 'react'
+import moment from 'moment'
+import { apiGet } from '../utilities/apiUtility.js'
 import '../styles/movies.css'
 
 class Movies extends Component {
@@ -9,36 +10,32 @@ class Movies extends Component {
         movieList: []
       }
 
+      this.getMovies = this.getMovies.bind(this)
       this.handleCheckbox = this.handleCheckbox.bind(this)
       this.renderMovieDivs = this.renderMovieDivs.bind(this)
     }
 
     componentDidMount() {
       if (this.props.movies && this.props.startDate && this.props.endDate) {
-        fetch(`https://api-dev.couchsports.ca/movies?startDate=${this.props.startDate}&endDate=${this.props.endDate}`, {
-          headers: {
-            Authorization: 'Bearer ' + localStorage.getItem('CouchSportsToken')
-          }
-        })
-        .then(res => res.json())
-        .then((data) => {
-          this.setState({movieList: data.movies})
-        })
+        this.getMovies()
       }
     }
 
     componentDidUpdate(prevProps, prevState) {
       if (this.props.startDate && this.props.endDate && (prevProps.startDate !== this.props.startDate || prevProps.endDate !== this.props.endDate)){
-        fetch(`https://api-dev.couchsports.ca/movies?startDate=${this.props.startDate}&endDate=${this.props.endDate}`, {
-          headers: {
-            Authorization: 'Bearer ' + localStorage.getItem('CouchSportsToken')
-          }
-        })
-        .then(res => res.json())
-        .then((data) => {
-          this.setState({movieList: data.movies})
-        })
+        this.getMovies()
       }
+    }
+
+    getMovies() {
+      apiGet(`movies?startDate=${this.props.startDate}&endDate=${this.props.endDate}`)
+      .then(data => {
+        if (data === null) {
+          this.props.handleError('Could not load movies. Please try again.')
+        } else {
+          this.setState({movieList: data.movies})
+        }
+      })
     }
 
     handleCheckbox(event, movie) {
@@ -61,7 +58,7 @@ class Movies extends Component {
             defaultChecked={this.props.movies && this.props.movies.some(propMovie => movie.id === propMovie.id)}
             onChange={(event) => this.handleCheckbox(event, movie)} />
           <label htmlFor={movie.title}>
-            {movie.title} - {moment(movie.releaseDate).format('ll')}
+            {movie.title} - {moment.utc(movie.releaseDate).format('ll')}
           </label>
         </div>
         )

@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
+import { apiGet } from '../utilities/apiUtility.js'
 import '../styles/gameHome.css'
 import GamePlayers from './gamePlayers.js'
 import WeekendBoxOffice from './weekendBoxOffice.js'
@@ -18,14 +19,13 @@ class GameHome extends Component {
   }
 
   fetchCurrentUser() {
-    fetch('https://api-dev.couchsports.ca/users/current', {
-      headers: {
-        Authorization: 'Bearer ' + localStorage.getItem('CouchSportsToken')
-      }
-    })
-    .then(res => res.json())
+    apiGet('users/current')
     .then((data) => {
-      this.setState({userId: data.id})
+      if (data === null) {
+        this.props.handleError('Unable to load your user information. Please refresh and try again.')
+      } else {
+        this.setState({userId: data.id})
+      }
     })
   }
 
@@ -39,18 +39,22 @@ class GameHome extends Component {
       <div>
         <div id='gameHomeDiv'>
           <GamePlayers
-            gameId={this.props.gameId} />
+            gameId={this.props.gameId}
+            handleError={this.props.handleError} />
           <WeekendBoxOffice
-            gameId={this.props.gameId} />
+            gameId={this.props.gameId}
+            handleError={this.props.handleError} />
           <UpcomingMovies
-            gameId={this.props.gameId} />
+            gameId={this.props.gameId}
+            handleError={this.props.handleError} />
           <Poll
             gameId={this.props.gameId}
             commissionerId={this.props.commissionerId}
-            userId={this.state.userId}/>
+            userId={this.state.userId}
+            handleError={this.props.handleError} />
         </div>
         <Chat
-          gameId={this.props.gameId + '-game'}/>
+          gameId={this.props.gameId + '-game'} />
       </div>
     ) : (
       null

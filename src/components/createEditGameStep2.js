@@ -79,7 +79,8 @@ class CreateEditGameStep2 extends Component {
         <Movies
           startDate={this.props.startDate}
           endDate={this.props.endDate}
-          movies={this.props.movies} />
+          movies={this.props.movies}
+          handleError={this.props.handleError} />
       </div>
     )
   }

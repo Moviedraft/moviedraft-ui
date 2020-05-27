@@ -1,8 +1,10 @@
-import React, { Component } from 'react';
-import moment from 'moment';
+import React, { Component } from 'react'
+import moment from 'moment'
+import { apiGet } from '../utilities/apiUtility.js'
 import Header from '../components/header.js'
 import AuctionHome from './auctionHome.js'
 import GameHome from './gameHome.js'
+import Error from './error.js'
 
 class Game extends Component {
   _gameRetrieved = false
@@ -14,10 +16,12 @@ class Game extends Component {
       movies: [],
       commissionerId: '',
       auctionComplete: false,
-      loaded: false
+      loaded: false,
+      errorMessage: ''
     }
 
     this.setAuctionComplete = this.setAuctionComplete.bind(this)
+    this.handleError = this.handleError.bind(this)
     this.fetchGame = this.fetchGame.bind(this)
     this.renderAuctionHome = this.renderAuctionHome.bind(this)
   }
@@ -26,21 +30,24 @@ class Game extends Component {
     this.setState({auctionComplete: auctionComplete})
   }
 
+  handleError(message) {
+    this.setState({errorMessage: message})
+  }
+
   fetchGame() {
-    fetch('https://api-dev.couchsports.ca/games/' + this.state.gameId, {
-      headers: {
-        Authorization: 'Bearer ' + localStorage.getItem('CouchSportsToken')
+    apiGet('games/' + this.state.gameId)
+    .then(data => {
+      if (data === null) {
+        this.handleError('Unable to load game. Please refresh and try again.')
+      } else {
+        this.setState({auctionDate: moment(data.auctionDate)})
+        this.setState({movies: data.movies})
+        this.setState({auctionComplete: data.auctionComplete})
+        this.setState({commissionerId: data.commissionerId})
+        this.setState({auctionItemsExpireInSeconds: data.auctionItemsExpireInSeconds})
+        this.setState({loaded: true})
       }
     })
-    .then(res => res.json())
-    .then((data) => {
-      this.setState({auctionDate: moment(data.auctionDate)})
-      this.setState({movies: data.movies})
-      this.setState({auctionComplete: data.auctionComplete})
-      this.setState({commissionerId: data.commissionerId})
-      this.setState({auctionItemsExpireInSeconds: data.auctionItemsExpireInSeconds})
-      this.setState({loaded: true})
-      });
   }
 
   renderAuctionHome() {
@@ -50,16 +57,22 @@ class Game extends Component {
       gameId={this.state.gameId}
       commissionerId={this.state.commissionerId}
       auctionItemsExpireInSeconds={this.state.auctionItemsExpireInSeconds}
-      auctionDate={this.state.auctionDate} />
+      auctionDate={this.state.auctionDate}
+      handleError={this.handleError} />
   }
 
   renderGameHome() {
     return <GameHome
       gameId={this.state.gameId}
-      commissionerId={this.state.commissionerId} />
+      commissionerId={this.state.commissionerId}
+      handleError={this.handleError} />
   }
 
   render() {
+    if (this.state.errorMessage !== '') {
+      return <Error errorMessage={this.state.errorMessage} />;
+    }
+
     if (!this._gameRetrieved) {
       this.fetchGame()
       this._gameRetrieved = true

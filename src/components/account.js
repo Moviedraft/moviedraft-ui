@@ -1,8 +1,9 @@
-import React, { Component } from 'react';
-import { navigate } from '@reach/router';
+import React, { Component } from 'react'
+import { navigate } from '@reach/router'
+import { apiGet } from '../utilities/apiUtility.js'
 import '../styles/account.css'
-import DownArrow from '../downArrow.png';
-import GenericPerson from '../genericPerson.jpeg';
+import DownArrow from '../downArrow.png'
+import GenericPerson from '../genericPerson.jpeg'
 
 class Account extends Component {
   constructor(props){
@@ -31,11 +32,7 @@ class Account extends Component {
   }
 
   logOut() {
-    fetch('https://api-dev.couchsports.ca/logout', {
-      headers: {
-        Authorization: 'Bearer ' + localStorage.getItem('CouchSportsToken')
-      }
-    })
+    apiGet('logout')
     .then(() => {
       localStorage.clear()
       this.props.parentCallback(false)
