@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
-import { BarChart } from 'react-chartkick';
+import React, { Component } from 'react'
+import { BarChart } from 'react-chartkick'
 import Modal from 'react-modal';
 import 'chart.js'
+import { apiGet, apiPost, apiPatch } from '../utilities/apiUtility.js'
 import '../styles/poll.css'
 
 class Poll extends Component {
@@ -64,24 +65,18 @@ class Poll extends Component {
       choicesArray.push(this.state.newPollChoice3)
     }
 
-    let body = JSON.stringify({
+    let body = {
       question: this.state.newPollQuestion,
       choices: choicesArray
-    })
+    }
 
-    fetch('https://api-dev.couchsports.ca/games/' + this.props.gameId + '/poll', {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + localStorage.getItem('CouchSportsToken')
-      },
-      method: 'POST',
-      body: body
-    })
-    .then(async res => {
-      if (res.ok) {
-        let jsonResponse = await res.json()
-        this.setState({question: jsonResponse.question})
-        this.setState({choices: jsonResponse.choices})
+    apiPost('games/' + this.props.gameId + '/poll', body)
+    .then(data => {
+      if (data === null) {
+        this.props.handleError('Unable to create poll. Please refresh and try again.')
+      } else {
+        this.setState({question: data.question})
+        this.setState({choices: data.choices})
       }
     })
     .then(() => {
@@ -90,28 +85,19 @@ class Poll extends Component {
       this.setState({voteSubmitted: false})
       this.handleCloseCreatePollModal()
     })
-    .catch(error => console.log(error))
   }
 
   fetchPoll() {
-    fetch('https://api-dev.couchsports.ca/games/' + this.props.gameId + '/poll', {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + localStorage.getItem('CouchSportsToken')
-      },
-      method: 'GET'
-    })
-    .then(async res => {
-      if (res.ok) {
-        let jsonResponse = await res.json()
-        this.setState({question: jsonResponse.question})
-        this.setState({choices: jsonResponse.choices})
-        this._pollLoaded = true
-      } else {
+    apiGet('games/' + this.props.gameId + '/poll')
+    .then(data => {
+      if (data === null) {
         this._noPoll = true
+      } else {
+        this.setState({question: data.question})
+        this.setState({choices: data.choices})
+        this._pollLoaded = true
       }
     })
-    .catch(error => console.log(error))
   }
 
   setVote(vote) {
@@ -119,26 +105,17 @@ class Poll extends Component {
   }
 
   submitVote(vote) {
-    let body = JSON.stringify({
-      vote: vote
-    })
+    let body = { vote: vote }
 
-    fetch('https://api-dev.couchsports.ca/games/' + this.props.gameId + '/poll', {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + localStorage.getItem('CouchSportsToken')
-      },
-      method: 'PATCH',
-      body: body
-    })
-    .then(async res => {
-      if (res.ok) {
-        let jsonResponse = await res.json()
-        this.setState({question: jsonResponse.question})
-        this.setState({choices: jsonResponse.choices})
+    apiPatch('games/' + this.props.gameId + '/poll', body)
+    .then(data => {
+      if (data === null) {
+        this.props.handleError('Unable to submit vote. Please refresh and try again.')
+      } else {
+        this.setState({question: data.question})
+        this.setState({choices: data.choices})
       }
     })
-    .catch(error => console.log(error))
 
     this.setState({voteSubmitted: true})
   }

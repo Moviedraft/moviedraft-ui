@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
+import { apiGet } from '../utilities/apiUtility.js'
 import '../styles/weekendBoxOffice.css'
 
 class WeekendBoxOffice extends Component {
@@ -21,20 +22,14 @@ class WeekendBoxOffice extends Component {
   }
 
   fetchWeekend() {
-    fetch('https://api-dev.couchsports.ca/games/' + this.props.gameId + '/weekend', {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + localStorage.getItem('CouchSportsToken')
-      },
-      method: 'GET'
-    })
-    .then(async res => {
-      if (res.ok) {
-        let jsonResponse = await res.json()
-        this.setState({weekend: jsonResponse.weekendBoxOffice})
+    apiGet('games/' + this.props.gameId + '/weekend')
+    .then(data => {
+      if (data === null) {
+        this.props.handleError('Unable to load weekend box office. Please refresh and try again.')
+      } else {
+        this.setState({weekend: data.weekendBoxOffice})
       }
     })
-    .catch(error => console.log(error))
   }
 
   renderWeekendBoxOffice() {

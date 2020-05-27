@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from '@reach/router'
 import moment from 'moment';
+import { apiGet, apiPost, apiDelete } from '../utilities/apiUtility.js'
 import EditGame from './editGame.js'
 import '../styles/userGames.css'
 
@@ -27,32 +28,22 @@ class UserGames extends Component {
   }
 
   onClick(gameId) {
-    fetch(`https://api-dev.couchsports.ca/games/${gameId}/join`, {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + localStorage.getItem('CouchSportsToken')
-      },
-      method: 'POST',
-      body: ''
-    })
-    .then(res => {
-      if (res.ok) {
+    apiPost(`games/${gameId}/join`, '')
+    .then(data => {
+      if (data == null) {
+        this.props.handleError('Unable to join game. Please try again or contact your game commissioner.')
+      } else {
         this.sendData(gameId)
       }
     })
-    .catch(error => console.log(error))
   }
 
   getGame(gameId) {
-    fetch(`https://api-dev.couchsports.ca/games/${gameId}`, {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + localStorage.getItem('CouchSportsToken')
-      },
-      method: 'GET'
-    })
-    .then(res => res.json())
+    apiGet(`games/${gameId}`)
     .then(data => {
+      if (data === null) {
+        this.props.handleError(`Unable to retrieve gameId: ${gameId}. Please refresh and try again.`)
+      } else {
         if (moment() > moment(data.auctionDate)) {
           alert('Games can not be edited after the auction date has passed.')
         }
@@ -60,24 +51,19 @@ class UserGames extends Component {
           this.setState({gameToEdit: data})
           this.setState({editModalOpen: true})
         }
-      })
-    .catch(error => console.log(error))
+      }
+    })
   }
 
   deleteGame(gameId) {
-    fetch(`https://api-dev.couchsports.ca/games/${gameId}`, {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + localStorage.getItem('CouchSportsToken')
-      },
-      method: 'DELETE'
-    })
-    .then(res => {
-      if (res.ok) {
+    apiDelete(`games/${gameId}`)
+    .then(data => {
+      if (data === null) {
+        this.props.handleError(`Unable to delete gameId: ${gameId}. Please refresh and try again.`)
+      } else {
         this.props.deleteGameCallbackFunction(gameId)
       }
     })
-    .catch(error => console.log(error))
   }
 
   renderEditButton(commissionerId, gameId) {
@@ -148,7 +134,8 @@ class UserGames extends Component {
       <EditGame
         parentCallback={this.editGameCallbackFunction}
         modalOpen={this.state.editModalOpen}
-        game={this.state.gameToEdit} />
+        game={this.state.gameToEdit}
+        handleError={this.props.handleError} />
       :
       null
   }

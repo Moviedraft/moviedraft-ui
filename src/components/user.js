@@ -1,9 +1,11 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
+import { apiGet } from '../utilities/apiUtility.js'
 import '../styles/user.css'
 import Header from '../components/header.js'
 import UserHandle from './userHandle.js'
 import UserGames from './userGames.js'
 import CreateGame from './createGame.js'
+import Error from './error.js'
 
 class User extends Component {
   constructor(props){
@@ -16,7 +18,8 @@ class User extends Component {
       userHandle: '',
       email: '',
       userGames: [],
-      modalOpen: false
+      modalOpen: false,
+      errorMessage: ''
     }
 
     this.onClick = this.onClick.bind(this)
@@ -24,6 +27,7 @@ class User extends Component {
     this.userGamesCallbackFunction = this.userGamesCallbackFunction.bind(this)
     this.createGameCallbackFunction = this.createGameCallbackFunction.bind(this)
     this.deleteGameCallbackFunction = this.deleteGameCallbackFunction.bind(this)
+    this.handleError = this.handleError.bind(this)
   }
 
   onClick() {
@@ -54,30 +58,36 @@ class User extends Component {
     }
   }
 
+  handleError(message) {
+    this.setState({errorMessage: message})
+  }
+
   componentDidMount() {
-    fetch('https://api-dev.couchsports.ca/users/current', {
-      headers: {
-        Authorization: 'Bearer ' + localStorage.getItem('CouchSportsToken')
-      }
-    })
-    .then(res => res.json())
+    apiGet('users/current')
     .then((data) => {
-      localStorage.setItem('CouchSportsHandle', data.userHandle)
+      if (data === null) {
+        this.handleError('Unable to retrieve user information. Please try logging out and back in.')
+      } else {
+        localStorage.setItem('CouchSportsHandle', data.userHandle)
 
-      this.setState({userId: data.id})
-      this.setState({firstName: data.firstName})
-      this.setState({lastName: data.lastName})
-      this.setState({userHandle: data.userHandle})
-      this.setState({email: data.email})
-      this.setState({picture: data.picture})
+        this.setState({userId: data.id})
+        this.setState({firstName: data.firstName})
+        this.setState({lastName: data.lastName})
+        this.setState({userHandle: data.userHandle})
+        this.setState({email: data.email})
+        this.setState({picture: data.picture})
 
-      data.games.forEach((game) => {
-        this.state.userGames.push(game)
-      });
+        data.games.forEach((game) => {
+          this.state.userGames.push(game)
+        });
+      }
     })
   }
 
   render() {
+    if (this.state.errorMessage !== '') {
+      return <Error errorMessage={this.state.errorMessage} />;
+    }
     return (
       <div id='userPage'>
         <Header />
@@ -91,6 +101,7 @@ class User extends Component {
             <li>
               <UserHandle
                 parentCallback={this.userHandlecallbackFunction}
+                handleError={this.handleError}
                 userHandle={this.state.userHandle}
               />
             </li>
@@ -120,10 +131,12 @@ class User extends Component {
           parentCallback={this.userGamesCallbackFunction}
           deleteGameCallbackFunction={this.deleteGameCallbackFunction}
           userId={this.state.userId}
-          userGames={this.state.userGames} />
+          userGames={this.state.userGames}
+          handleError={this.handleError} />
         <CreateGame
           parentCallback={this.createGameCallbackFunction}
-          modalOpen={this.state.modalOpen} />
+          modalOpen={this.state.modalOpen}
+          handleError={this.handleError} />
       </div>
     )
   }

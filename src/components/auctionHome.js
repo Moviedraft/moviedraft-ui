@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
-import moment from 'moment';
+import React, { Component } from 'react'
+import moment from 'moment'
+import { apiGet, apiPatch } from '../utilities/apiUtility.js'
 import AuctionItem from './auctionItem.js'
 import Chat from './chat.js'
 import '../styles/auctionHome.css'
@@ -53,37 +54,30 @@ class AuctionHome extends Component {
   }
 
   fetchCurrentUser() {
-    fetch('https://api-dev.couchsports.ca/users/current', {
-      headers: {
-        Authorization: 'Bearer ' + localStorage.getItem('CouchSportsToken')
-      }
-    })
-    .then(async res => {
-      if (res.ok) {
-        let currentUser = await res.json()
+    apiGet('users/current')
+    .then(data => {
+      if (data === null) {
+        this.props.handleError('Unable to load your user information. Please refresh and try again.')
+      } else {
+        let currentUser = data
         if (this._isMounted) {
           this.setState({currentUser: currentUser})
         }
       }
     })
-    .catch(error => console.log(error))
   }
 
   endAuction() {
-    fetch('https://api-dev.couchsports.ca/games/' + this.props.gameId, {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + localStorage.getItem('CouchSportsToken')
-      },
-      method: 'PATCH',
-      body: JSON.stringify( { auctionComplete: true } )
-    })
-    .then(async res => {
-      if (res.ok) {
+    let body = { auctionComplete: true }
+
+    apiPatch('games/' + this.props.gameId, body)
+    .then(data => {
+      if (data === null) {
+        this.props.handleError('Unable to update auction. Please refresh and try again.')
+      } else {
         this.props.parentCallback(true)
       }
     })
-    .catch(error => console.log(error))
   }
 
   renderAuctionDate() {
@@ -123,7 +117,8 @@ class AuctionHome extends Component {
         movie={movie}
         gameId={this.props.gameId}
         auctionItemsExpireInSeconds={this.props.auctionItemsExpireInSeconds}
-        webSocket={this.webSocket}/>
+        webSocket={this.webSocket}
+        handleError={this.handleError}/>
     })
   }
 

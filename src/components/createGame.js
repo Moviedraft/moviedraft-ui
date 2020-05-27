@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
-import moment from 'moment';
+import React, { Component } from 'react'
+import moment from 'moment'
+import { apiPost } from '../utilities/apiUtility.js'
 import '../styles/createGame.css'
-import Modal from 'react-modal';
+import Modal from 'react-modal'
 import CreateEditGameStep1 from './createEditGameStep1.js'
 import CreateEditGameStep2 from './createEditGameStep2.js'
 import CreateEditGameStep3 from './createEditGameStep3.js'
@@ -112,7 +113,7 @@ class CreateGame extends Component {
       })
     }
 
-    let body = JSON.stringify({
+    let body = {
       playerIds: this.state.playerEmails,
       dollarSpendingCap: this.state.auctionDollars,
       playerBuyIn: 0,
@@ -123,22 +124,14 @@ class CreateGame extends Component {
       endDate: moment(this.state.endDate).format(),
       gameName: this.state.gameName,
       auctionDate: requestAuctionDate.format()
-    })
+    }
 
-    fetch('https://api-dev.couchsports.ca/games', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + localStorage.getItem('CouchSportsToken')
-      },
-      body: body
+    apiPost('games', body)
+    .then(data => {
+      if (data === null) {
+        this.props.handleError('Unable to create game. Please refresh and try again.')
+      }
     })
-    .then(res => res.json())
-    .then((data) => {
-
-    })
-    .catch(console.log)
 
     this.resetValues()
     this.props.parentCallback(false)
@@ -229,7 +222,8 @@ class CreateGame extends Component {
                 endDate={this.state.endDate}
                 auctionDate={this.state.auctionDate}
                 auctionItemExpiryTimeSeconds={this.state.auctionItemExpiryTimeSeconds}
-                movies={this.state.movies} />
+                movies={this.state.movies}
+                handleError={this.props.handleError} />
               <CreateEditGameStep3
                 currentStep={this.state.currentStep}
                 handleChange={this.handleChange}

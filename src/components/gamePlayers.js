@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
+import { apiGet } from '../utilities/apiUtility.js'
 import '../styles/gamePlayers.css'
 
 class GamePlayers extends Component {
@@ -22,21 +23,15 @@ class GamePlayers extends Component {
   }
 
   fetchPlayers() {
-    fetch('https://api-dev.couchsports.ca/games/' + this.props.gameId + '/players', {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + localStorage.getItem('CouchSportsToken')
-      },
-      method: 'GET'
-    })
-    .then(async res => {
-      if (res.ok) {
-        let jsonResponse = await res.json()
-        let sortedPlayers = jsonResponse.players.sort((a, b) => b.totalGross - a.totalGross)
+    apiGet('games/' + this.props.gameId + '/players')
+    .then(data => {
+      if (data === null) {
+        this.props.handleError('Unable to retrieve player information. Please refresh and try again.')
+      } else {
+        let sortedPlayers = data.players.sort((a, b) => b.totalGross - a.totalGross)
         this.setState({players: sortedPlayers})
       }
     })
-    .catch(error => console.log(error))
   }
 
   renderPlayers() {

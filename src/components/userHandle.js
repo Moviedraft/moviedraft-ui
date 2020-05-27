@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
+import { apiPatch } from '../utilities/apiUtility.js'
 import '../styles/userHandle.css'
 
 class UserHandle extends Component {
@@ -35,24 +36,21 @@ class UserHandle extends Component {
   }
 
   patchUserHandle() {
-    fetch('https://api-dev.couchsports.ca/users/current', {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + localStorage.getItem('CouchSportsToken')
-      },
-      method: 'PATCH',
-      body: JSON.stringify( { userHandle: this.state.newUserHandle } )
-    })
-    .then(res => res.json())
-    .then(async (data) => {
-      await this.sendData(data)
+    let body = { userHandle: this.state.newUserHandle }
 
-      localStorage.setItem('CouchSportsHandle', data.userHandle)
+    apiPatch('users/current', body)
+    .then(async data => {
+      if (data === null) {
+        this.props.handleError('Unable to change userHandle. Please refresh the page.')
+      } else {
+        await this.sendData(data)
 
-      this.setState({newUserHandle: ''})
-      this.setState({editMode: !this.state.editMode})
+        localStorage.setItem('CouchSportsHandle', data.userHandle)
+
+        this.setState({newUserHandle: ''})
+        this.setState({editMode: !this.state.editMode})
+      }
     })
-    .catch(error => console.log(error))
   }
 
   render() {

@@ -1,6 +1,7 @@
-import React, { Component } from 'react';
-import moment from 'moment';
-import PubNub from 'pubnub';
+import React, { Component } from 'react'
+import moment from 'moment'
+import PubNub from 'pubnub'
+import { apiGet, apiPost } from '../utilities/apiUtility.js'
 import '../styles/auctionItem.css';
 import Timer from './timer.js';
 
@@ -105,25 +106,23 @@ class AuctionItem extends Component {
  }
 
   beginAuction(movieId) {
-    fetch('https://api-dev.couchsports.ca/bids/' + this.props.gameId + '/' + movieId, {
-      headers: {
-        Authorization: 'Bearer ' + localStorage.getItem('CouchSportsToken')
-      }
-    })
-    .then(res => res.json())
-    .then((data) => {
-      if(!data.auctionExpirySet) {
-        this.setState({error: 'The auction for this item has not begun yet.'})
-      } else if (moment() < moment(data.auctionExpiry)) {
-        this.setStates(data)
-        this.setState({auctionStarted: true})
-        this.joinAuction()
+    apiGet('bids/' + this.props.gameId + '/' + movieId)
+    .then(data => {
+      if (data === null) {
+        this.props.handleError('Unable to begin auction. Please refresh and try again.')
       } else {
-        this.setStates(data)
-        this.setState({error: 'The auction has completed for this item.'})
+        if(!data.auctionExpirySet) {
+          this.setState({error: 'The auction for this item has not begun yet.'})
+        } else if (moment() < moment(data.auctionExpiry)) {
+          this.setStates(data)
+          this.setState({auctionStarted: true})
+          this.joinAuction()
+        } else {
+          this.setStates(data)
+          this.setState({error: 'The auction has completed for this item.'})
+        }
       }
     })
-    .catch(error => console.log(error));
   }
 
   setStates(data) {
@@ -151,37 +150,33 @@ class AuctionItem extends Component {
       this.setState({error: 'You may not bid higher than the maximum: $' + this.state.dollarSpendingCap})
       this.setState({bid: parseInt(this.state.currentHighBid, 10) + 1})
     } else {
-      fetch('https://api-dev.couchsports.ca/bids', {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + localStorage.getItem('CouchSportsToken')
-        },
-        method: 'POST',
-        body: JSON.stringify( { gameId: this.props.gameId, movieId: this.props.movie.id, bid: this.state.bid } )
-      })
-      .then(async res => {
-        let jsonRes = await res.json()
-        if (res.ok) {
+      let body = {
+        gameId: this.props.gameId,
+        movieId: this.props.movie.id,
+        bid: this.state.bid
+      }
+
+      apiPost('bids', body)
+      .then(data => {
+        if (data !== null) {
           let message = {
             'message': 'postbid',
             'auctionID': this.state.auctionID,
-            'bid': jsonRes.bid,
-            'userHandle': jsonRes.userHandle,
-            'auctionExpiry': jsonRes.auctionExpiry
+            'bid': data.bid,
+            'userHandle': data.userHandle,
+            'auctionExpiry': data.auctionExpiry
           }
           this.props.webSocket.send(JSON.stringify(message))
-        }
-        else {
-          let message = jsonRes.message
+        } else {
+          let message = data.message
+
           if (message.includes('closed')) {
             this.setState({error: 'Auction is closed for this item.'})
           }
-          if (res.status === 400) {
-            this.setState({error: message})
-          }
+
+          this.setState({error: message})
         }
       })
-      .catch(error => console.log(error))
     }
   }
 

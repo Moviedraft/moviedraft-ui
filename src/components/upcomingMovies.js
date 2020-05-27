@@ -1,6 +1,7 @@
-import React, { Component } from 'react';
-import '../styles/upcomingMovies.css';
-import moment from 'moment';
+import React, { Component } from 'react'
+import { apiGet } from '../utilities/apiUtility.js'
+import '../styles/upcomingMovies.css'
+import moment from 'moment'
 
 class UpcomingMovies extends Component {
   _upcomingMoviesRetrieved = false
@@ -26,17 +27,12 @@ class UpcomingMovies extends Component {
     let startDate = moment().utc().startOf('isoWeek').add(4, 'day').format();
     let endDate = moment().utc().startOf('isoWeek').add(1, 'week').format();
 
-    fetch('https://api-dev.couchsports.ca/movies?startDate=' + startDate + '&endDate=' + endDate, {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + localStorage.getItem('CouchSportsToken')
-      },
-      method: 'GET'
-    })
-    .then(async res => {
-      if (res.ok) {
-        let jsonResponse = await res.json()
-        jsonResponse.movies.forEach((movie) => {
+    apiGet('movies?startDate=' + startDate + '&endDate=' + endDate)
+    .then(data => {
+      if (data === null) {
+        this.props.handleError('Unable to load upcoming movies. Please refresh and try again.')
+      } else {
+        data.movies.forEach((movie) => {
           let bid = this.fetchBid(this.props.gameId, movie.id)
           if (bid) {
             let upcomingMovie = {
@@ -64,26 +60,13 @@ class UpcomingMovies extends Component {
         });
       }
     })
-    .catch(error => console.log(error))
   }
 
   fetchBid(gameId, movieId) {
-    fetch('https://api-dev.couchsports.ca/bids/' + gameId + '/' + movieId, {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + localStorage.getItem('CouchSportsToken')
-      },
-      method: 'GET'
+    apiGet('bids/' + gameId + '/' + movieId)
+    .then(data => {
+      return data !== null ? data : null
     })
-    .then(async res => {
-      if (res.ok) {
-        let jsonResponse = await res.json()
-        return jsonResponse
-      }
-
-      return null
-    })
-    .catch(error => console.log(error))
   }
 
   renderUpcomingMovies() {
