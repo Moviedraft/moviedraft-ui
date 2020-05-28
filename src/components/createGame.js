@@ -116,7 +116,6 @@ class CreateGame extends Component {
     let body = {
       playerIds: this.state.playerEmails,
       dollarSpendingCap: this.state.auctionDollars,
-      playerBuyIn: 0,
       rules: rules,
       auctionItemsExpireInSeconds: this.state.auctionItemExpiryTimeSeconds,
       movies: this.state.movies.map((movie) => movie.id),
