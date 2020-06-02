@@ -38,7 +38,7 @@ export const apiPatch = async(endpoint, body)=> {
 export const apiPost = async(endpoint, body)=> {
   let response = await apiRequestWithBody(endpoint, 'POST', body)
 
-  return response.status === 200 || response.hasOwnProperty('message') ? response.json() : null
+  return response.json()
 }
 
 export const apiPut = async(endpoint, body)=> {

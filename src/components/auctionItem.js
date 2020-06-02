@@ -159,22 +159,18 @@ class AuctionItem extends Component {
       apiPost('bids', body)
       .then(data => {
         if (data !== null) {
-          let message = {
-            'message': 'postbid',
-            'auctionID': this.state.auctionID,
-            'bid': data.bid,
-            'userHandle': data.userHandle,
-            'auctionExpiry': data.auctionExpiry
+          if (data.hasOwnProperty('message')) {
+              this.setState({error: data.message})
+          } else {
+            let message = {
+              'message': 'postbid',
+              'auctionID': this.state.auctionID,
+              'bid': data.bid,
+              'userHandle': data.userHandle,
+              'auctionExpiry': data.auctionExpiry
+            }
+            this.props.webSocket.send(JSON.stringify(message))
           }
-          this.props.webSocket.send(JSON.stringify(message))
-        } else {
-          let message = data.message
-
-          if (message.includes('closed')) {
-            this.setState({error: 'Auction is closed for this item.'})
-          }
-
-          this.setState({error: message})
         }
       })
     }
