@@ -17,7 +17,7 @@ class CreateGame extends Component {
       auctionDollars: 100,
       startDate: '',
       endDate: '',
-      auctionDate: moment().add(7, 'days').format('YYYY-MM-DDTHH:mm'),
+      auctionDate: '',
       auctionItemExpiryTimeSeconds: 30,
       movies: [],
       playWithRules: false,
