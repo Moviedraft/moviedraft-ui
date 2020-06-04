@@ -78,8 +78,8 @@ class CreateGame extends Component {
     this.setState({auctionItemExpiryTimeSeconds: 30})
     this.setState({movies: []})
     this.setState({playWithRules: false})
-    this.setState({grossCapRule: {grossCapActive: false, ruleName: 'grossCap', capValue: 224999999, centsOnDollar: 0.4, baseValue: 135200000}})
-    this.setState({valueMultiplierRule: {valueMultiplierActive: false, ruleName: 'valueMultiplier', lowerThreshold: 8000000, upperThreshold: 13000000}})
+    this.setState({grossCapRule: {grossCapActive: false, ruleName: 'grossCap', displayTitle: 'GROSS CAP', capValue: 224999999, centsOnDollar: 0.4, baseValue: 135200000}})
+    this.setState({valueMultiplierRule: {valueMultiplierActive: false, ruleName: 'valueMultiplier', displayTitle: 'VALUE MULTIPLIER', lowerThreshold: 8000000, upperThreshold: 13000000}})
     this.setState({playerEmails: []})
     this.props.parentCallback(false)
   }
