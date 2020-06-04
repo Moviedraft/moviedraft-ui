@@ -75,7 +75,7 @@ class CreateGame extends Component {
     this.setState({startDate: ''})
     this.setState({endDate: ''})
     this.setState({auctionDate: ''})
-    this.setState({auctionItemExpiryTimeSeconds: ''})
+    this.setState({auctionItemExpiryTimeSeconds: 30})
     this.setState({movies: []})
     this.setState({playWithRules: false})
     this.setState({grossCapRule: {grossCapActive: false, ruleName: 'grossCap', capValue: 224999999, centsOnDollar: 0.4, baseValue: 135200000}})
