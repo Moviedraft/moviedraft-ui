@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import '../styles/error.css'
 import Header from './header.js'
 
 class Error extends Component {
