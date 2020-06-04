@@ -55,7 +55,7 @@ class GamePlayers extends Component {
                 <td title='player'>{player.userHandle}</td>
                 <td title='total gross'>{this._formatter.format(player.totalGross)}</td>
                 <td title='total spent'>{this._formatter.format(player.totalSpent)}</td>
-                <td title='movies purchased'>{player.moviesPurchasedTitles.join(', ')}</td>
+                <td title='movies purchased'>{player.movies.map(movie => { return movie.title + ' ($' + movie.cost + ')'}).reduce((prev, curr) => [prev, ', ', curr])}</td>
               </tr>))}
           </tbody>
         </table>
