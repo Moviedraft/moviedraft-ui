@@ -84,7 +84,7 @@ class CreateGame extends Component {
     this.props.parentCallback(false)
   }
 
-  handleSubmit(event) {
+  async handleSubmit(event) {
     event.preventDefault()
 
     let requestAuctionDate = moment(this.state.auctionDate)
@@ -125,10 +125,10 @@ class CreateGame extends Component {
       auctionDate: requestAuctionDate.format()
     }
 
-    apiPost('games', body)
+    await apiPost('games', body)
     .then(data => {
-      if (data === null) {
-        this.props.handleError('Unable to create game. Please refresh and try again.')
+      if (data.hasOwnProperty('message')) {
+        this.props.handleError('Unable to create game: ' + data.message + '\nPlease refresh and try again.')
       }
     })
 

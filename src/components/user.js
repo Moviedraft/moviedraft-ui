@@ -28,6 +28,11 @@ class User extends Component {
     this.createGameCallbackFunction = this.createGameCallbackFunction.bind(this)
     this.deleteGameCallbackFunction = this.deleteGameCallbackFunction.bind(this)
     this.handleError = this.handleError.bind(this)
+    this.getCurrentUser = this.getCurrentUser.bind(this)
+  }
+
+  componentDidMount() {
+    this.getCurrentUser()
   }
 
   onClick() {
@@ -47,6 +52,7 @@ class User extends Component {
 
   createGameCallbackFunction(modalOpen) {
     this.setState({modalOpen: modalOpen})
+    this.getCurrentUser()
   }
 
   deleteGameCallbackFunction(gameId) {
@@ -60,9 +66,10 @@ class User extends Component {
 
   handleError(message) {
     this.setState({errorMessage: message})
+    this.getCurrentUser()
   }
 
-  componentDidMount() {
+  getCurrentUser() {
     apiGet('users/current')
     .then((data) => {
       if (data === null) {
@@ -76,10 +83,7 @@ class User extends Component {
         this.setState({userHandle: data.userHandle})
         this.setState({email: data.email})
         this.setState({picture: data.picture})
-
-        data.games.forEach((game) => {
-          this.state.userGames.push(game)
-        });
+        this.setState({userGames: data.games})
       }
     })
   }
