@@ -27,6 +27,7 @@ class User extends Component {
     this.userGamesCallbackFunction = this.userGamesCallbackFunction.bind(this)
     this.createGameCallbackFunction = this.createGameCallbackFunction.bind(this)
     this.deleteGameCallbackFunction = this.deleteGameCallbackFunction.bind(this)
+    this.updateGameNameCallbackFunction = this.updateGameNameCallbackFunction.bind(this)
     this.handleError = this.handleError.bind(this)
     this.getCurrentUser = this.getCurrentUser.bind(this)
   }
@@ -62,6 +63,13 @@ class User extends Component {
       userGames.splice(index, 1);
       this.setState({userGames: userGames});
     }
+  }
+
+  updateGameNameCallbackFunction(game) {
+    let userGamesToUpdate = [...this.state.userGames]
+    let index = userGamesToUpdate.findIndex(userGame => userGame.game_id === game._id)
+    userGamesToUpdate[index].gameName = game.gameName
+    this.setState({userGames: userGamesToUpdate})
   }
 
   handleError(message) {
@@ -136,6 +144,7 @@ class User extends Component {
           deleteGameCallbackFunction={this.deleteGameCallbackFunction}
           userId={this.state.userId}
           userGames={this.state.userGames}
+          updateGameNameCallbackFunction={this.updateGameNameCallbackFunction}
           handleError={this.handleError} />
         <CreateGame
           parentCallback={this.createGameCallbackFunction}

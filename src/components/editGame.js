@@ -153,6 +153,8 @@ class EditGame extends Component {
     .then(data => {
       if (data === null) {
         this.props.handleError('Unable to edit game. Please try again.')
+      } else {
+        this.props.updateGameNameCallbackFunction(data)
       }
     })
 
