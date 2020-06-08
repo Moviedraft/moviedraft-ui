@@ -135,7 +135,8 @@ class UserGames extends Component {
         parentCallback={this.editGameCallbackFunction}
         modalOpen={this.state.editModalOpen}
         game={this.state.gameToEdit}
-        handleError={this.props.handleError} />
+        handleError={this.props.handleError}
+        updateGameNameCallbackFunction={this.props.updateGameNameCallbackFunction} />
       :
       null
   }
