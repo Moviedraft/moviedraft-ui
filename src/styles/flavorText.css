@@ -1,0 +1,24 @@
+#flavorTextDiv {
+  padding: 1em;
+}
+
+.editFlavorTextButton {
+  display:inline-block;
+  position: relative;
+  float: left;
+  top: auto !important;
+}
+
+.flavorTextInput {
+  width: 100%;
+}
+
+.text {
+  white-space: pre-wrap;
+  word-break: break-all;
+  clear: both;
+}
+
+#createButton {
+  position: relative;
+}
