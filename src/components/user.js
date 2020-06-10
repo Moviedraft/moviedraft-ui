@@ -19,7 +19,8 @@ class User extends Component {
       email: '',
       userGames: [],
       modalOpen: false,
-      errorMessage: ''
+      errorMessage: '',
+      userLoaded: false
     }
 
     this.onClick = this.onClick.bind(this)
@@ -92,6 +93,7 @@ class User extends Component {
         this.setState({email: data.email})
         this.setState({picture: data.picture})
         this.setState({userGames: data.games})
+        this.setState({userLoaded: true})
       }
     })
   }
@@ -100,6 +102,11 @@ class User extends Component {
     if (this.state.errorMessage !== '') {
       return <Error errorMessage={this.state.errorMessage} />;
     }
+
+    if (this.state.userLoaded === false) {
+      return null
+    }
+
     return (
       <div id='userPage'>
         <Header />
