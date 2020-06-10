@@ -3,6 +3,7 @@ import { apiGet } from '../utilities/apiUtility.js'
 import '../styles/gameHome.css'
 import GamePlayers from './gamePlayers.js'
 import WeekendBoxOffice from './weekendBoxOffice.js'
+import FlavorText from './flavorText.js'
 import UpcomingMovies from './upcomingMovies.js'
 import Poll from './poll.js'
 import Chat from './chat.js'
@@ -44,7 +45,19 @@ class GameHome extends Component {
           <WeekendBoxOffice
             gameId={this.props.gameId}
             handleError={this.props.handleError} />
+          <FlavorText
+            flavorType='weekend'
+            commissionerId={this.props.commissionerId}
+            userId={this.state.userId}
+            gameId={this.props.gameId}
+            handleError={this.props.handleError} />
           <UpcomingMovies
+            gameId={this.props.gameId}
+            handleError={this.props.handleError} />
+          <FlavorText
+            flavorType='upcoming'
+            commissionerId={this.props.commissionerId}
+            userId={this.state.userId}
             gameId={this.props.gameId}
             handleError={this.props.handleError} />
           <Poll
