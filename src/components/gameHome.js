@@ -9,14 +9,29 @@ import Poll from './poll.js'
 import Chat from './chat.js'
 
 class GameHome extends Component {
-  _userLoaded = false
   constructor(props){
     super(props)
     this.state = {
-      userId: ''
+      userId: '',
+      userLoaded: false,
+      gamePlayersLoaded: false,
+      weekendBoxOfficeLoaded: false,
+      weekendFlavorTextLoaded: false,
+      upcomingFlavorTextLoaded: false,
+      upcomingMoviesLoaded: false,
+      pollLoaded: false
     }
 
+    this.updateComponentLoadedFlag = this.updateComponentLoadedFlag.bind(this)
     this.fetchCurrentUser = this.fetchCurrentUser.bind(this)
+  }
+
+  componentDidMount() {
+    this.fetchCurrentUser()
+  }
+
+  updateComponentLoadedFlag(componentName) {
+    this.setState({[componentName]:true})
   }
 
   fetchCurrentUser() {
@@ -26,41 +41,59 @@ class GameHome extends Component {
         this.props.handleError('Unable to load your user information. Please refresh and try again.')
       } else {
         this.setState({userId: data.id})
+        this.setState({userLoaded: true})
       }
     })
   }
 
   render() {
-    if (!this._userLoaded) {
-      this.fetchCurrentUser()
-      this._userLoaded = true
+    if (this.userLoaded === false ||
+        this.gamePlayersLoaded === false ||
+        this.weekendBoxOfficeLoaded === false ||
+        this.weekendFlavorTextLoaded === false ||
+        this.upcomingFlavorTextLoaded === false ||
+        this.upcomingMoviesLoaded === false ||
+        this.pollLoaded === false) {
+      return null
     }
 
-    return this._userLoaded ? (
+    return (
       <div>
         <div id='gameHomeDiv'>
           <GamePlayers
+            updateComponentLoadedFlag={this.updateComponentLoadedFlag}
+            componentName='gamePlayersLoaded'
             gameId={this.props.gameId}
             handleError={this.props.handleError} />
           <WeekendBoxOffice
+            updateComponentLoadedFlag={this.updateComponentLoadedFlag}
+            componentName='weekendBoxOfficeLoaded'
             gameId={this.props.gameId}
             handleError={this.props.handleError} />
           <FlavorText
+            updateComponentLoadedFlag={this.updateComponentLoadedFlag}
+            componentName='weekendFlavorTextLoaded'
             flavorType='weekend'
             commissionerId={this.props.commissionerId}
             userId={this.state.userId}
             gameId={this.props.gameId}
             handleError={this.props.handleError} />
           <UpcomingMovies
+            updateComponentLoadedFlag={this.updateComponentLoadedFlag}
+            componentName='upcomingMoviesLoaded'
             gameId={this.props.gameId}
             handleError={this.props.handleError} />
           <FlavorText
+            updateComponentLoadedFlag={this.updateComponentLoadedFlag}
+            componentName='upcomingFlavorTextLoaded'
             flavorType='upcoming'
             commissionerId={this.props.commissionerId}
             userId={this.state.userId}
             gameId={this.props.gameId}
             handleError={this.props.handleError} />
           <Poll
+            updateComponentLoadedFlag={this.updateComponentLoadedFlag}
+            componentName='pollLoaded'
             gameId={this.props.gameId}
             commissionerId={this.props.commissionerId}
             userId={this.state.userId}
@@ -69,8 +102,6 @@ class GameHome extends Component {
         <Chat
           gameId={this.props.gameId + '-game'} />
       </div>
-    ) : (
-      null
     )
   }
 }

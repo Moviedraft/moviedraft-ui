@@ -96,6 +96,7 @@ class Poll extends Component {
         this.setState({question: data.question})
         this.setState({choices: data.choices})
         this._pollLoaded = true
+        this.props.updateComponentLoadedFlag(this.props.componentName)
       }
     })
   }

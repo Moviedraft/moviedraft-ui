@@ -59,6 +59,8 @@ class UpcomingMovies extends Component {
           }
         });
       }
+
+      this.props.updateComponentLoadedFlag(this.props.componentName)
     })
   }
 
