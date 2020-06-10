@@ -32,6 +32,8 @@ class flavorText extends Component {
         this.setState({text: data.flavorText.text})
         this.setState({defaultCreate: false})
       }
+
+      this.props.updateComponentLoadedFlag(this.props.componentName)
     })
   }
 

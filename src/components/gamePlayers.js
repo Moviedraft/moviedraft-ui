@@ -30,6 +30,7 @@ class GamePlayers extends Component {
       } else {
         let sortedPlayers = data.players.sort((a, b) => b.totalGross - a.totalGross)
         this.setState({players: sortedPlayers})
+        this.props.updateComponentLoadedFlag(this.props.componentName)
       }
     })
   }

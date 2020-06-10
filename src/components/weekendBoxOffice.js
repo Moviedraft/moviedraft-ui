@@ -21,6 +21,10 @@ class WeekendBoxOffice extends Component {
     this.renderWeekendBoxOffice = this.renderWeekendBoxOffice.bind(this)
   }
 
+  componentDidMount() {
+    this.fetchWeekend()
+  }
+
   fetchWeekend() {
     apiGet('games/' + this.props.gameId + '/weekend')
     .then(data => {
@@ -28,6 +32,7 @@ class WeekendBoxOffice extends Component {
         this.props.handleError('Unable to load weekend box office. Please refresh and try again.')
       } else {
         this.setState({weekend: data.weekendBoxOffice})
+        this.props.updateComponentLoadedFlag(this.props.componentName)
       }
     })
   }
@@ -67,20 +72,11 @@ class WeekendBoxOffice extends Component {
   }
 
   render() {
-    if (!this._weekendBoxOfficeLoaded) {
-      this.fetchWeekend()
-      this._weekendBoxOfficeLoaded = true
-    }
-
-    if (this._weekendBoxOfficeLoaded) {
-      return (
+    return (
         <div>
           {this.renderWeekendBoxOffice()}
         </div>
       )
-    }
-
-    return null
   }
 }
 
