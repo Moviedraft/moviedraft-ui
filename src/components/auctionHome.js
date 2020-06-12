@@ -15,7 +15,7 @@ class AuctionHome extends Component {
       currentUser: '',
       webSocket: null,
       auctionCountdownIntervalId: '',
-      auctionDuration: moment().add('1', 'y')
+      auctionDuration: null
     }
 
     this.setDuration = this.setDuration.bind(this)
@@ -29,9 +29,11 @@ class AuctionHome extends Component {
 
   componentDidMount() {
     this.fetchCurrentUser()
+    this.setDuration()
 
     let intervalId = setInterval(() => {
       if (moment(this.props.auctionDate).diff(moment(this.state.auctionDuration)) > 0) {
+        console.log('setting interval')
         this.setDuration()
       } else {
         clearInterval(intervalId)
