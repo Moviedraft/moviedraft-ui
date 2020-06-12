@@ -34,7 +34,8 @@ class AuctionItem extends Component {
     this.checkWinner = this.checkWinner.bind(this)
     this.beginAuction = this.beginAuction.bind(this)
     this.submitBid = this.submitBid.bind(this)
-    this.renderAuctionPage = this.renderAuctionItem.bind(this)
+    this.renderMoviePoster = this.renderMoviePoster.bind(this)
+    this.renderAuctionItem = this.renderAuctionItem.bind(this)
     this.setStates = this.setStates.bind(this)
     this.updateHighBid = this.updateHighBid.bind(this)
   }
@@ -188,76 +189,73 @@ class AuctionItem extends Component {
     }
   }
 
+  renderMoviePoster() {
+    return (
+      <div>
+        <div className='posterWrapper'>
+          <img
+            src={this.props.movie.posterUrl}
+            className='posterImage'
+            alt='movie poster' />
+        </div>
+        <p>{this.props.movie.title}</p>
+        <p>{moment.utc(this.props.movie.releaseDate).format('dddd, MMMM Do YYYY')}</p>
+      </div>
+    )
+  }
+
   renderAuctionItem() {
-      return this.state.auctionStarted && moment() < moment(this.state.auctionExpiry) ?
-        (
-          <div className='movieParent'>
-            <div className='posterWrapper'>
-              <img
-                src={this.props.movie.posterUrl}
-                className='posterImage'
-                alt='movie poster' />
-            </div>
-            <p>{this.props.movie.title}</p>
-            <Timer ref='timer'
-              parentCallback={this.callbackFunction}
-              auctionExpiry={this.state.auctionExpiry} />
-            <p>
-              {'Current bid: ' + this.state.highestBidder + ' $' + this.state.currentHighBid}
-            </p>
-            <input
-              className='bidInput'
-              id='bid'
-              name='bid'
-              type='number'
-              min={this.state.minBid}
-              step='1'
-              value={this.state.bid}
-              onChange={(event) => this.updateBid(event)}
-              />
-            <button
-              className='auctionButton'
-              onClick={() => this.submitBid()}>
-              SUBMIT BID
-            </button>
-            <p>{this.state.error}</p>
-          </div>
-        ) : moment() > moment(this.state.auctionExpiry) ?
-          (
-            <div className='movieParent'>
-              <div className='posterWrapper'>
-                <img
-                  src={this.props.movie.posterUrl}
-                  className='posterImage'
-                  alt='movie poster' />
-              </div>
-              <p>{this.props.movie.title}</p>
-              <p>{moment.utc(this.props.movie.releaseDate).format('dddd, MMMM Do YYYY')}</p>
-              <button
-                className='auctionButton'
-                onClick={() => this.checkWinner()}>
-                CHECK WINNER
-              </button>
-              <p>{this.state.error}</p>
-            </div>
-          ) : (
-            <div className='movieParent'>
-              <div className='posterWrapper'>
-                <img
-                  src={this.props.movie.posterUrl}
-                  className='posterImage'
-                  alt='movie poster' />
-              </div>
-              <p>{this.props.movie.title}</p>
-              <p>{moment.utc(this.props.movie.releaseDate).format('dddd, MMMM Do YYYY')}</p>
-              <button
-                className='auctionButton'
-                onClick={() => this.beginAuction(this.props.movie.id)}>
-                BEGIN AUCTION
-              </button>
-              <p>{this.state.error}</p>
-            </div>
+    if (moment(this.state.auctionExpiry).isValid() && moment() > moment(this.state.auctionExpiry)) {
+      return (
+        <div className='movieParent'>
+          {this.renderMoviePoster()}
+          <button
+            className='auctionButton'
+            onClick={() => this.checkWinner()}>
+            CHECK WINNER
+          </button>
+          <p>{this.state.error}</p>
+        </div>
       )
+    }
+
+    return !this.state.auctionStarted ? (
+      <div className='movieParent'>
+        {this.renderMoviePoster()}
+        <button
+          className='auctionButton'
+          onClick={() => this.beginAuction(this.props.movie.id)}>
+          JOIN AUCTION
+        </button>
+        <p>{this.state.error}</p>
+      </div>
+    ) : (
+      <div className='movieParent'>
+        {this.renderMoviePoster()}
+        <Timer ref='timer'
+          parentCallback={this.callbackFunction}
+          auctionExpiry={this.state.auctionExpiry} />
+        <p>
+          {'Current bid: ' + this.state.highestBidder + ' $' + this.state.currentHighBid}
+        </p>
+        <input
+          className='bidInput'
+          id='bid'
+          name='bid'
+          type='number'
+          min={this.state.minBid}
+          step='1'
+          value={this.state.bid}
+          onChange={(event) => this.updateBid(event)}
+          />
+        <button
+          className='auctionButton'
+          onClick={() => this.submitBid()}>
+          SUBMIT BID
+        </button>
+        <p>{this.state.error}</p>
+      </div>
+    )
   }
 
   render() {
