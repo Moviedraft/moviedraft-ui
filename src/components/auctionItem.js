@@ -10,7 +10,7 @@ class AuctionItem extends Component {
     super(props)
     this.state = {
       auctionStarted: false,
-      auctionExpiry: '',
+      auctionExpiry: moment().add(1, 'y'),
       dollarSpendingCap: 0,
       minBid: 0,
       currentHighBid: 0,
@@ -44,6 +44,7 @@ class AuctionItem extends Component {
     this.setState({timerDone: timerDone})
     this.setState({error: ''})
     this.setState({auctionStarted: false})
+    this.setState({auctionExpiry: moment().subtract(1, 'y')})
 	}
 
   componentDidMount() {
@@ -205,7 +206,7 @@ class AuctionItem extends Component {
   }
 
   renderAuctionItem() {
-    if (moment(this.state.auctionExpiry).isValid() && moment() > moment(this.state.auctionExpiry)) {
+    if (moment() >= moment(this.state.auctionExpiry)) {
       return (
         <div className='movieParent'>
           {this.renderMoviePoster()}

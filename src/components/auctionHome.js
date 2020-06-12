@@ -7,15 +7,15 @@ import '../styles/auctionHome.css'
 
 class AuctionHome extends Component {
   _isMounted = false;
-  _auctionDurationLoaded = false;
 
   constructor(props){
     super(props)
     this.state = {
+      auctionDurationLoaded: false,
       currentUser: '',
       webSocket: null,
       auctionCountdownIntervalId: '',
-      auctionDuration: null
+      auctionDuration: moment().add('1', 'y')
     }
 
     this.setDuration = this.setDuration.bind(this)
@@ -30,9 +30,15 @@ class AuctionHome extends Component {
   componentDidMount() {
     this.fetchCurrentUser()
 
-    let intervalId = setInterval(() => this.setDuration(), 1000);
+    let intervalId = setInterval(() => {
+      if (moment(this.props.auctionDate).diff(moment(this.state.auctionDuration)) > 0) {
+        this.setDuration()
+      } else {
+        clearInterval(intervalId)
+      }
+    }, 1000);
     this.setState({auctionCountdownIntervalId: intervalId})
-
+    this.setState({auctionDurationLoaded: true})
     this._isMounted = true
 
     this.webSocket.onclose = () => {
@@ -48,9 +54,6 @@ class AuctionHome extends Component {
   setDuration() {
     let timeDifference = moment(this.props.auctionDate).diff(moment())
     this.setState({auctionDuration: moment.duration(timeDifference)})
-    if (this.state.auctionDuration !== null) {
-      this._auctionDurationLoaded = true
-    }
   }
 
   fetchCurrentUser() {
@@ -82,7 +85,7 @@ class AuctionHome extends Component {
 
   renderAuctionDate() {
     if (this.state.auctionDuration === null) {
-      return <div></div>
+      return null
     }
 
     let days = Math.abs(moment(this.props.auctionDate).diff(moment(), 'days'))
@@ -137,7 +140,7 @@ class AuctionHome extends Component {
   }
 
   render() {
-    if (!this._auctionDurationLoaded) {
+    if (!this.state.auctionDurationLoaded) {
       return <div></div>
     }
 
