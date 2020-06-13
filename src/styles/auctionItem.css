@@ -21,6 +21,11 @@
   border-radius: 0;
 }
 
+.posterPlaceholder {
+  height: 100%;
+  line-height: 4em;
+}
+
 .auctionButton {
   position: relative;
 }
