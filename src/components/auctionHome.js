@@ -33,7 +33,6 @@ class AuctionHome extends Component {
 
     let intervalId = setInterval(() => {
       if (moment(this.props.auctionDate).diff(moment(this.state.auctionDuration)) > 0) {
-        console.log('setting interval')
         this.setDuration()
       } else {
         clearInterval(intervalId)
