@@ -191,6 +191,27 @@ class AuctionItem extends Component {
   }
 
   renderMoviePoster() {
+    return this.props.movie.posterUrl && this.props.movie.posterUrl !== '' ?
+    (
+      <div>
+        <div className='posterWrapper'>
+          <img
+            src={this.props.movie.posterUrl}
+            className='posterImage'
+            alt='movie poster' />
+        </div>
+        <p>{this.props.movie.title}</p>
+        <p>{moment.utc(this.props.movie.releaseDate).format('dddd, MMMM Do YYYY')}</p>
+      </div>
+    ) : (
+      <div>
+        <div className='posterWrapper'>
+            <i className='material-icons posterPlaceholder'>local_movies</i>
+        </div>
+        <p>{this.props.movie.title}</p>
+        <p>{moment.utc(this.props.movie.releaseDate).format('dddd, MMMM Do YYYY')}</p>
+      </div>
+    )
     return (
       <div>
         <div className='posterWrapper'>
