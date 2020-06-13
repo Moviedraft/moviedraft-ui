@@ -212,18 +212,6 @@ class AuctionItem extends Component {
         <p>{moment.utc(this.props.movie.releaseDate).format('dddd, MMMM Do YYYY')}</p>
       </div>
     )
-    return (
-      <div>
-        <div className='posterWrapper'>
-          <img
-            src={this.props.movie.posterUrl}
-            className='posterImage'
-            alt='movie poster' />
-        </div>
-        <p>{this.props.movie.title}</p>
-        <p>{moment.utc(this.props.movie.releaseDate).format('dddd, MMMM Do YYYY')}</p>
-      </div>
-    )
   }
 
   renderAuctionItem() {
