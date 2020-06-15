@@ -43,14 +43,9 @@ class UserGames extends Component {
     .then(data => {
       if (data === null) {
         this.props.handleError(`Unable to retrieve gameId: ${gameId}. Please refresh and try again.`)
-      } else {
-        if (moment() > moment(data.auctionDate)) {
-          alert('Games can not be edited after the auction date has passed.')
-        }
-        else if(data.hasOwnProperty('_id')){
-          this.setState({gameToEdit: data})
-          this.setState({editModalOpen: true})
-        }
+      } else if(data.hasOwnProperty('_id')) {
+        this.setState({gameToEdit: data})
+        this.setState({editModalOpen: true})
       }
     })
   }
@@ -66,8 +61,8 @@ class UserGames extends Component {
     })
   }
 
-  renderEditButton(commissionerId, gameId) {
-    return this.props.userId === commissionerId ?
+  renderEditButton(commissionerId, gameId, auctionDate) {
+    return this.props.userId === commissionerId && moment() < moment(auctionDate)?
       (
         <button
         className='adminButtons'
@@ -106,7 +101,7 @@ class UserGames extends Component {
               state={{gameId: `${item.game_id}`}}>
               {item.gameName}
             </Link>
-            {this.renderEditButton(item.commissioner_id, item.game_id)}
+            {this.renderEditButton(item.commissioner_id, item.game_id, item.auctionDate)}
             {this.renderDeleteButton(item.commissioner_id, item.game_id)}
           </div>
           <div className='invitedGame'></div>
