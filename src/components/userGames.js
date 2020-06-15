@@ -66,8 +66,8 @@ class UserGames extends Component {
     })
   }
 
-  renderEditButton(commissionerId, gameId) {
-    return this.props.userId === commissionerId ?
+  renderEditButton(commissionerId, gameId, auctionDate) {
+    return this.props.userId === commissionerId && moment() < moment(auctionDate)?
       (
         <button
         className='adminButtons'
@@ -106,7 +106,7 @@ class UserGames extends Component {
               state={{gameId: `${item.game_id}`}}>
               {item.gameName}
             </Link>
-            {this.renderEditButton(item.commissioner_id, item.game_id)}
+            {this.renderEditButton(item.commissioner_id, item.game_id, item.auctionDate)}
             {this.renderDeleteButton(item.commissioner_id, item.game_id)}
           </div>
           <div className='invitedGame'></div>
