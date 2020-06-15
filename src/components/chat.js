@@ -23,7 +23,6 @@ class Chat extends Component {
     this.sendMessage = this.sendMessage.bind(this)
     this.getMessage = this.getMessage.bind(this)
     this.handleKeyPress = this.handleKeyPress.bind(this)
-    this.scrollToBottom = this.scrollToBottom.bind(this)
   }
 
   componentDidMount() {
@@ -49,7 +48,6 @@ class Chat extends Component {
             this.setState(previousState => ({messages: [...previousState.messages, message.message]}));
           });
         }
-        this.scrollToBottom()
       }
     );
   }
@@ -62,10 +60,6 @@ class Chat extends Component {
     if (event.key === 'Enter') {
       this.sendMessage(this.state.userHandle + ': ' + this.state.message)
     }
-  }
-
-  scrollToBottom() {
-  this.messagesEnd.scrollIntoView({ behavior: 'smooth' });
   }
 
   getMessage() {
