@@ -11,8 +11,11 @@ class Game extends Component {
   constructor(props){
     super(props)
     this.state = {
+      gameName: '',
       gameId: this.props.gameId,
       auctionDate: '',
+      startDate: '',
+      endDate: '',
       movies: [],
       commissionerId: '',
       auctionComplete: false,
@@ -40,6 +43,7 @@ class Game extends Component {
       if (data === null) {
         this.handleError('Unable to load game. Please refresh and try again.')
       } else {
+        this.setState({gameName: data.gameName})
         this.setState({auctionDate: moment(data.auctionDate)})
         this.setState({movies: data.movies.sort((movie1, movie2) => {
           if (moment(movie1.releaseDate) > moment(movie2.releaseDate)) return 1
@@ -50,6 +54,8 @@ class Game extends Component {
         this.setState({auctionComplete: data.auctionComplete})
         this.setState({commissionerId: data.commissionerId})
         this.setState({auctionItemsExpireInSeconds: data.auctionItemsExpireInSeconds})
+        this.setState({startDate: data.startDate})
+        this.setState({endDate: data.endDate})
         this.setState({loaded: true})
       }
     })
@@ -87,7 +93,10 @@ class Game extends Component {
       return this.state.auctionComplete ?
       (
         <div>
-          <Header />
+          <Header
+            gameName={this.state.gameName}
+            startDate={this.state.startDate}
+            endDate={this.state.endDate} />
           <div>
             {this.renderGameHome()}
           </div>
@@ -95,7 +104,10 @@ class Game extends Component {
       ) :
       (
         <div>
-          <Header />
+          <Header
+            gameName={this.state.gameName}
+            startDate={this.state.startDate}
+            endDate={this.state.endDate} />
           <div>
             {this.renderAuctionHome()}
           </div>

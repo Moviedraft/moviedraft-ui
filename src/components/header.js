@@ -17,6 +17,7 @@ class Header extends Component {
   }
 
   componentDidMount() {
+    console.log(this.props.gameName)
     if (localStorage.getItem('CouchSportsToken') && moment() < moment(localStorage.getItem('CouchSportsTokenExpiry'))) {
       this.setState({loggedIn: true})
     }
@@ -42,11 +43,26 @@ class Header extends Component {
       )
   }
 
+  renderGameInfo() {
+    return this.props.gameName && this.props.startDate && this.props.endDate ?
+    (
+      <div id='gameInfo'>
+        <div id='gameName'>{this.props.gameName}</div>
+        <div id='gameDates'>{moment(this.props.startDate).format('LL') + ' - ' + moment(this.props.endDate).format('LL')}</div>
+      </div>
+    ) : (
+      <div id='gameInfo'>&nbsp;</div>
+    )
+  }
+
   render() {
     return (
-      <div>
+      <div id='headerContainer'>
         <span id='companyName' onClick={this.onClick}>CouchSports</span>
-        {this.renderAccountButton()}
+        {this.renderGameInfo()}
+        <div id='accountContainer'>
+          {this.renderAccountButton()}
+        </div>
       </div>
     );
   }
