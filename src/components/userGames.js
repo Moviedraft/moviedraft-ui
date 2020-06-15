@@ -43,14 +43,9 @@ class UserGames extends Component {
     .then(data => {
       if (data === null) {
         this.props.handleError(`Unable to retrieve gameId: ${gameId}. Please refresh and try again.`)
-      } else {
-        if (moment() > moment(data.auctionDate)) {
-          alert('Games can not be edited after the auction date has passed.')
-        }
-        else if(data.hasOwnProperty('_id')){
-          this.setState({gameToEdit: data})
-          this.setState({editModalOpen: true})
-        }
+      } else if(data.hasOwnProperty('_id')) {
+        this.setState({gameToEdit: data})
+        this.setState({editModalOpen: true})
       }
     })
   }
