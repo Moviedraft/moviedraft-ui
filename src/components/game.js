@@ -41,7 +41,12 @@ class Game extends Component {
         this.handleError('Unable to load game. Please refresh and try again.')
       } else {
         this.setState({auctionDate: moment(data.auctionDate)})
-        this.setState({movies: data.movies})
+        this.setState({movies: data.movies.sort((movie1, movie2) => {
+          if (moment(movie1.releaseDate) > moment(movie2.releaseDate)) return 1
+          if (moment(movie1.releaseDate) < moment(movie2.releaseDate)) return -1
+          if (movie1.title > movie2.title) return 1
+          if (movie1.title < movie2.title) return -1
+        })})
         this.setState({auctionComplete: data.auctionComplete})
         this.setState({commissionerId: data.commissionerId})
         this.setState({auctionItemsExpireInSeconds: data.auctionItemsExpireInSeconds})
