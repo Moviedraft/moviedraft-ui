@@ -46,8 +46,8 @@ class Header extends Component {
     return this.props.gameName && this.props.startDate && this.props.endDate ?
     (
       <div id='gameInfo'>
-        <div id='gameName'>{this.props.gameName}</div>
-        <div id='gameDates'>{moment(this.props.startDate).format('LL') + ' - ' + moment(this.props.endDate).format('LL')}</div>
+        <div id='headerGameName'>{this.props.gameName}</div>
+        <div id='headerGameDates'>{moment(this.props.startDate).format('LL') + ' - ' + moment(this.props.endDate).format('LL')}</div>
       </div>
     ) : (
       <div id='gameInfo'>&nbsp;</div>
