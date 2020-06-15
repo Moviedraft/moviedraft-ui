@@ -17,7 +17,6 @@ class Header extends Component {
   }
 
   componentDidMount() {
-    console.log(this.props.gameName)
     if (localStorage.getItem('CouchSportsToken') && moment() < moment(localStorage.getItem('CouchSportsTokenExpiry'))) {
       this.setState({loggedIn: true})
     }
