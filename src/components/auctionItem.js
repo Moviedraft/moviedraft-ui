@@ -78,7 +78,7 @@ class AuctionItem extends Component {
 
     this.webSocket.onmessage = (event) => {
       let eventData = JSON.parse(event.data)
-      console.log(eventData.message)
+      
       if(eventData.message.hasOwnProperty('auctionID') && eventData.message.auctionID === this.state.auctionID) {
         this.updateHighBid(eventData.message)
       }
