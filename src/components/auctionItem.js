@@ -172,7 +172,6 @@ class AuctionItem extends Component {
               'auctionExpiry': data.auctionExpiry
             }
             this.props.webSocket.send(JSON.stringify(message))
-            this.props.updatePlayerAmounts()
           }
         }
       })
@@ -180,6 +179,7 @@ class AuctionItem extends Component {
   }
 
   updateHighBid(bid) {
+    this.props.updatePlayerAmounts()
     this.setState({highestBidder: bid.userHandle});
     this.setState({minBid: parseInt(bid.bid, 10) + 1});
     this.setState({bid: parseInt(bid.bid, 10) + 1});
