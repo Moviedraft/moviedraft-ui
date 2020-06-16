@@ -28,6 +28,8 @@ class AuctionItem extends Component {
       uuid: this.props.gameId + this.props.gameId
     });
 
+    this.webSocket = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL)
+
     this.callbackFunction = this.callbackFunction.bind(this)
     this.joinAuction = this.joinAuction.bind(this)
     this.updateBid = this.updateBid.bind(this)
@@ -48,8 +50,12 @@ class AuctionItem extends Component {
 	}
 
   componentDidMount() {
-    this.props.webSocket.onopen = () => {
+    this.webSocket.onopen = () => {
       this.setState({connectedToWebSocket: true})
+    }
+
+    this.webSocket.onclose = () => {
+      this.webSocket = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL)
     }
   }
 
@@ -59,7 +65,7 @@ class AuctionItem extends Component {
         'message': 'leaveauction',
         'auctionID': this.state.auctionID
       }
-      this.props.webSocket.send(JSON.stringify(message))
+      this.webSocket.send(JSON.stringify(message))
     }
   }
 
@@ -68,12 +74,12 @@ class AuctionItem extends Component {
       'message': 'joinauction',
       'auctionID': this.state.auctionID
     }
-    this.props.webSocket.send(JSON.stringify(message))
+    this.webSocket.send(JSON.stringify(message))
 
-    this.props.webSocket.onmessage = (event) => {
+    this.webSocket.onmessage = (event) => {
       let eventData = JSON.parse(event.data)
-
-      if(eventData.message.hasOwnProperty('auctionExpiry')) {
+      console.log(eventData.message)
+      if(eventData.message.hasOwnProperty('auctionID') && eventData.message.auctionID === this.state.auctionID) {
         this.updateHighBid(eventData.message)
       }
     }
@@ -171,7 +177,7 @@ class AuctionItem extends Component {
               'userHandle': data.userHandle,
               'auctionExpiry': data.auctionExpiry
             }
-            this.props.webSocket.send(JSON.stringify(message))
+            this.webSocket.send(JSON.stringify(message))
           }
         }
       })
