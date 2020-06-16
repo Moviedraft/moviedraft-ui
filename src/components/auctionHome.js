@@ -20,7 +20,6 @@ class AuctionHome extends Component {
       playersLoaded: false
     }
 
-    this.updatePlayerAmounts = this.updatePlayerAmounts.bind(this)
     this.setDuration = this.setDuration.bind(this)
     this.fetchCurrentUser = this.fetchCurrentUser.bind(this)
     this.fetchPlayers = this.fetchPlayers.bind(this)
@@ -55,10 +54,6 @@ class AuctionHome extends Component {
   componentWillUnmount() {
     this._isMounted = false
     clearInterval(this.state.auctionCountdownIntervalId)
-  }
-
-  updatePlayerAmounts() {
-    this.fetchPlayers()
   }
 
   setDuration() {
@@ -168,7 +163,7 @@ class AuctionHome extends Component {
         gameId={this.props.gameId}
         auctionItemsExpireInSeconds={this.props.auctionItemsExpireInSeconds}
         webSocket={this.webSocket}
-        updatePlayerAmounts={this.updatePlayerAmounts}
+        fetchPlayers={this.fetchPlayers}
         handleError={this.handleError}/>
     })
   }
