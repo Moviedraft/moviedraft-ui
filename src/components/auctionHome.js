@@ -36,7 +36,7 @@ class AuctionHome extends Component {
     this.setDuration()
 
     let intervalId = setInterval(() => {
-      if (moment(this.props.auctionDate).diff(moment(this.state.auctionDuration)) > 0) {
+      if (this.state.auctionDuration > 0) {
         this.setDuration()
       } else {
         clearInterval(intervalId)
@@ -144,9 +144,10 @@ class AuctionHome extends Component {
     (
       this.state.players.map(player => {
         let amountRemaining = this.props.dollarSpendingCap - player.totalSpent
+        let movieTitles =  player.movies.map(movie => movie.title + ' ($' + movie.cost + ')').join(', ')
         return (
           <div key={player.id}>
-            <span>{player.userHandle}</span>{' - $' + amountRemaining}
+            <span>{player.userHandle}</span>{' - $' + amountRemaining + ' - ' + movieTitles}
           </div>
         )
       })
