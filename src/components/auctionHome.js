@@ -13,7 +13,6 @@ class AuctionHome extends Component {
     this.state = {
       auctionDurationLoaded: false,
       currentUser: '',
-      webSocket: null,
       auctionCountdownIntervalId: '',
       auctionDuration: null,
       players: [],
@@ -27,8 +26,6 @@ class AuctionHome extends Component {
     this.renderAuctionPage = this.renderAuctionPage.bind(this)
     this.renderAuctionEndButton = this.renderAuctionEndButton.bind(this)
   }
-
-  webSocket = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL)
 
   componentDidMount() {
     this.fetchCurrentUser()
@@ -45,10 +42,6 @@ class AuctionHome extends Component {
     this.setState({auctionCountdownIntervalId: intervalId})
     this.setState({auctionDurationLoaded: true})
     this._isMounted = true
-
-    this.webSocket.onclose = () => {
-      this.webSocket = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL)
-    }
   }
 
   componentWillUnmount() {
@@ -163,7 +156,6 @@ class AuctionHome extends Component {
         movie={movie}
         gameId={this.props.gameId}
         auctionItemsExpireInSeconds={this.props.auctionItemsExpireInSeconds}
-        webSocket={this.webSocket}
         fetchPlayers={this.fetchPlayers}
         handleError={this.handleError}/>
     })
