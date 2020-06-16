@@ -179,6 +179,7 @@ class AuctionItem extends Component {
   }
 
   updateHighBid(bid) {
+    this.props.fetchPlayers()
     this.setState({highestBidder: bid.userHandle});
     this.setState({minBid: parseInt(bid.bid, 10) + 1});
     this.setState({bid: parseInt(bid.bid, 10) + 1});

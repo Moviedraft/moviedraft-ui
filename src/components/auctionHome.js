@@ -15,11 +15,14 @@ class AuctionHome extends Component {
       currentUser: '',
       webSocket: null,
       auctionCountdownIntervalId: '',
-      auctionDuration: null
+      auctionDuration: null,
+      players: [],
+      playersLoaded: false
     }
 
     this.setDuration = this.setDuration.bind(this)
     this.fetchCurrentUser = this.fetchCurrentUser.bind(this)
+    this.fetchPlayers = this.fetchPlayers.bind(this)
     this.endAuction = this.endAuction.bind(this)
     this.renderAuctionPage = this.renderAuctionPage.bind(this)
     this.renderAuctionEndButton = this.renderAuctionEndButton.bind(this)
@@ -29,6 +32,7 @@ class AuctionHome extends Component {
 
   componentDidMount() {
     this.fetchCurrentUser()
+    this.fetchPlayers()
     this.setDuration()
 
     let intervalId = setInterval(() => {
@@ -67,6 +71,27 @@ class AuctionHome extends Component {
         if (this._isMounted) {
           this.setState({currentUser: currentUser})
         }
+      }
+    })
+  }
+
+  fetchPlayers() {
+    apiGet('games/' + this.props.gameId + '/players')
+    .then(data => {
+      if (data === null) {
+        this.props.handleError('Unable to load players for auction amounts remaining. Please refresh and try again.')
+      } else {
+        let sortedPlayers = data.players.sort((player1, player2) => {
+          let player1Name = player1.userHandle.toLowerCase()
+          let player2Name = player2.userHandle.toLowerCase()
+          if (player1.totalSpent > player2.totalSpent) return 1
+          if (player1.totalSpent < player2.totalSpent) return -1
+          if (player1Name > player2Name) return 1
+          if (player1Name < player2Name) return -1
+          return 1
+        })
+        this.setState({players: sortedPlayers})
+        this.setState({playersLoaded: true})
       }
     })
   }
@@ -114,6 +139,22 @@ class AuctionHome extends Component {
       </h3>
   }
 
+  renderAuctionPlayers() {
+    return this.state.players.length > 0 ?
+    (
+      this.state.players.map(player => {
+        let amountRemaining = this.props.dollarSpendingCap - player.totalSpent
+        return (
+          <div key={player.id}>
+            <span>{player.userHandle}</span>{' - $' + amountRemaining}
+          </div>
+        )
+      })
+    ) : (
+      null
+    )
+  }
+
   renderAuctionPage() {
     return this.props.movies.map((movie) => {
       return <AuctionItem
@@ -122,6 +163,7 @@ class AuctionHome extends Component {
         gameId={this.props.gameId}
         auctionItemsExpireInSeconds={this.props.auctionItemsExpireInSeconds}
         webSocket={this.webSocket}
+        fetchPlayers={this.fetchPlayers}
         handleError={this.handleError}/>
     })
   }
@@ -141,7 +183,7 @@ class AuctionHome extends Component {
   }
 
   render() {
-    if (!this.state.auctionDurationLoaded) {
+    if (!this.state.auctionDurationLoaded || !this.state.playersLoaded) {
       return <div></div>
     }
 
@@ -149,6 +191,12 @@ class AuctionHome extends Component {
       <div>
         <div id='auctionDateDiv'>
           {this.renderAuctionDate()}
+        </div>
+        <div id='auctionPlayersDiv'>
+          <h3>
+            Remaining Amounts to Auction With:
+          </h3>
+          {this.renderAuctionPlayers()}
         </div>
         <div id='auctionHomeDiv'>
           {this.renderAuctionPage()}

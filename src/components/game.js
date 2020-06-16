@@ -14,6 +14,8 @@ class Game extends Component {
       gameName: '',
       gameId: this.props.gameId,
       auctionDate: '',
+      auctionItemsExpireInSeconds: 0,
+      dollarSpendingCap: 0,
       startDate: '',
       endDate: '',
       movies: [],
@@ -50,10 +52,12 @@ class Game extends Component {
           if (moment(movie1.releaseDate) < moment(movie2.releaseDate)) return -1
           if (movie1.title > movie2.title) return 1
           if (movie1.title < movie2.title) return -1
+          return 1
         })})
         this.setState({auctionComplete: data.auctionComplete})
         this.setState({commissionerId: data.commissionerId})
         this.setState({auctionItemsExpireInSeconds: data.auctionItemsExpireInSeconds})
+        this.setState({dollarSpendingCap: data.dollarSpendingCap})
         this.setState({startDate: data.startDate})
         this.setState({endDate: data.endDate})
         this.setState({loaded: true})
@@ -69,6 +73,7 @@ class Game extends Component {
       commissionerId={this.state.commissionerId}
       auctionItemsExpireInSeconds={this.state.auctionItemsExpireInSeconds}
       auctionDate={this.state.auctionDate}
+      dollarSpendingCap={this.state.dollarSpendingCap}
       handleError={this.handleError} />
   }
 
