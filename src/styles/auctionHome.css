@@ -7,6 +7,20 @@
   margin-left: 1em;
 }
 
+#auctionPlayersDiv {
+  margin-left: 1em;
+  margin-bottom: 1em;
+}
+
+#auctionPlayersDiv h3 {
+  margin: 0;
+  margin-bottom: 0.5em;
+}
+
+#auctionPlayersDiv div span {
+  font-weight: bold;
+}
+
 .auctionCountdownSpan {
   color: red;
 }

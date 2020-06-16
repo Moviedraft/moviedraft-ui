@@ -172,6 +172,7 @@ class AuctionItem extends Component {
               'auctionExpiry': data.auctionExpiry
             }
             this.props.webSocket.send(JSON.stringify(message))
+            this.props.updatePlayerAmounts()
           }
         }
       })
