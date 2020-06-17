@@ -22,6 +22,7 @@ class AuctionHome extends Component {
     this.webSocket = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL)
 
     this.joinGameAuction = this.joinGameAuction.bind(this)
+    this.leaveGameAuction = this.leaveGameAuction.bind(this)
     this.setDuration = this.setDuration.bind(this)
     this.fetchCurrentUser = this.fetchCurrentUser.bind(this)
     this.fetchPlayers = this.fetchPlayers.bind(this)
@@ -34,11 +35,7 @@ class AuctionHome extends Component {
     this.webSocket.onopen = () => {
       this.joinGameAuction()
     }
-
-    this.webSocket.onclose = () => {
-      this.webSocket = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL)
-    }
-
+    
     this.fetchCurrentUser()
     this.fetchPlayers()
     this.setDuration()
@@ -58,6 +55,7 @@ class AuctionHome extends Component {
   componentWillUnmount() {
     this._isMounted = false
     clearInterval(this.state.auctionCountdownIntervalId)
+    this.leaveGameAuction()
   }
 
   joinGameAuction() {
@@ -74,6 +72,14 @@ class AuctionHome extends Component {
         window.location.reload(true);
       }
     }
+  }
+
+  leaveGameAuction() {
+    let message = {
+      'message': 'leavegameauction',
+      'gameID': this.props.gameId
+    }
+    this.webSocket.send(JSON.stringify(message))
   }
 
   setDuration() {
