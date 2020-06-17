@@ -25,14 +25,9 @@ class Game extends Component {
       errorMessage: ''
     }
 
-    this.setAuctionComplete = this.setAuctionComplete.bind(this)
     this.handleError = this.handleError.bind(this)
     this.fetchGame = this.fetchGame.bind(this)
     this.renderAuctionHome = this.renderAuctionHome.bind(this)
-  }
-
-  setAuctionComplete(auctionComplete) {
-    this.setState({auctionComplete: auctionComplete})
   }
 
   handleError(message) {
@@ -67,7 +62,6 @@ class Game extends Component {
 
   renderAuctionHome() {
     return <AuctionHome
-      parentCallback={this.setAuctionComplete}
       movies={this.state.movies}
       gameId={this.state.gameId}
       commissionerId={this.state.commissionerId}

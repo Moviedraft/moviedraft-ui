@@ -19,6 +19,9 @@ class AuctionHome extends Component {
       playersLoaded: false
     }
 
+    this.webSocket = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL)
+
+    this.joinGameAuction = this.joinGameAuction.bind(this)
     this.setDuration = this.setDuration.bind(this)
     this.fetchCurrentUser = this.fetchCurrentUser.bind(this)
     this.fetchPlayers = this.fetchPlayers.bind(this)
@@ -28,6 +31,14 @@ class AuctionHome extends Component {
   }
 
   componentDidMount() {
+    this.webSocket.onopen = () => {
+      this.joinGameAuction()
+    }
+
+    this.webSocket.onclose = () => {
+      this.webSocket = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL)
+    }
+
     this.fetchCurrentUser()
     this.fetchPlayers()
     this.setDuration()
@@ -47,6 +58,22 @@ class AuctionHome extends Component {
   componentWillUnmount() {
     this._isMounted = false
     clearInterval(this.state.auctionCountdownIntervalId)
+  }
+
+  joinGameAuction() {
+    let message = {
+      'message': 'joingameauction',
+      'gameID': this.props.gameId
+    }
+    this.webSocket.send(JSON.stringify(message))
+
+    this.webSocket.onmessage = (event) => {
+      let eventData = JSON.parse(event.data)
+
+      if(eventData.message.hasOwnProperty('action') && eventData.message.gameID === this.props.gameId) {
+        window.location.reload(true);
+      }
+    }
   }
 
   setDuration() {
@@ -97,7 +124,11 @@ class AuctionHome extends Component {
       if (data === null) {
         this.props.handleError('Unable to update auction. Please refresh and try again.')
       } else {
-        this.props.parentCallback(true)
+        let message = {
+          'message': 'closegameauction',
+          'gameID': this.props.gameId
+        }
+        this.webSocket.send(JSON.stringify(message))
       }
     })
   }
