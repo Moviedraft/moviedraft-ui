@@ -52,6 +52,11 @@ class Chat extends Component {
     );
   }
 
+  componentDidUpdate() {
+        const messageWrapper = document.getElementById('messageWrapper');
+        messageWrapper.scrollTop = messageWrapper.scrollHeight;
+      }
+
   componentWillUnmount() {
     this.pubnub.unsubscribe({ channels: [this.state.channelId] });
   }
