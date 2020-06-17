@@ -32,7 +32,6 @@ class AuctionHome extends Component {
 
   componentDidMount() {
     this.webSocket.onopen = () => {
-      this.setState({connectedToWebSocket: true})
       this.joinGameAuction()
     }
 
