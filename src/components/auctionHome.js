@@ -91,7 +91,7 @@ class AuctionHome extends Component {
   }
 
   getCurrentTime() {
-    let time = apiGet('games/time')
+    apiGet('games/time')
     .then(data => {
       if (data === null) {
         this.props.handleError('Unable to retrieve current time. Please refresh and try again.')
