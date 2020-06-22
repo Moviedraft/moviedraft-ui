@@ -16,7 +16,8 @@ class AuctionHome extends Component {
       auctionCountdownIntervalId: '',
       auctionDuration: null,
       players: [],
-      playersLoaded: false
+      playersLoaded: false,
+      serverOffset: 0
     }
 
     this.webSocket = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL)
@@ -24,6 +25,7 @@ class AuctionHome extends Component {
     this.joinGameAuction = this.joinGameAuction.bind(this)
     this.leaveGameAuction = this.leaveGameAuction.bind(this)
     this.setDuration = this.setDuration.bind(this)
+    this.getCurrentTime = this.getCurrentTime.bind(this)
     this.fetchCurrentUser = this.fetchCurrentUser.bind(this)
     this.fetchPlayers = this.fetchPlayers.bind(this)
     this.endAuction = this.endAuction.bind(this)
@@ -35,10 +37,11 @@ class AuctionHome extends Component {
     this.webSocket.onopen = () => {
       this.joinGameAuction()
     }
-    
+
     this.fetchCurrentUser()
     this.fetchPlayers()
     this.setDuration()
+    this.getCurrentTime()
 
     let intervalId = setInterval(() => {
       if (this.state.auctionDuration > 0) {
@@ -85,6 +88,19 @@ class AuctionHome extends Component {
   setDuration() {
     let timeDifference = moment(this.props.auctionDate).diff(moment())
     this.setState({auctionDuration: moment.duration(timeDifference)})
+  }
+
+  getCurrentTime() {
+    let time = apiGet('games/time')
+    .then(data => {
+      if (data === null) {
+        this.props.handleError('Unable to retrieve current time. Please refresh and try again.')
+      } else {
+        let serverTime = data.time
+        let serverOffset = moment(serverTime).diff(new Date());
+        this.setState({serverOffset: serverOffset})
+      }
+    })
   }
 
   fetchCurrentUser() {
@@ -194,6 +210,7 @@ class AuctionHome extends Component {
         gameId={this.props.gameId}
         auctionItemsExpireInSeconds={this.props.auctionItemsExpireInSeconds}
         fetchPlayers={this.fetchPlayers}
+        serverOffset={this.serverOffset}
         handleError={this.handleError}/>
     })
   }

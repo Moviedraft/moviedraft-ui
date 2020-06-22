@@ -78,7 +78,7 @@ class AuctionItem extends Component {
 
     this.webSocket.onmessage = (event) => {
       let eventData = JSON.parse(event.data)
-      
+
       if(eventData.message.hasOwnProperty('auctionID') && eventData.message.auctionID === this.state.auctionID) {
         this.updateHighBid(eventData.message)
       }
@@ -121,7 +121,7 @@ class AuctionItem extends Component {
       } else {
         if(!data.auctionExpirySet) {
           this.setState({error: 'The auction for this item has not begun yet.'})
-        } else if (moment() < moment(data.auctionExpiry)) {
+        } else if (moment() < moment(data.auctionExpiry).add('milliseconds', this.props.serverOffset)) {
           this.setStates(data)
           this.setState({auctionStarted: true})
           this.joinAuction()
@@ -135,7 +135,7 @@ class AuctionItem extends Component {
 
   setStates(data) {
     this.setState({error: ''})
-    this.setState({auctionExpiry: moment(data.auctionExpiry)})
+    this.setState({auctionExpiry: moment(data.auctionExpiry).add('milliseconds', this.props.serverOffset)})
     this.setState({dollarSpendingCap: data.dollarSpendingCap})
 
     if (data.bid && data.userHandle) {
