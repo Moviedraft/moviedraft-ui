@@ -19,8 +19,7 @@ class AuctionItem extends Component {
       timerDone: false,
       error: '',
       auctionID: this.props.gameId + this.props.movie.id,
-      connectedToWebSocket: false,
-      currentTime: null
+      connectedToWebSocket: false
     }
 
     this.pubnub = new PubNub({
