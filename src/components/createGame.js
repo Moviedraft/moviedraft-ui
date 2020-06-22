@@ -17,7 +17,7 @@ class CreateGame extends Component {
       auctionDollars: 100,
       startDate: '',
       endDate: '',
-      auctionDate: '',
+      auctionDate: moment().add(1, 'days'),
       auctionItemExpiryTimeSeconds: 30,
       movies: [],
       playWithRules: false,
@@ -74,7 +74,7 @@ class CreateGame extends Component {
     this.setState({auctionDollars: 100})
     this.setState({startDate: ''})
     this.setState({endDate: ''})
-    this.setState({auctionDate: ''})
+    this.setState({auctionDate: moment().add(1, 'days')})
     this.setState({auctionItemExpiryTimeSeconds: 30})
     this.setState({movies: []})
     this.setState({playWithRules: false})
@@ -86,11 +86,6 @@ class CreateGame extends Component {
 
   async handleSubmit(event) {
     event.preventDefault()
-
-    let requestAuctionDate = moment(this.state.auctionDate)
-    if (!requestAuctionDate.isValid()) {
-      requestAuctionDate = moment.max()
-    }
 
     let rules = []
     if (this.state.playWithRules && this.state.grossCapRule.grossCapActive) {
@@ -122,7 +117,7 @@ class CreateGame extends Component {
       startDate: moment(this.state.startDate).format(),
       endDate: moment(this.state.endDate).format(),
       gameName: this.state.gameName,
-      auctionDate: requestAuctionDate.format()
+      auctionDate: moment(this.state.auctionDate).format()
     }
 
     await apiPost('games', body)
