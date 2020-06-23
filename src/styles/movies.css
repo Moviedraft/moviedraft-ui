@@ -9,3 +9,7 @@
   max-height: inherit;
   max-width: inherit;
 }
+
+#selectAllMoviesCheckbox {
+  font-weight: bold;
+}

@@ -11,7 +11,9 @@ class Movies extends Component {
       }
 
       this.getMovies = this.getMovies.bind(this)
+      this.RemoveMoviesOutsideDates = this.RemoveMoviesOutsideDates.bind(this)
       this.handleCheckbox = this.handleCheckbox.bind(this)
+      this.handleSelectAll = this.handleSelectAll.bind(this)
       this.renderMovieDivs = this.renderMovieDivs.bind(this)
     }
 
@@ -24,6 +26,7 @@ class Movies extends Component {
     componentDidUpdate(prevProps, prevState) {
       if (this.props.startDate && this.props.endDate && (prevProps.startDate !== this.props.startDate || prevProps.endDate !== this.props.endDate)){
         this.getMovies()
+        this.RemoveMoviesOutsideDates()
       }
     }
 
@@ -38,13 +41,30 @@ class Movies extends Component {
       })
     }
 
+    RemoveMoviesOutsideDates() {
+      this.props.movies.forEach((movie, index) => {
+        if (!(moment(movie.releaseDate).isBetween(this.props.startDate, this.props.endDate))) {
+          this.props.movies.splice(index, 1)
+        }
+      })
+    }
+
     handleCheckbox(event, movie) {
       if(event.target.checked) {
-        this.props.movies.push(movie)
+        if (!(this.props.movies.filter(x => x.id === movie.id).length > 0)) {
+          this.props.movies.push(movie)
+        }
       } else {
-        const index = this.props.movies.findIndex((x) => x.id === movie.id);
-        this.props.movies.splice(index, 1);
+        const index = this.props.movies.findIndex((x) => x.id === movie.id)
+        this.props.movies.splice(index, 1)
       }
+      this.forceUpdate()
+    }
+
+    handleSelectAll(event) {
+      this.state.movieList.forEach((movie) => {
+        this.handleCheckbox(event, movie)
+      })
     }
 
     renderMovieDivs(movies) {
@@ -55,7 +75,7 @@ class Movies extends Component {
             value={movie.id}
             id={movie.title}
             name={movie.title}
-            defaultChecked={this.props.movies && this.props.movies.some(propMovie => movie.id === propMovie.id)}
+            checked={(this.props.movies && this.props.movies.some(propMovie => movie.id === propMovie.id))}
             onChange={(event) => this.handleCheckbox(event, movie)} />
           <label htmlFor={movie.title}>
             {movie.title} - {moment.utc(movie.releaseDate).format('ll')}
@@ -65,11 +85,28 @@ class Movies extends Component {
     }
 
     render() {
-      return (
-        <div id='moviesWrapper'>
-          {this.renderMovieDivs(this.state.movieList)}
-        </div>
-      )
+      if (this.state.movieList.length > 0) {
+        return (
+          <div id='moviesWrapper'>
+            <div>
+              <input
+                type='checkbox'
+                id='selectAllMovies'
+                name='selectAllMovies'
+                onChange={(event => this.handleSelectAll(event))}
+                checked={this.state.movieList.every(x => this.props.movies.some(y => x.id === y.id))} />
+              <label
+                htmlFor='selectAllMovies'
+                id='selectAllMoviesCheckbox' >
+                Select All
+              </label>
+            </div>
+            {this.renderMovieDivs(this.state.movieList)}
+          </div>
+        )
+      }
+
+      return null
     }
 }
 
