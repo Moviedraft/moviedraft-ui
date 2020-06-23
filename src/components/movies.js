@@ -11,7 +11,6 @@ class Movies extends Component {
       }
 
       this.getMovies = this.getMovies.bind(this)
-      this.RemoveMoviesOutsideDates = this.RemoveMoviesOutsideDates.bind(this)
       this.handleCheckbox = this.handleCheckbox.bind(this)
       this.handleSelectAll = this.handleSelectAll.bind(this)
       this.renderMovieDivs = this.renderMovieDivs.bind(this)
@@ -26,7 +25,6 @@ class Movies extends Component {
     componentDidUpdate(prevProps, prevState) {
       if (this.props.startDate && this.props.endDate && (prevProps.startDate !== this.props.startDate || prevProps.endDate !== this.props.endDate)){
         this.getMovies()
-        this.RemoveMoviesOutsideDates()
       }
     }
 
@@ -37,14 +35,6 @@ class Movies extends Component {
           this.props.handleError('Could not load movies. Please try again.')
         } else {
           this.setState({movieList: data.movies})
-        }
-      })
-    }
-
-    RemoveMoviesOutsideDates() {
-      this.props.movies.forEach((movie, index) => {
-        if (!(moment(movie.releaseDate).isBetween(this.props.startDate, this.props.endDate))) {
-          this.props.movies.splice(index, 1)
         }
       })
     }
