@@ -113,7 +113,7 @@ class CreateGame extends Component {
       dollarSpendingCap: this.state.auctionDollars,
       rules: rules,
       auctionItemsExpireInSeconds: this.state.auctionItemExpiryTimeSeconds,
-      movies: this.state.movies.map((movie) => movie.id),
+      movies: this.state.movies.filter(movie => (moment(movie.releaseDate).isBetween(this.state.startDate, this.state.endDate))).map((movie) => movie.id),
       startDate: moment(this.state.startDate).format(),
       endDate: moment(this.state.endDate).format(),
       gameName: this.state.gameName,
