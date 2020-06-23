@@ -30,6 +30,7 @@ class AuctionItem extends Component {
 
     this.webSocket = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL)
 
+    this.handleKeyDown = this.handleKeyDown.bind(this)
     this.callbackFunction = this.callbackFunction.bind(this)
     this.joinAuction = this.joinAuction.bind(this)
     this.updateBid = this.updateBid.bind(this)
@@ -40,6 +41,12 @@ class AuctionItem extends Component {
     this.renderAuctionItem = this.renderAuctionItem.bind(this)
     this.setStates = this.setStates.bind(this)
     this.updateHighBid = this.updateHighBid.bind(this)
+  }
+
+  handleKeyDown(event) {
+    if (['Enter'].includes(event.key)) {
+      this.submitBid()
+    }
   }
 
   callbackFunction(timerDone) {
@@ -264,6 +271,7 @@ class AuctionItem extends Component {
           step='1'
           value={this.state.bid}
           onChange={(event) => this.updateBid(event)}
+          onKeyDown={this.handleKeyDown}
           />
         <button
           className='auctionButton'
