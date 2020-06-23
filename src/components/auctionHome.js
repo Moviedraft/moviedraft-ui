@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import moment from 'moment'
+import PubNub from 'pubnub'
 import { apiGet, apiPatch } from '../utilities/apiUtility.js'
 import AuctionItem from './auctionItem.js'
 import Chat from './chat.js'
@@ -22,6 +23,13 @@ class AuctionHome extends Component {
 
     this.webSocket = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL)
 
+    this.pubnub = new PubNub({
+      publishKey: process.env.REACT_APP_PUBNUB_PUBLISH_KEY,
+      subscribeKey: process.env.REACT_APP_PUBNUB_SUBSCRIBE_KEY,
+      uuid: this.props.gameId + this.props.gameId
+    });
+
+    this.sendMessage = this.sendMessage.bind(this)
     this.joinGameAuction = this.joinGameAuction.bind(this)
     this.leaveGameAuction = this.leaveGameAuction.bind(this)
     this.setDuration = this.setDuration.bind(this)
@@ -38,9 +46,9 @@ class AuctionHome extends Component {
       this.joinGameAuction()
     }
 
+    this.setDuration()
     this.fetchCurrentUser()
     this.fetchPlayers()
-    this.setDuration()
     this.getCurrentTime()
 
     let intervalId = setInterval(() => {
@@ -59,6 +67,19 @@ class AuctionHome extends Component {
     this._isMounted = false
     clearInterval(this.state.auctionCountdownIntervalId)
     this.leaveGameAuction()
+
+    if (this.state.auctionDuration <= 0) {
+      let message = 'System: ' + this.state.currentUser.userHandle + ' has left the auction room.'
+      this.sendMessage(message)
+    }
+  }
+
+  sendMessage(message) {
+    this.pubnub.publish(
+      {
+        channel: this.props.gameId,
+        message,
+      });
   }
 
   joinGameAuction() {
@@ -112,6 +133,11 @@ class AuctionHome extends Component {
         let currentUser = data
         if (this._isMounted) {
           this.setState({currentUser: currentUser})
+
+          if (this.state.auctionDuration <= 0) {
+            let message = 'System: ' + currentUser.userHandle + ' has entered the auction room.'
+            this.sendMessage(message)
+          }
         }
       }
     })
