@@ -211,7 +211,8 @@ class AuctionItem extends Component {
         <div className='posterWrapper'>
           <a
             href={this.props.movie.url}
-            target='_blank'>
+            target='_blank'
+            rel='noopener noreferrer'>
             <img
               src={this.props.movie.posterUrl}
               className='posterImage'
@@ -226,7 +227,8 @@ class AuctionItem extends Component {
         <div className='posterWrapper'>
           <a
             href={this.props.movie.url}
-            target='_blank'>
+            target='_blank'
+            rel='noopener noreferrer'>
             <i className='material-icons posterPlaceholder'>local_movies</i>
           </a>
         </div>
