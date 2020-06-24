@@ -209,10 +209,14 @@ class AuctionItem extends Component {
     (
       <div>
         <div className='posterWrapper'>
-          <img
-            src={this.props.movie.posterUrl}
-            className='posterImage'
-            alt='movie poster' />
+          <a
+            href={this.props.movie.url}
+            target='_blank'>
+            <img
+              src={this.props.movie.posterUrl}
+              className='posterImage'
+              alt='movie poster' />
+          </a>
         </div>
         <p>{this.props.movie.title}</p>
         <p>{moment.utc(this.props.movie.releaseDate).format('dddd, MMMM Do YYYY')}</p>
@@ -220,7 +224,11 @@ class AuctionItem extends Component {
     ) : (
       <div>
         <div className='posterWrapper'>
+          <a
+            href={this.props.movie.url}
+            target='_blank'>
             <i className='material-icons posterPlaceholder'>local_movies</i>
+          </a>
         </div>
         <p>{this.props.movie.title}</p>
         <p>{moment.utc(this.props.movie.releaseDate).format('dddd, MMMM Do YYYY')}</p>

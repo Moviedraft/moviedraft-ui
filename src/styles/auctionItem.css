@@ -19,6 +19,19 @@
   width: 100%;
   height: 100%;
   border-radius: 0;
+  box-shadow: -5px 5px;
+}
+
+.posterWrapper a:link{
+  color: #8C8C8C;
+}
+
+.posterWrapper a:visited{
+  color: #8C8C8C;
+}
+
+.posterWrapper a:hover {
+  color: red;
 }
 
 .posterPlaceholder {
@@ -27,6 +40,7 @@
   line-height: 4em;
   border: 1px solid black;
   background-color: #F1F1F1;
+  box-shadow: -5px 5px;
 }
 
 .auctionButton {
