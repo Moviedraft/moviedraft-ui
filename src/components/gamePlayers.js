@@ -58,7 +58,7 @@ class GamePlayers extends Component {
                 <td title='total gross'>{this._formatter.format(player.totalGross)}</td>
                 <td title='total spent'>{this._formatter.format(player.totalSpent)}</td>
                 <td title='movies purchased'>{player.movies.map(movie => {
-                    return moment(movie.releaseDate) < moment(this.props.endDate) ?
+                    return moment(movie.releaseDate).isBetween(this.props.startDate, this.props.endDate) ?
                       movie.title + ' ($' + movie.cost + ')' :
                       'REMOVED -' + movie.title + ' ($' + movie.cost + ')'
                     }).join(', ')}
