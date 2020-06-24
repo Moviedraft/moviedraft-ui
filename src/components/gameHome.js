@@ -64,6 +64,8 @@ class GameHome extends Component {
             updateComponentLoadedFlag={this.updateComponentLoadedFlag}
             componentName='gamePlayersLoaded'
             gameId={this.props.gameId}
+            startDate={this.props.startDate}
+            endDate={this.props.endDate}
             handleError={this.props.handleError} />
           <WeekendBoxOffice
             updateComponentLoadedFlag={this.updateComponentLoadedFlag}

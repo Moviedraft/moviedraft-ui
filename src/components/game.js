@@ -75,6 +75,8 @@ class Game extends Component {
     return <GameHome
       gameId={this.state.gameId}
       commissionerId={this.state.commissionerId}
+      startDate={this.state.startDate}
+      endDate={this.state.endDate}
       handleError={this.handleError} />
   }
 

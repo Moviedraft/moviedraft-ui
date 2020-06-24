@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import moment from 'moment'
 import { apiGet } from '../utilities/apiUtility.js'
 import '../styles/gamePlayers.css'
 
@@ -56,7 +57,12 @@ class GamePlayers extends Component {
                 <td title='player'>{player.userHandle}</td>
                 <td title='total gross'>{this._formatter.format(player.totalGross)}</td>
                 <td title='total spent'>{this._formatter.format(player.totalSpent)}</td>
-                <td title='movies purchased'>{player.movies.map(movie => { return movie.title + ' ($' + movie.cost + ')'}).join(', ')}</td>
+                <td title='movies purchased'>{player.movies.map(movie => {
+                    return moment(movie.releaseDate) < moment(this.props.endDate) ?
+                      movie.title + ' ($' + movie.cost + ')' :
+                      'REMOVED -' + movie.title + ' ($' + movie.cost + ')'
+                    }).join(', ')}
+                </td>
               </tr>))}
           </tbody>
         </table>
