@@ -252,7 +252,7 @@ class AuctionHome extends Component {
         auctionExpiry={this.state.bids.find(bid => bid.movie_id === movie.id).auctionExpiry}
         auctionExpirySet={this.state.bids.find(bid => bid.movie_id === movie.id).auctionExpirySet}
         fetchPlayers={this.fetchPlayers}
-        serverOffset={this.serverOffset}
+        serverOffset={this.state.serverOffset}
         handleError={this.handleError}/>
     })
   }
