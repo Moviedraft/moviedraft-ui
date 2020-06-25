@@ -251,6 +251,8 @@ class AuctionHome extends Component {
         auctionItemsExpireInSeconds={this.props.auctionItemsExpireInSeconds}
         auctionExpiry={this.state.bids.find(bid => bid.movie_id === movie.id).auctionExpiry}
         auctionExpirySet={this.state.bids.find(bid => bid.movie_id === movie.id).auctionExpirySet}
+        dollarSpendingCap={this.state.bids.find(bid => bid.movie_id === movie.id).dollarSpendingCap}
+        currentHighBid={this.state.bids.find(bid => bid.movie_id === movie.id).bid}
         fetchPlayers={this.fetchPlayers}
         serverOffset={this.state.serverOffset}
         handleError={this.handleError}/>
