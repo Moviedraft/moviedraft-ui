@@ -132,7 +132,7 @@ class AuctionItem extends Component {
   submitBid() {
     this.setState({error: ''})
 
-    if (moment() > this.state.auctionExpiry) {
+    if (moment() > moment(this.state.auctionExpiry)) {
       this.setState({error: 'The auction for this item has completed.'})
     } else if (this.state.bid <= this.state.currentHighBid) {
       this.setState({error: 'Your bid must be higher than the current bid.'})
