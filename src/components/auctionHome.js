@@ -18,7 +18,8 @@ class AuctionHome extends Component {
       auctionDuration: null,
       players: [],
       playersLoaded: false,
-      serverOffset: 0
+      serverOffset: 0,
+      bids: []
     }
 
     this.webSocket = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL)
@@ -34,6 +35,7 @@ class AuctionHome extends Component {
     this.leaveGameAuction = this.leaveGameAuction.bind(this)
     this.setDuration = this.setDuration.bind(this)
     this.getCurrentTime = this.getCurrentTime.bind(this)
+    this.getBids = this.getBids.bind(this)
     this.fetchCurrentUser = this.fetchCurrentUser.bind(this)
     this.fetchPlayers = this.fetchPlayers.bind(this)
     this.endAuction = this.endAuction.bind(this)
@@ -49,6 +51,7 @@ class AuctionHome extends Component {
     this.setDuration()
     this.fetchCurrentUser()
     this.fetchPlayers()
+    this.getBids()
     this.getCurrentTime()
 
     let intervalId = setInterval(() => {
@@ -120,6 +123,17 @@ class AuctionHome extends Component {
         let serverTime = data.time
         let serverOffset = moment(serverTime).diff(new Date());
         this.setState({serverOffset: serverOffset})
+      }
+    })
+  }
+
+  getBids() {
+    apiGet('bids/' + this.props.gameId)
+    .then(data => {
+      if (data === null) {
+        this.props.handleError('Unable to retrieve auction bids. Please refresh and try again.')
+      } else {
+        this.setState({bids: data.bids})
       }
     })
   }
@@ -235,6 +249,8 @@ class AuctionHome extends Component {
         movie={movie}
         gameId={this.props.gameId}
         auctionItemsExpireInSeconds={this.props.auctionItemsExpireInSeconds}
+        auctionExpiry={this.state.bids.find(bid => bid.movie_id === movie.id).auctionExpiry}
+        auctionExpirySet={this.state.bids.find(bid => bid.movie_id === movie.id).auctionExpirySet}
         fetchPlayers={this.fetchPlayers}
         serverOffset={this.serverOffset}
         handleError={this.handleError}/>
@@ -267,7 +283,7 @@ class AuctionHome extends Component {
         </div>
         <div id='auctionPlayersDiv'>
           <h3>
-            Remaining Amounts to Auction With:
+            Auction Details:
           </h3>
           {this.renderAuctionPlayers()}
         </div>

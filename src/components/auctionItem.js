@@ -10,7 +10,8 @@ class AuctionItem extends Component {
     super(props)
     this.state = {
       auctionStarted: false,
-      auctionExpiry: moment().add(1, 'y'),
+      auctionExpiry: this.props.auctionExpiry,
+      auctionExpirySet: this.props.auctionExpirySet,
       dollarSpendingCap: 0,
       minBid: 0,
       currentHighBid: 0,
@@ -34,7 +35,6 @@ class AuctionItem extends Component {
     this.callbackFunction = this.callbackFunction.bind(this)
     this.joinAuction = this.joinAuction.bind(this)
     this.updateBid = this.updateBid.bind(this)
-    this.checkWinner = this.checkWinner.bind(this)
     this.beginAuction = this.beginAuction.bind(this)
     this.submitBid = this.submitBid.bind(this)
     this.renderMoviePoster = this.renderMoviePoster.bind(this)
@@ -52,7 +52,6 @@ class AuctionItem extends Component {
   callbackFunction(timerDone) {
     this.setState({timerDone: timerDone})
     this.setState({error: ''})
-    this.setState({auctionStarted: false})
     this.setState({auctionExpiry: moment().subtract(1, 'y')})
 	}
 
@@ -96,30 +95,6 @@ class AuctionItem extends Component {
    this.setState({bid: event.target.value})
  }
 
- checkWinner() {
-   let message = this.state.highestBidder === '' && this.state.currentHighBid === 0 ?
-     (
-       'System: No bid was placed for "' +
-       this.props.movie.title +
-       '"'
-     ) : (
-       'System: ' +
-       'The winner of the auction for "' +
-       this.props.movie.title +
-       '" was ' +
-       this.state.highestBidder +
-       ' with a bid of $' +
-       this.state.currentHighBid
-     )
-
-   this.pubnub.publish(
-     {
-       channel: this.props.gameId,
-       message: message
-     }
-   );
- }
-
   beginAuction(movieId) {
     apiGet('bids/' + this.props.gameId + '/' + movieId)
     .then(data => {
@@ -143,6 +118,7 @@ class AuctionItem extends Component {
   setStates(data) {
     this.setState({error: ''})
     this.setState({auctionExpiry: moment(data.auctionExpiry).add('milliseconds', this.props.serverOffset)})
+    this.setState({auctionExpirySet: data.auctionExpirySet})
     this.setState({dollarSpendingCap: data.dollarSpendingCap})
 
     if (data.bid && data.userHandle) {
@@ -239,18 +215,8 @@ class AuctionItem extends Component {
   }
 
   renderAuctionItem() {
-    if (moment() >= moment(this.state.auctionExpiry)) {
-      return (
-        <div className='movieParent'>
-          {this.renderMoviePoster()}
-          <button
-            className='auctionButton'
-            onClick={() => this.checkWinner()}>
-            CHECK WINNER
-          </button>
-          <p>{this.state.error}</p>
-        </div>
-      )
+    if (this.state.auctionExpirySet && moment() >= moment(this.state.auctionExpiry)) {
+      return null
     }
 
     return !this.state.auctionStarted ? (
