@@ -10,7 +10,7 @@ class AuctionItem extends Component {
     super(props)
     this.state = {
       auctionStarted: false,
-      auctionExpiry: this.props.auctionExpiry,
+      auctionExpiry: moment(this.props.auctionExpiry).add('milliseconds', this.props.serverOffset),
       auctionExpirySet: this.props.auctionExpirySet,
       dollarSpendingCap: 0,
       minBid: 0,
@@ -117,7 +117,10 @@ class AuctionItem extends Component {
 
   setStates(data) {
     this.setState({error: ''})
-    this.setState({auctionExpiry: moment(data.auctionExpiry).add('milliseconds', this.props.serverOffset)})
+    this.setState({auctionExpiry:
+      this.props.serverOffset < 0 ?
+      moment(data.auctionExpiry).subtract('milliseconds', this.props.serverOffset) :
+      moment(data.auctionExpiry).add('milliseconds', this.props.serverOffset)})
     this.setState({auctionExpirySet: data.auctionExpirySet})
     this.setState({dollarSpendingCap: data.dollarSpendingCap})
 
@@ -173,7 +176,10 @@ class AuctionItem extends Component {
     this.setState({minBid: parseInt(bid.bid, 10) + 1});
     this.setState({bid: parseInt(bid.bid, 10) + 1});
     this.setState({currentHighBid: bid.bid});
-    this.setState({auctionExpiry: moment(bid.auctionExpiry.toUpperCase())})
+    this.setState({auctionExpiry:
+      this.props.serverOffset < 0 ?
+      moment(bid.auctionExpiry.toUpperCase()).subtract('milliseconds', this.props.serverOffset) :
+      moment(bid.auctionExpiry.toUpperCase()).add('milliseconds', this.props.serverOffset)})
 
     if (this.refs.timer !== undefined) {
       this.refs.timer.resetTimer(this.state.auctionExpiry)
