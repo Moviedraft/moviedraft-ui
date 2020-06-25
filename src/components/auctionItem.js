@@ -14,9 +14,9 @@ class AuctionItem extends Component {
         moment(this.props.auctionExpiry).subtract('milliseconds', this.props.serverOffset) :
         moment(this.props.auctionExpiry).add('milliseconds', this.props.serverOffset),
       auctionExpirySet: this.props.auctionExpirySet,
-      dollarSpendingCap: 0,
+      dollarSpendingCap: this.props.dollarSpendingCap,
       minBid: 0,
-      currentHighBid: 0,
+      currentHighBid: this.props.currentHighBid ?? 0,
       highestBidder: '',
       bid: 1,
       timerDone: false,
@@ -34,7 +34,7 @@ class AuctionItem extends Component {
     this.webSocket = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL)
 
     this.handleKeyDown = this.handleKeyDown.bind(this)
-    this.callbackFunction = this.callbackFunction.bind(this)
+    this.timerDone = this.timerDone.bind(this)
     this.joinAuction = this.joinAuction.bind(this)
     this.updateBid = this.updateBid.bind(this)
     this.beginAuction = this.beginAuction.bind(this)
@@ -51,7 +51,7 @@ class AuctionItem extends Component {
     }
   }
 
-  callbackFunction(timerDone) {
+  timerDone(timerDone) {
     this.setState({timerDone: timerDone})
     this.setState({error: ''})
     this.setState({auctionExpiry: moment().subtract(1, 'y')})
@@ -178,10 +178,13 @@ class AuctionItem extends Component {
     this.setState({minBid: parseInt(bid.bid, 10) + 1});
     this.setState({bid: parseInt(bid.bid, 10) + 1});
     this.setState({currentHighBid: bid.bid});
-    this.setState({auctionExpiry:
-      this.props.serverOffset < 0 ?
-      moment(bid.auctionExpiry.toUpperCase()).subtract('milliseconds', this.props.serverOffset) :
-      moment(bid.auctionExpiry.toUpperCase()).add('milliseconds', this.props.serverOffset)})
+
+    bid.bid === 100 ?
+      this.timerDone(true) :
+      this.setState({auctionExpiry:
+        this.props.serverOffset < 0 ?
+        moment(bid.auctionExpiry.toUpperCase()).subtract('milliseconds', this.props.serverOffset) :
+        moment(bid.auctionExpiry.toUpperCase()).add('milliseconds', this.props.serverOffset)})
 
     if (this.refs.timer !== undefined) {
       this.refs.timer.resetTimer(this.state.auctionExpiry)
@@ -223,7 +226,13 @@ class AuctionItem extends Component {
   }
 
   renderAuctionItem() {
-    if (this.state.auctionExpirySet && moment() >= moment(this.state.auctionExpiry)) {
+    console.log(this.props.movie.title)
+    console.log(this.state.currentHighBid)
+    console.log(this.state.dollarSpendingCap)
+    console.log('================')
+    if (this.state.auctionExpirySet &&
+        (this.state.currentHighBid >= this.state.dollarSpendingCap ||
+        moment() >= moment(this.state.auctionExpiry))) {
       return null
     }
 
@@ -241,7 +250,7 @@ class AuctionItem extends Component {
       <div className='movieParent'>
         {this.renderMoviePoster()}
         <Timer ref='timer'
-          parentCallback={this.callbackFunction}
+          parentCallback={this.timerDone}
           auctionExpiry={this.state.auctionExpiry} />
         <p>
           {'Current bid: ' + this.state.highestBidder + ' $' + this.state.currentHighBid}
