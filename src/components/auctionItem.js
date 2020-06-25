@@ -179,7 +179,7 @@ class AuctionItem extends Component {
     this.setState({bid: parseInt(bid.bid, 10) + 1});
     this.setState({currentHighBid: bid.bid});
 
-    bid.bid === 100 ?
+    bid.bid === this.state.dollarSpendingCap ?
       this.timerDone(true) :
       this.setState({auctionExpiry:
         this.props.serverOffset < 0 ?
