@@ -226,10 +226,6 @@ class AuctionItem extends Component {
   }
 
   renderAuctionItem() {
-    console.log(this.props.movie.title)
-    console.log(this.state.currentHighBid)
-    console.log(this.state.dollarSpendingCap)
-    console.log('================')
     if (this.state.auctionExpirySet &&
         (this.state.currentHighBid >= this.state.dollarSpendingCap ||
         moment() >= moment(this.state.auctionExpiry))) {
