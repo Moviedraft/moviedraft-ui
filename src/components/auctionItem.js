@@ -10,7 +10,9 @@ class AuctionItem extends Component {
     super(props)
     this.state = {
       auctionStarted: false,
-      auctionExpiry: moment(this.props.auctionExpiry).add('milliseconds', this.props.serverOffset),
+      auctionExpiry: this.props.serverOffset < 0 ?
+        moment(this.props.auctionExpiry).subtract('milliseconds', this.props.serverOffset) :
+        moment(this.props.auctionExpiry).add('milliseconds', this.props.serverOffset),
       auctionExpirySet: this.props.auctionExpirySet,
       dollarSpendingCap: 0,
       minBid: 0,
