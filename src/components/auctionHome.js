@@ -173,6 +173,7 @@ class AuctionHome extends Component {
           return 1
         })
         this.setState({players: sortedPlayers})
+        this.setState({currentUserTotalBids: sortedPlayers.find(player => player.id === this.state.currentUser.id).totalSpent})
         this.setState({playersLoaded: true})
       }
     })
@@ -249,6 +250,7 @@ class AuctionHome extends Component {
         movie={movie}
         gameId={this.props.gameId}
         auctionItemsExpireInSeconds={this.props.auctionItemsExpireInSeconds}
+        currentUserTotalBids={this.state.currentUserTotalBids}
         auctionExpiry={this.state.bids.find(bid => bid.movie_id === movie.id).auctionExpiry}
         auctionExpirySet={this.state.bids.find(bid => bid.movie_id === movie.id).auctionExpirySet}
         dollarSpendingCap={this.state.bids.find(bid => bid.movie_id === movie.id).dollarSpendingCap}
