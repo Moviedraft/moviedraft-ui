@@ -243,7 +243,6 @@ class AuctionHome extends Component {
   }
 
   renderAuctionPage() {
-    console.log(this.state.bids)
     return this.props.movies.map((movie) => {
       return <AuctionItem
         key={movie.id}
