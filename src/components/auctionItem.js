@@ -39,6 +39,7 @@ class AuctionItem extends Component {
     this.updateBid = this.updateBid.bind(this)
     this.beginAuction = this.beginAuction.bind(this)
     this.submitBid = this.submitBid.bind(this)
+    this.allIn = this.allIn.bind(this)
     this.renderMoviePoster = this.renderMoviePoster.bind(this)
     this.renderAuctionItem = this.renderAuctionItem.bind(this)
     this.setStates = this.setStates.bind(this)
@@ -182,6 +183,10 @@ class AuctionItem extends Component {
     }
   }
 
+  allIn() {
+    this.setState({bid: this.state.dollarSpendingCap - this.props.currentUserTotalBids}, () => { this.submitBid() })
+  }
+
   updateHighBid(bid) {
     this.props.fetchPlayers()
     this.setState({highestBidder: bid.userHandle});
@@ -280,6 +285,11 @@ class AuctionItem extends Component {
           className='auctionButton'
           onClick={() => this.submitBid()}>
           SUBMIT BID
+        </button>
+        <button
+          className='auctionButton'
+          onClick={() => this.allIn()}>
+          ALL-IN
         </button>
         <p>{this.state.error}</p>
       </div>
