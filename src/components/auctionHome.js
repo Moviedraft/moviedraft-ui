@@ -145,13 +145,10 @@ class AuctionHome extends Component {
         this.props.handleError('Unable to load your user information. Please refresh and try again.')
       } else {
         let currentUser = data
-        if (this._isMounted) {
-          this.setState({currentUser: currentUser})
-
-          if (this.state.auctionDuration <= 0) {
-            let message = 'System: ' + currentUser.userHandle + ' has entered the auction room.'
-            this.sendMessage(message)
-          }
+        this.setState({currentUser: currentUser})
+        if (this.state.auctionDuration <= 0) {
+          let message = 'System: ' + currentUser.userHandle + ' has entered the auction room.'
+          this.sendMessage(message)
         }
       }
     })
