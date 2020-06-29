@@ -48,8 +48,8 @@ class AuctionHome extends Component {
       this.joinGameAuction()
     }
 
-    this.setDuration()
     this.fetchCurrentUser()
+    this.setDuration()
     this.getBids()
     this.fetchPlayers()
     this.getCurrentTime()
