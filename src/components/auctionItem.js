@@ -11,8 +11,8 @@ class AuctionItem extends Component {
     this.state = {
       auctionStarted: false,
       auctionExpiry: this.props.serverOffset < 0 ?
-        moment(this.props.auctionExpiry).subtract('milliseconds', this.props.serverOffset) :
-        moment(this.props.auctionExpiry).add('milliseconds', this.props.serverOffset),
+        moment(this.props.auctionExpiry).subtract(this.props.serverOffset, 'milliseconds') :
+        moment(this.props.auctionExpiry).add(this.props.serverOffset, 'milliseconds'),
       auctionExpirySet: this.props.auctionExpirySet,
       dollarSpendingCap: this.props.dollarSpendingCap,
       minBid: 0,
@@ -98,14 +98,22 @@ class AuctionItem extends Component {
  }
 
   beginAuction(movieId) {
+    let currentTime = this.props.serverOffset < 0 ?
+      moment().subtract(this.props.serverOffset, 'milliseconds') :
+      moment().add(this.props.serverOffset, 'milliseconds')
+
     apiGet('bids/' + this.props.gameId + '/' + movieId)
     .then(data => {
       if (data === null) {
         this.props.handleError('Unable to begin auction. Please refresh and try again.')
       } else {
+        let auctionExpiryTime = this.props.serverOffset < 0 ?
+          moment(data.auctionExpiry).subtract(this.props.serverOffset, 'milliseconds') :
+          moment(data.auctionExpiry).add(this.props.serverOffset, 'milliseconds')
+
         if(!data.auctionExpirySet) {
           this.setState({error: 'The auction for this item has not begun yet.'})
-        } else if (moment() < moment(data.auctionExpiry).add('milliseconds', this.props.serverOffset)) {
+        } else if (currentTime < auctionExpiryTime) {
           this.setStates(data)
           this.setState({auctionStarted: true})
           this.joinAuction()
@@ -121,8 +129,8 @@ class AuctionItem extends Component {
     this.setState({error: ''})
     this.setState({auctionExpiry:
       this.props.serverOffset < 0 ?
-      moment(data.auctionExpiry).subtract('milliseconds', this.props.serverOffset) :
-      moment(data.auctionExpiry).add('milliseconds', this.props.serverOffset)})
+      moment(data.auctionExpiry).subtract(this.props.serverOffset, 'milliseconds') :
+      moment(data.auctionExpiry).add(this.props.serverOffset, 'milliseconds')})
     this.setState({auctionExpirySet: data.auctionExpirySet})
     this.setState({dollarSpendingCap: data.dollarSpendingCap})
 
@@ -136,8 +144,10 @@ class AuctionItem extends Component {
 
   submitBid() {
     this.setState({error: ''})
-
-    if (moment() > moment(this.state.auctionExpiry)) {
+    let currentTime = this.props.serverOffset < 0 ?
+      moment().subtract(this.props.serverOffset, 'milliseconds') :
+      moment().add(this.props.serverOffset, 'milliseconds')
+    if (currentTime > moment(this.state.auctionExpiry)) {
       this.setState({error: 'The auction for this item has completed.'})
     } else if (this.state.bid <= this.state.currentHighBid) {
       this.setState({error: 'Your bid must be higher than the current bid.'})
@@ -183,8 +193,8 @@ class AuctionItem extends Component {
       this.timerDone(true) :
       this.setState({auctionExpiry:
         this.props.serverOffset < 0 ?
-        moment(bid.auctionExpiry.toUpperCase()).subtract('milliseconds', this.props.serverOffset) :
-        moment(bid.auctionExpiry.toUpperCase()).add('milliseconds', this.props.serverOffset)})
+        moment(bid.auctionExpiry.toUpperCase()).subtract(this.props.serverOffset, 'milliseconds') :
+        moment(bid.auctionExpiry.toUpperCase()).add(this.props.serverOffset, 'milliseconds')})
 
     if (this.refs.timer !== undefined) {
       this.refs.timer.resetTimer(this.state.auctionExpiry)
@@ -226,9 +236,13 @@ class AuctionItem extends Component {
   }
 
   renderAuctionItem() {
+    let currentTime = this.props.serverOffset < 0 ?
+      moment().subtract(this.props.serverOffset, 'milliseconds') :
+      moment().add(this.props.serverOffset, 'milliseconds')
+
     if (this.state.auctionExpirySet &&
         (this.state.currentHighBid >= this.state.dollarSpendingCap ||
-        moment() >= moment(this.state.auctionExpiry))) {
+        currentTime >= moment(this.state.auctionExpiry))) {
       return null
     }
 

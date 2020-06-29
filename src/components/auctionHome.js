@@ -50,8 +50,8 @@ class AuctionHome extends Component {
 
     this.setDuration()
     this.fetchCurrentUser()
-    this.fetchPlayers()
     this.getBids()
+    this.fetchPlayers()
     this.getCurrentTime()
 
     let intervalId = setInterval(() => {
