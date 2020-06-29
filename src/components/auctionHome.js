@@ -50,8 +50,8 @@ class AuctionHome extends Component {
 
     this.setDuration()
     this.fetchCurrentUser()
-    this.fetchPlayers()
     this.getBids()
+    this.fetchPlayers()
     this.getCurrentTime()
 
     let intervalId = setInterval(() => {
@@ -243,6 +243,7 @@ class AuctionHome extends Component {
   }
 
   renderAuctionPage() {
+    console.log(this.state.bids)
     return this.props.movies.map((movie) => {
       return <AuctionItem
         key={movie.id}
