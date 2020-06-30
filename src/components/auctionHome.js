@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import moment from 'moment'
 import PubNub from 'pubnub'
 import { apiGet, apiPatch } from '../utilities/apiUtility.js'
+import { getCurrentTime } from '../utilities/dateTimeUtility.js'
 import AuctionItem from './auctionItem.js'
 import Chat from './chat.js'
 import '../styles/auctionHome.css'
@@ -14,11 +15,11 @@ class AuctionHome extends Component {
     this.state = {
       auctionDurationLoaded: false,
       currentUser: '',
+      currentTime: '',
       auctionCountdownIntervalId: '',
       auctionDuration: null,
       players: [],
       playersLoaded: false,
-      serverOffset: 0,
       bids: []
     }
 
@@ -34,7 +35,6 @@ class AuctionHome extends Component {
     this.joinGameAuction = this.joinGameAuction.bind(this)
     this.leaveGameAuction = this.leaveGameAuction.bind(this)
     this.setDuration = this.setDuration.bind(this)
-    this.getCurrentTime = this.getCurrentTime.bind(this)
     this.getBids = this.getBids.bind(this)
     this.fetchCurrentUser = this.fetchCurrentUser.bind(this)
     this.fetchPlayers = this.fetchPlayers.bind(this)
@@ -52,7 +52,9 @@ class AuctionHome extends Component {
     this.setDuration()
     this.getBids()
     this.fetchPlayers()
-    this.getCurrentTime()
+    getCurrentTime().then(data => {
+      this.setState({currentTime: data.time})
+    })
 
     let intervalId = setInterval(() => {
       if (this.state.auctionDuration > 0) {
@@ -113,19 +115,6 @@ class AuctionHome extends Component {
   setDuration() {
     let timeDifference = moment(this.props.auctionDate).diff(moment())
     this.setState({auctionDuration: moment.duration(timeDifference)})
-  }
-
-  getCurrentTime() {
-    apiGet('games/time')
-    .then(data => {
-      if (data === null) {
-        this.props.handleError('Unable to retrieve current time. Please refresh and try again.')
-      } else {
-        let serverTime = data.time
-        let serverOffset = moment(serverTime).diff(new Date());
-        this.setState({serverOffset: serverOffset})
-      }
-    })
   }
 
   getBids() {
@@ -247,6 +236,7 @@ class AuctionHome extends Component {
         key={movie.id}
         movie={movie}
         gameId={this.props.gameId}
+        currentTime={this.state.currentTime}
         auctionItemsExpireInSeconds={this.props.auctionItemsExpireInSeconds}
         currentUserTotalBids={this.state.currentUserTotalBids}
         auctionExpiry={this.state.bids.find(bid => bid.movie_id === movie.id).auctionExpiry}
@@ -254,7 +244,6 @@ class AuctionHome extends Component {
         dollarSpendingCap={this.state.bids.find(bid => bid.movie_id === movie.id).dollarSpendingCap}
         currentHighBid={this.state.bids.find(bid => bid.movie_id === movie.id).bid}
         fetchPlayers={this.fetchPlayers}
-        serverOffset={this.state.serverOffset}
         handleError={this.handleError}/>
     })
   }
