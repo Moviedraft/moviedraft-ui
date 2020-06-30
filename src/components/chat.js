@@ -1,6 +1,7 @@
-import React, { Component } from 'react';
-import PubNub from 'pubnub';
-import { PubNubProvider } from 'pubnub-react';
+import React, { Component } from 'react'
+import PubNub from 'pubnub'
+import moment from 'moment'
+import { PubNubProvider } from 'pubnub-react'
 import '../styles/chat.css'
 
 class Chat extends Component {
@@ -19,6 +20,7 @@ class Chat extends Component {
       uuid: this.props.gameId + this.props.gameId
     });
 
+    this.processMessage = this.processMessage.bind(this)
     this.setMessage = this.setMessage.bind(this)
     this.sendMessage = this.sendMessage.bind(this)
     this.getMessage = this.getMessage.bind(this)
@@ -28,7 +30,7 @@ class Chat extends Component {
   componentDidMount() {
     this.pubnub.addListener({
       message: messageEvent => {
-        this.setState(previousState => ({messages: [...previousState.messages, messageEvent.message]}));
+        this.processMessage(messageEvent.message)
       }
     });
 
@@ -45,7 +47,7 @@ class Chat extends Component {
       (status, response) => {
         if (response.channels && this.state.channelId in response.channels) {
           response.channels[this.state.channelId].forEach((message) => {
-            this.setState(previousState => ({messages: [...previousState.messages, message.message]}));
+            this.processMessage(message.message)
           });
         }
       }
@@ -75,11 +77,26 @@ class Chat extends Component {
       (status, response) => {
         if (response.channels && this.state.channelId in response.channels) {
           response.channels[this.state.channelId].forEach((message) => {
-            this.setState(previousState => ({messages: [...previousState.messages, message.message]}));
+            this.processMessage(message.message)
           });
         }
       }
     );
+  }
+
+  processMessage(message) {
+    let processedMessage = ''
+    let splitMessage = message.split(/_(.*)/)
+    if (splitMessage.length > 1) {
+      let time = splitMessage[0]
+      let text = splitMessage[1]
+      let localTime = '(' + moment(time.toUpperCase()).format('lll') + ')'
+      processedMessage = localTime + ' ' + text
+    } else {
+      processedMessage = message
+    }
+
+    this.setState(previousState => ({messages: [...previousState.messages, processedMessage]}));
   }
 
   setMessage(message) {
@@ -87,6 +104,7 @@ class Chat extends Component {
   }
 
   sendMessage(message) {
+    message = moment.utc().format() + '_' + message
     this.pubnub.publish(
       {
         channel: this.state.channelId,

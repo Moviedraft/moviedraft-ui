@@ -78,6 +78,7 @@ class AuctionHome extends Component {
   }
 
   sendMessage(message) {
+    message = moment.utc().format() + '_' + message
     this.pubnub.publish(
       {
         channel: this.props.gameId,
