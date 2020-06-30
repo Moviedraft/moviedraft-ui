@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import moment from 'moment'
-import PubNub from 'pubnub'
 import { apiGet, apiPost } from '../utilities/apiUtility.js'
 import '../styles/auctionItem.css';
 import Timer from './timer.js';
@@ -24,12 +23,6 @@ class AuctionItem extends Component {
       auctionID: this.props.gameId + this.props.movie.id,
       connectedToWebSocket: false
     }
-
-    this.pubnub = new PubNub({
-      publishKey: process.env.REACT_APP_PUBNUB_PUBLISH_KEY,
-      subscribeKey: process.env.REACT_APP_PUBNUB_SUBSCRIBE_KEY,
-      uuid: this.props.gameId + this.props.gameId
-    });
 
     this.webSocket = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL)
 
