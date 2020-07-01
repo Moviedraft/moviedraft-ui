@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import moment from 'moment'
-import { apiGet } from '../utilities/apiUtility.js'
 import { getCurrentTime } from '../utilities/dateTimeUtility.js'
 
 class Timer extends Component {
