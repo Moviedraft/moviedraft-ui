@@ -1,12 +1,15 @@
 import React, { Component } from 'react'
 import moment from 'moment'
+import { apiGet } from '../utilities/apiUtility.js'
+import { getCurrentTime } from '../utilities/dateTimeUtility.js'
 
 class Timer extends Component {
   constructor(props){
     super(props)
     this.state = {
       time: 0,
-      timerId: ''
+      timerId: '',
+      currentTime: ''
     }
 
     this.sendData = this.sendData.bind(this)
@@ -29,7 +32,10 @@ class Timer extends Component {
   }
 
   startTimer() {
-    this.setState({time: moment(this.props.auctionExpiry).diff(moment(), 'seconds')})
+    getCurrentTime().then(data => {
+      let duration = moment.duration(moment(this.props.auctionExpiry).diff(moment(data.time)))
+      this.setState({time: duration.seconds()})
+    })
 
     let timerId = setInterval(() => {
       this.setState({
@@ -49,7 +55,10 @@ class Timer extends Component {
   }
 
   resetTimer(time) {
-    this.setState({time: moment(time).diff(moment(), 'seconds')})
+    getCurrentTime().then(data => {
+      let duration = moment.duration(moment(time).diff(moment(data.time)))
+      this.setState({time: duration.seconds()})
+    })
   }
 
   render() {
