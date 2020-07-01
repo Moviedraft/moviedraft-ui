@@ -32,7 +32,7 @@ class Timer extends Component {
   }
 
   startTimer() {
-    let currentTime = getCurrentTime().then(data => {
+    getCurrentTime().then(data => {
       let duration = moment.duration(moment(this.props.auctionExpiry).diff(moment(data.time)))
       this.setState({time: duration.seconds()})
     })
