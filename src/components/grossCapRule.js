@@ -26,7 +26,7 @@ class GrossCapRule extends Component {
   calculateGrossCapEarnings() {
     let grossEarnings =
       this.state.movieGross > this.props.grossCapRule.capValue ?
-      (this.state.movieGross * this.props.grossCapRule.centsOnDollar + this.props.grossCapRule.baseValue) :
+      (this.state.movieGross - this.props.grossCapRule.capValue) * this.props.grossCapRule.centsOnDollar + this.props.grossCapRule.capValue :
       this.state.movieGross
 
     return (Math.round(grossEarnings * 100) / 100).toFixed(2);
