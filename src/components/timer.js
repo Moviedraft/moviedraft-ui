@@ -8,7 +8,8 @@ class Timer extends Component {
     this.state = {
       time: 0,
       timerId: '',
-      currentTime: ''
+      currentTime: '',
+      timerLoaded: false
     }
 
     this.sendData = this.sendData.bind(this)
@@ -34,12 +35,12 @@ class Timer extends Component {
     getCurrentTime().then(data => {
       let duration = moment.duration(moment(this.props.auctionExpiry).diff(moment(data.time)))
       this.setState({time: duration.seconds()})
+      this.setState({timerLoaded: true})
     })
 
     let timerId = setInterval(() => {
-      this.setState({
-        time: this.state.time - 1
-      })
+      this.setState({time: this.state.time - 1})
+
       if (this.state.time <= 0){
         this.stopTimer();
         this.sendData();
@@ -61,9 +62,17 @@ class Timer extends Component {
   }
 
   render() {
-    return(
+    if (this.state.timerLoaded) {
+      return(
+        <div>
+          <h3>{this.state.time} seconds left</h3>
+        </div>
+      )
+    }
+
+    return (
       <div>
-        <h3>{this.state.time} seconds left</h3>
+        <h3>Loading Timer...</h3>
       </div>
     )
   }
