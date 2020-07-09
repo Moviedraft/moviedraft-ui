@@ -46,7 +46,7 @@ class ProfilePic extends Component {
 
   uploadImage() {
     let newFileName = this.props.userId + Math.random().toString(36).slice(-6)
-    console.log(this.state.selectedFile)
+
     this.s3Client.uploadFile(this.state.selectedFile, newFileName)
     .then(data => {
       let body = {
