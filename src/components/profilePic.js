@@ -49,7 +49,9 @@ class ProfilePic extends Component {
 
     this.s3Client.uploadFile(this.state.selectedFile, newFileName)
     .then(data => {
-      if (data.location === this.props.picture) {
+      let queryIndex = this.props.picture.lastIndexOf('?') > -1 ? this.props.picture.lastIndexOf('?') : this.props.picture.length
+      let parsedUrl = this.props.picture.substr(0, queryIndex)
+      if (data.location === parsedUrl) {
         this.props.updateProfilePic(data.location)
         this.resetStates()
       } else {
@@ -103,7 +105,6 @@ class ProfilePic extends Component {
       <div id='pofilePicWrapper'>
         <img
           id='picture'
-          key={Date.now()}
           style={this.state.imageLoaded ? {} : {display: 'none'}}
           onLoad={() => this.setState({imageLoaded: true})}
           src={this.state.filePreviewUrl ?? this.props.picture}

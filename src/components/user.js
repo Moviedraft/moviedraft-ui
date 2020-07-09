@@ -101,7 +101,7 @@ class User extends Component {
   }
 
   updateProfilePic(picture) {
-    this.setState({picture: picture})
+    this.setState({picture: picture + '?' + Date.now()})
   }
 
   render() {
