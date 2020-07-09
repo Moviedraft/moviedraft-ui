@@ -35,6 +35,11 @@
   background-color: #e9e9e9;
 }
 
+#selectImage label {
+  display: inline-block;
+  width: 200px;
+}
+
 #selectImage input {
   display: none;
 }
