@@ -5,6 +5,7 @@ import Header from '../components/header.js'
 import UserHandle from './userHandle.js'
 import UserGames from './userGames.js'
 import CreateGame from './createGame.js'
+import ProfilePic from './profilePic.js'
 import Error from './error.js'
 
 class User extends Component {
@@ -31,6 +32,7 @@ class User extends Component {
     this.updateGameNameCallbackFunction = this.updateGameNameCallbackFunction.bind(this)
     this.handleError = this.handleError.bind(this)
     this.getCurrentUser = this.getCurrentUser.bind(this)
+    this.updateProfilePic = this.updateProfilePic.bind(this)
   }
 
   componentDidMount() {
@@ -98,6 +100,10 @@ class User extends Component {
     })
   }
 
+  updateProfilePic(picture) {
+    this.setState({picture: picture})
+  }
+
   render() {
     if (this.state.errorMessage !== '') {
       return <Error errorMessage={this.state.errorMessage} />;
@@ -111,23 +117,24 @@ class User extends Component {
       <div id='userPage'>
         <Header />
         <div id='profilePic'>
-          <img
-            style={this.state.imageLoaded ? {} : {display: 'none'}}
-            onLoad={() => this.setState({imageLoaded: true})}
-            src={this.state.picture}
-            alt='Profile' />
-          <ul id='userTitle'>
-            <li>
-              <UserHandle
-                parentCallback={this.userHandlecallbackFunction}
-                handleError={this.handleError}
-                userHandle={this.state.userHandle}
-              />
-            </li>
-            <li>
-              <div>{this.state.email}</div>
-            </li>
-          </ul>
+          <ProfilePic
+            picture={this.state.picture}
+            userId={this.state.userId}
+            updateProfilePic={this.updateProfilePic} />
+          <div id='userHandleWrapper'>
+            <ul id='userTitle'>
+              <li>
+                <UserHandle
+                  parentCallback={this.userHandlecallbackFunction}
+                  handleError={this.handleError}
+                  userHandle={this.state.userHandle}
+                />
+              </li>
+              <li>
+                <div>{this.state.email}</div>
+              </li>
+            </ul>
+          </div>
         </div>
         <div id='userInfo'>
           <ul>

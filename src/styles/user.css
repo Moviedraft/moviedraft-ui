@@ -7,12 +7,14 @@
 }
 
 #profilePic {
-  overflow: visible;
+  min-height:20%;
+  height:20%;
 }
 
-#userTitle {
-  padding: 4em;
-  margin-left: 10em;
+#userHandleWrapper {
+  width: 70%;
+  overflow: auto;
+  display: inline-block;
 }
 
 #userInfo {
