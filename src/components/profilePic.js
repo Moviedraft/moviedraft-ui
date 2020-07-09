@@ -30,7 +30,6 @@ class ProfilePic extends Component {
 
   previewImage(event) {
     let file = event.target.files[0]
-    console.log(file)
 
     if (file === undefined) {
       return null
@@ -46,11 +45,10 @@ class ProfilePic extends Component {
   }
 
   uploadImage() {
-    console.log('uploading!')
     let newFileName = this.props.userId + Math.random().toString(36).slice(-6)
+
     this.s3Client.uploadFile(this.state.selectedFile, newFileName)
     .then(data => {
-      console.log(data)
       let body = {
         'picture': data.location
       }
