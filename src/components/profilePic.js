@@ -45,23 +45,28 @@ class ProfilePic extends Component {
   }
 
   uploadImage() {
-    let newFileName = this.props.userId + Math.random().toString(36).slice(-6)
+    let newFileName = this.props.userId
 
     this.s3Client.uploadFile(this.state.selectedFile, newFileName)
     .then(data => {
-      let body = {
-        'picture': data.location
-      }
-      apiPatch('users/current', body).then(data => {
-        if (data !== null) {
-          this.props.updateProfilePic(data.picture)
-        }
+      if (data.location === this.props.picture) {
+        this.props.updateProfilePic(data.location)
         this.resetStates()
-      })
+      } else {
+        let body = {
+          'picture': data.location
+        }
+        apiPatch('users/current', body)
+        .then(data => {
+          if (data !== null) {
+            this.props.updateProfilePic(data.picture)
+            this.resetStates()
+          }
+        })
+      }
     })
     .catch(err => console.error(err))
   }
-
 
   resetStates() {
     this.setState({selectedFile: null})
@@ -90,7 +95,6 @@ class ProfilePic extends Component {
           type='file'
           onChange={this.previewImage} />
       </div>
-
     )
   }
 
@@ -99,6 +103,7 @@ class ProfilePic extends Component {
       <div id='pofilePicWrapper'>
         <img
           id='picture'
+          key={Date.now()}
           style={this.state.imageLoaded ? {} : {display: 'none'}}
           onLoad={() => this.setState({imageLoaded: true})}
           src={this.state.filePreviewUrl ?? this.props.picture}
