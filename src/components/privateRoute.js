@@ -6,9 +6,11 @@ class PrivateRoute extends React.Component {
   render() {
     const { component: Component, location, ...rest } = this.props
 
-    if (localStorage.getItem('CouchSportsToken') == null || moment() > moment(localStorage.getItem('CouchSportsTokenExpiry'))) {
-      localStorage.clear()
-      return <Redirect to='/' noThrow />
+    if (localStorage.getItem('CouchSportsToken') === null ||
+        localStorage.getItem('CouchSportsToken') === undefined ||
+        moment() > moment(localStorage.getItem('CouchSportsTokenExpiry'))) {
+          localStorage.clear()
+          return <Redirect to='/' noThrow />
     }
 
     return <Component {...rest} />

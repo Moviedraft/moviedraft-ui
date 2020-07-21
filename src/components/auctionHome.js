@@ -20,7 +20,8 @@ class AuctionHome extends Component {
       auctionDuration: null,
       players: [],
       playersLoaded: false,
-      bids: []
+      bids: [],
+      bidsLoaded: false
     }
 
     this.webSocket = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL)
@@ -39,6 +40,7 @@ class AuctionHome extends Component {
     this.fetchCurrentUser = this.fetchCurrentUser.bind(this)
     this.fetchPlayers = this.fetchPlayers.bind(this)
     this.endAuction = this.endAuction.bind(this)
+    this.updateHighBid = this.updateHighBid.bind(this)
     this.renderAuctionPage = this.renderAuctionPage.bind(this)
     this.renderAuctionEndButton = this.renderAuctionEndButton.bind(this)
   }
@@ -46,13 +48,29 @@ class AuctionHome extends Component {
   componentDidMount() {
     this.webSocket.onopen = () => {
       this.joinGameAuction()
+      this.setState({connectedToWebSocket: true})
+    }
+
+    this.webSocket.onmessage = (event) => {
+      let eventData = JSON.parse(event.data)
+
+      if(eventData.message.hasOwnProperty('action') && eventData.message.action === 'closeAuction') {
+        window.location.reload(true)
+      }
+
+      if(eventData.message.hasOwnProperty('auctionID')) {
+        this.updateHighBid(eventData.message)
+        this.fetchPlayers()
+      }
     }
 
     this.fetchCurrentUser()
     this.setDuration()
     this.getBids()
     this.fetchPlayers()
-    getCurrentTime().then(data => {
+
+    getCurrentTime()
+    .then(data => {
       this.setState({currentTime: data.time})
     })
 
@@ -94,14 +112,6 @@ class AuctionHome extends Component {
       'gameID': this.props.gameId
     }
     this.webSocket.send(JSON.stringify(message))
-
-    this.webSocket.onmessage = (event) => {
-      let eventData = JSON.parse(event.data)
-
-      if(eventData.message.hasOwnProperty('action') && eventData.message.gameID === this.props.gameId) {
-        window.location.reload(true);
-      }
-    }
   }
 
   leaveGameAuction() {
@@ -124,6 +134,7 @@ class AuctionHome extends Component {
         this.props.handleError('Unable to retrieve auction bids. Please refresh and try again.')
       } else {
         this.setState({bids: data.bids})
+        this.setState({bidsLoaded: true})
       }
     })
   }
@@ -164,6 +175,31 @@ class AuctionHome extends Component {
         this.setState({playersLoaded: true})
       }
     })
+  }
+
+  updateHighBid(bid) {
+    getCurrentTime().then(data => {
+      this.setState({currentTime: data.time})
+    })
+
+    const index = this.state.bids.findIndex(existingBid => existingBid.game_id + existingBid.movie_id === bid.auctionID)
+
+    if (index > -1) {
+      let bidsCopy = [...this.state.bids]
+      bidsCopy[index].userHandle = bid.userHandle
+      bidsCopy[index].bid = parseInt(bid.bid, 10)
+      bidsCopy[index].currentHighBid = bid.bid
+
+      bidsCopy[index].bid === this.state.dollarSpendingCap ?
+        bidsCopy[index].auctionExpiry = moment(bid.auctionExpiry.toUpperCase()).subtract(1, 'y').format() :
+        bidsCopy[index].auctionExpiry = bid.auctionExpiry.toUpperCase()
+
+      this.setState({bids: bidsCopy})
+    }
+
+    if (this.refs.timer !== undefined) {
+      this.refs.timer.resetTimer(this.state.auctionExpiry)
+    }
   }
 
   endAuction() {
@@ -242,8 +278,10 @@ class AuctionHome extends Component {
         auctionExpiry={this.state.bids.find(bid => bid.movie_id === movie.id).auctionExpiry}
         auctionExpirySet={this.state.bids.find(bid => bid.movie_id === movie.id).auctionExpirySet}
         dollarSpendingCap={this.state.bids.find(bid => bid.movie_id === movie.id).dollarSpendingCap}
-        currentHighBid={this.state.bids.find(bid => bid.movie_id === movie.id).bid}
+        bid={this.state.bids.find(bid => bid.movie_id === movie.id).bid}
+        userHandle={this.state.bids.find(bid => bid.movie_id === movie.id).userHandle}
         fetchPlayers={this.fetchPlayers}
+        webSocket={this.webSocket}
         handleError={this.handleError}/>
     })
   }
@@ -263,8 +301,10 @@ class AuctionHome extends Component {
   }
 
   render() {
-    if (!this.state.auctionDurationLoaded || !this.state.playersLoaded) {
-      return <div></div>
+    if (!this.state.auctionDurationLoaded ||
+      !this.state.playersLoaded ||
+      !this.state.bidsLoaded) {
+      return null
     }
 
     return (
