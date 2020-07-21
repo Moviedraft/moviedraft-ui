@@ -15,29 +15,46 @@ class AuctionItem extends Component {
       auctionExpirySet: this.props.auctionExpirySet,
       dollarSpendingCap: this.props.dollarSpendingCap,
       minBid: 0,
-      currentHighBid: this.props.currentHighBid ?? 0,
-      highestBidder: '',
-      bid: 1,
+      currentHighBid: this.props.bid ?? 0,
+      highestBidder: this.props.userHandle ?? '',
+      bid: this.props.bid && this.props.bid > 1 ? parseInt(this.props.bid, 10) + 1 : 1,
       timerDone: false,
       error: '',
-      auctionID: this.props.gameId + this.props.movie.id,
-      connectedToWebSocket: false
+      auctionID: this.props.gameId + this.props.movie.id
     }
 
-    this.webSocket = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL)
-
+    this.updateBid = this.updateBid.bind(this)
     this.handleKeyDown = this.handleKeyDown.bind(this)
     this.timerDone = this.timerDone.bind(this)
     this.joinAuction = this.joinAuction.bind(this)
-    this.updateBid = this.updateBid.bind(this)
     this.beginAuction = this.beginAuction.bind(this)
     this.submitBid = this.submitBid.bind(this)
     this.allIn = this.allIn.bind(this)
     this.renderMoviePoster = this.renderMoviePoster.bind(this)
     this.renderAuctionItem = this.renderAuctionItem.bind(this)
-    this.setStates = this.setStates.bind(this)
-    this.updateHighBid = this.updateHighBid.bind(this)
   }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.auctionExpiry !== this.props.auctionExpiry) {
+      this.setState({auctionExpiry: this.props.auctionExpiry})
+      this.setState({currentHighBid: this.props.bid})
+      this.setState({highestBidder: this.props.userHandle})
+      this.setState({bid: parseInt(this.props.bid, 10) + 1})
+
+      getCurrentTime()
+      .then(data => {
+        this.setState({currentTime: data.time})
+      })
+
+      if (this.refs.timer !== undefined) {
+        this.refs.timer.resetTimer(this.props.auctionExpiry)
+      }
+    }
+  }
+
+  updateBid(event) {
+   this.setState({bid: event.target.value})
+ }
 
   handleKeyDown(event) {
     if (['Enter'].includes(event.key)) {
@@ -51,45 +68,13 @@ class AuctionItem extends Component {
     this.setState({auctionExpiry: moment().subtract(1, 'y')})
 	}
 
-  componentDidMount() {
-    this.webSocket.onopen = () => {
-      this.setState({connectedToWebSocket: true})
-    }
-
-    this.webSocket.onclose = () => {
-      this.webSocket = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL)
-    }
-  }
-
-  componentWillUnmount() {
-    if (this.state.connectedToWebSocket) {
-      let message = {
-        'message': 'leaveauction',
-        'auctionID': this.state.auctionID
-      }
-      this.webSocket.send(JSON.stringify(message))
-    }
-  }
-
   joinAuction() {
     let message = {
       'message': 'joinauction',
       'auctionID': this.state.auctionID
     }
-    this.webSocket.send(JSON.stringify(message))
-
-    this.webSocket.onmessage = (event) => {
-      let eventData = JSON.parse(event.data)
-
-      if(eventData.message.hasOwnProperty('auctionID') && eventData.message.auctionID === this.state.auctionID) {
-        this.updateHighBid(eventData.message)
-      }
-    }
+    this.props.webSocket.send(JSON.stringify(message))
   }
-
- updateBid(event) {
-   this.setState({bid: event.target.value})
- }
 
   beginAuction(movieId) {
     apiGet('bids/' + this.props.gameId + '/' + movieId)
@@ -100,29 +85,14 @@ class AuctionItem extends Component {
         if(!data.auctionExpirySet) {
           this.setState({error: 'The auction for this item has not begun yet.'})
         } else if (moment(this.state.currentTime) < moment(data.auctionExpiry)) {
-          this.setStates(data)
-          this.setState({auctionStarted: true})
           this.joinAuction()
+          this.setState({auctionStarted: true})
+          this.setState({auctionExpiry: data.auctionExpiry})
         } else {
-          this.setStates(data)
           this.setState({error: 'The auction has completed for this item.'})
         }
       }
     })
-  }
-
-  setStates(data) {
-    this.setState({error: ''})
-    this.setState({auctionExpiry: moment(data.auctionExpiry)})
-    this.setState({auctionExpirySet: data.auctionExpirySet})
-    this.setState({dollarSpendingCap: data.dollarSpendingCap})
-
-    if (data.bid && data.userHandle) {
-      this.setState({currentHighBid: data.bid})
-      this.setState({minBid: parseInt(data.bid, 10) + 1})
-      this.setState({bid: data.bid + 1})
-      this.setState({highestBidder: data.userHandle})
-    }
   }
 
   submitBid() {
@@ -155,7 +125,7 @@ class AuctionItem extends Component {
               'userHandle': data.userHandle,
               'auctionExpiry': data.auctionExpiry
             }
-            this.webSocket.send(JSON.stringify(message))
+            this.props.webSocket.send(JSON.stringify(message))
           }
         }
       })
@@ -164,25 +134,6 @@ class AuctionItem extends Component {
 
   allIn() {
     this.setState({bid: this.state.dollarSpendingCap - this.props.currentUserTotalBids}, () => { this.submitBid() })
-  }
-
-  updateHighBid(bid) {
-    this.props.fetchPlayers()
-    getCurrentTime().then(data => {
-      this.setState({currentTime: data.time})
-    })
-    this.setState({highestBidder: bid.userHandle});
-    this.setState({minBid: parseInt(bid.bid, 10) + 1});
-    this.setState({bid: parseInt(bid.bid, 10) + 1});
-    this.setState({currentHighBid: bid.bid});
-
-    bid.bid === this.state.dollarSpendingCap ?
-      this.timerDone(true) :
-      this.setState({auctionExpiry: bid.auctionExpiry.toUpperCase()})
-
-    if (this.refs.timer !== undefined) {
-      this.refs.timer.resetTimer(this.state.auctionExpiry)
-    }
   }
 
   renderMoviePoster() {
@@ -221,9 +172,15 @@ class AuctionItem extends Component {
 
   renderAuctionItem() {
     if (this.state.auctionExpirySet &&
-        (this.state.currentHighBid >= this.state.dollarSpendingCap ||
-        moment(this.state.currentTime) >= moment(this.state.auctionExpiry))) {
-      return null
+      (this.state.currentHighBid >= this.state.dollarSpendingCap ||
+      moment(this.state.currentTime) >= moment(this.state.auctionExpiry) ||
+      this.state.timerDone)) {
+        return (
+          <div className='movieParent'>
+          {this.renderMoviePoster()}
+          <p>The winner was {this.state.highestBidder} with ${this.state.currentHighBid}</p>
+        </div>
+      )
     }
 
     return !this.state.auctionStarted ? (
