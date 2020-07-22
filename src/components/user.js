@@ -115,7 +115,8 @@ class User extends Component {
 
     return (
       <div id='userPage'>
-        <Header />
+        <Header
+          picture={this.state.picture}/>
         <div id='profilePic'>
           <ProfilePic
             picture={this.state.picture}
