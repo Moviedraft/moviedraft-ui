@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import moment from 'moment'
 import { apiGet, apiPost } from '../utilities/apiUtility.js'
-import { getCurrentTime } from '../utilities/dateTimeUtility.js'
 import '../styles/auctionItem.css';
 import Timer from './timer.js';
 
@@ -36,15 +35,11 @@ class AuctionItem extends Component {
 
   componentDidUpdate(prevProps) {
     if (prevProps.auctionExpiry !== this.props.auctionExpiry) {
+      this.setState({currentTime: this.props.currentTime})
       this.setState({auctionExpiry: this.props.auctionExpiry})
       this.setState({currentHighBid: this.props.bid})
       this.setState({highestBidder: this.props.userHandle})
       this.setState({bid: parseInt(this.props.bid, 10) + 1})
-
-      getCurrentTime()
-      .then(data => {
-        this.setState({currentTime: data.time})
-      })
 
       if (this.refs.timer !== undefined) {
         this.refs.timer.resetTimer(this.props.auctionExpiry)
@@ -63,9 +58,9 @@ class AuctionItem extends Component {
   }
 
   timerDone(timerDone) {
+    this.setState({auctionExpiry: moment().subtract(1, 'y')})
     this.setState({timerDone: timerDone})
     this.setState({error: ''})
-    this.setState({auctionExpiry: moment().subtract(1, 'y')})
 	}
 
   joinAuction() {
@@ -88,6 +83,7 @@ class AuctionItem extends Component {
           this.joinAuction()
           this.setState({auctionStarted: true})
           this.setState({auctionExpiry: data.auctionExpiry})
+          this.setState({auctionExpirySet: true})
         } else {
           this.setState({error: 'The auction has completed for this item.'})
         }
@@ -173,8 +169,7 @@ class AuctionItem extends Component {
   renderAuctionItem() {
     if (this.state.auctionExpirySet &&
       (this.state.currentHighBid >= this.state.dollarSpendingCap ||
-      moment(this.state.currentTime) >= moment(this.state.auctionExpiry) ||
-      this.state.timerDone)) {
+      moment(this.state.currentTime) >= moment(this.state.auctionExpiry))) {
         return (
           <div className='movieParent'>
           {this.renderMoviePoster()}
