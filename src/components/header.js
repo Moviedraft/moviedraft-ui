@@ -34,7 +34,8 @@ class Header extends Component {
     return this.state.loggedIn ?
       (
         <Account
-          parentCallback={this.loggedIn}/>
+          parentCallback={this.loggedIn}
+          picture={this.props.picture}/>
       ) : (
         <Login
           id='googleLogin'

@@ -14,7 +14,7 @@ class AuctionHome extends Component {
     super(props)
     this.state = {
       auctionDurationLoaded: false,
-      currentUser: '',
+      currentUser: this.props.currentUser,
       currentTime: '',
       auctionCountdownIntervalId: '',
       auctionDuration: null,
@@ -37,7 +37,6 @@ class AuctionHome extends Component {
     this.leaveGameAuction = this.leaveGameAuction.bind(this)
     this.setDuration = this.setDuration.bind(this)
     this.getBids = this.getBids.bind(this)
-    this.fetchCurrentUser = this.fetchCurrentUser.bind(this)
     this.fetchPlayers = this.fetchPlayers.bind(this)
     this.endAuction = this.endAuction.bind(this)
     this.updateHighBid = this.updateHighBid.bind(this)
@@ -64,7 +63,6 @@ class AuctionHome extends Component {
       }
     }
 
-    this.fetchCurrentUser()
     this.setDuration()
     this.getBids()
     this.fetchPlayers()
@@ -80,9 +78,16 @@ class AuctionHome extends Component {
       } else {
         clearInterval(intervalId)
       }
-    }, 1000);
+    }, 1000)
+
     this.setState({auctionCountdownIntervalId: intervalId})
     this.setState({auctionDurationLoaded: true})
+
+    if (this.state.auctionDuration <= 0) {
+      let message = 'System: ' + this.state.currentUser.userHandle + ' has entered the auction room.'
+      this.sendMessage(message)
+    }
+
     this._isMounted = true
   }
 
@@ -135,22 +140,6 @@ class AuctionHome extends Component {
       } else {
         this.setState({bids: data.bids})
         this.setState({bidsLoaded: true})
-      }
-    })
-  }
-
-  fetchCurrentUser() {
-    apiGet('users/current')
-    .then(data => {
-      if (data === null) {
-        this.props.handleError('Unable to load your user information. Please refresh and try again.')
-      } else {
-        let currentUser = data
-        this.setState({currentUser: currentUser})
-        if (this.state.auctionDuration <= 0) {
-          let message = 'System: ' + currentUser.userHandle + ' has entered the auction room.'
-          this.sendMessage(message)
-        }
       }
     })
   }

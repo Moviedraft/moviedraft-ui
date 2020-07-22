@@ -20,18 +20,31 @@ class Game extends Component {
       endDate: '',
       movies: [],
       commissionerId: '',
+      currentUser: null,
       auctionComplete: false,
       loaded: false,
       errorMessage: ''
     }
 
     this.handleError = this.handleError.bind(this)
+    this.fetchCurrentUser = this.fetchCurrentUser.bind(this)
     this.fetchGame = this.fetchGame.bind(this)
     this.renderAuctionHome = this.renderAuctionHome.bind(this)
   }
 
   handleError(message) {
     this.setState({errorMessage: message})
+  }
+
+  fetchCurrentUser() {
+    apiGet('users/current')
+    .then(data => {
+      if (data === null) {
+        this.props.handleError('Unable to load your user information. Please refresh and try again.')
+      } else {
+        this.setState({currentUser: data})
+      }
+    })
   }
 
   fetchGame() {
@@ -64,6 +77,7 @@ class Game extends Component {
     return <AuctionHome
       movies={this.state.movies}
       gameId={this.state.gameId}
+      currentUser={this.state.currentUser}
       commissionerId={this.state.commissionerId}
       auctionItemsExpireInSeconds={this.state.auctionItemsExpireInSeconds}
       auctionDate={this.state.auctionDate}
@@ -87,6 +101,7 @@ class Game extends Component {
 
     if (!this._gameRetrieved) {
       this.fetchGame()
+      this.fetchCurrentUser()
       this._gameRetrieved = true
     }
 
@@ -97,7 +112,8 @@ class Game extends Component {
           <Header
             gameName={this.state.gameName}
             startDate={this.state.startDate}
-            endDate={this.state.endDate} />
+            endDate={this.state.endDate}
+            picture={this.state.currentUser.picture} />
           <div>
             {this.renderGameHome()}
           </div>
@@ -108,7 +124,8 @@ class Game extends Component {
           <Header
             gameName={this.state.gameName}
             startDate={this.state.startDate}
-            endDate={this.state.endDate} />
+            endDate={this.state.endDate}
+            picture={this.state.currentUser.picture} />
           <div>
             {this.renderAuctionHome()}
           </div>

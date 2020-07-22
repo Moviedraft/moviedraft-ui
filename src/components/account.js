@@ -49,7 +49,7 @@ class Account extends Component {
          onClick={() => this.showMenu()}>
          <img
           id='AccountButtonProfilePic'
-          src={GenericPerson}
+          src={this.props.picture ?? GenericPerson}
           alt='Profile Pic' />
          <img
            id='DownArrow'
