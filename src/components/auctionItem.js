@@ -170,6 +170,16 @@ class AuctionItem extends Component {
     if (this.state.auctionExpirySet &&
       (this.state.currentHighBid >= this.state.dollarSpendingCap ||
       moment(this.state.currentTime) >= moment(this.state.auctionExpiry))) {
+
+        if (this.state.highestBidder === '') {
+          return (
+            <div className='movieParent'>
+              {this.renderMoviePoster()}
+              <p>No bid placed</p>
+            </div>
+          )
+        }
+
         return (
           <div className='movieParent'>
           {this.renderMoviePoster()}
