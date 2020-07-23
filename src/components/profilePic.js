@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import '../styles/profilePic.css'
 import S3 from 'aws-s3'
+import moment from 'moment'
 import { apiPatch } from '../utilities/apiUtility.js'
 
 class ProfilePic extends Component {
@@ -45,27 +46,21 @@ class ProfilePic extends Component {
   }
 
   uploadImage() {
-    let newFileName = this.props.userId
+    let newFileName = this.props.userId + moment().valueOf()
 
     this.s3Client.uploadFile(this.state.selectedFile, newFileName)
     .then(data => {
-      let queryIndex = this.props.picture.lastIndexOf('?') > -1 ? this.props.picture.lastIndexOf('?') : this.props.picture.length
-      let parsedUrl = this.props.picture.substr(0, queryIndex)
-      if (data.location === parsedUrl) {
-        this.props.updateProfilePic(data.location)
-        this.resetStates()
-      } else {
-        let body = {
-          'picture': data.location
-        }
-        apiPatch('users/current', body)
-        .then(data => {
-          if (data !== null) {
-            this.props.updateProfilePic(data.picture)
-            this.resetStates()
-          }
-        })
+      let body = {
+        'picture': data.location
       }
+
+      apiPatch('users/current', body)
+      .then(data => {
+        if (data !== null) {
+          this.props.updateProfilePic(data.picture)
+          this.resetStates()
+        }
+      })
     })
     .catch(err => console.error(err))
   }
