@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import '../styles/profilePic.css'
 import S3 from 'aws-s3'
+import moment from 'moment'
 import { apiPatch } from '../utilities/apiUtility.js'
 
 class ProfilePic extends Component {
@@ -45,7 +46,7 @@ class ProfilePic extends Component {
   }
 
   uploadImage() {
-    let newFileName = this.props.userId
+    let newFileName = this.props.userId + moment().valueOf()
 
     this.s3Client.uploadFile(this.state.selectedFile, newFileName)
     .then(data => {
