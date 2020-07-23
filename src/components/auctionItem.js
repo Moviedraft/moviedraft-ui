@@ -25,7 +25,6 @@ class AuctionItem extends Component {
     this.updateBid = this.updateBid.bind(this)
     this.handleKeyDown = this.handleKeyDown.bind(this)
     this.timerDone = this.timerDone.bind(this)
-    this.joinAuction = this.joinAuction.bind(this)
     this.beginAuction = this.beginAuction.bind(this)
     this.submitBid = this.submitBid.bind(this)
     this.allIn = this.allIn.bind(this)
@@ -63,14 +62,6 @@ class AuctionItem extends Component {
     this.setState({error: ''})
 	}
 
-  joinAuction() {
-    let message = {
-      'message': 'joinauction',
-      'auctionID': this.state.auctionID
-    }
-    this.props.webSocket.send(JSON.stringify(message))
-  }
-
   beginAuction(movieId) {
     apiGet('bids/' + this.props.gameId + '/' + movieId)
     .then(data => {
@@ -80,7 +71,6 @@ class AuctionItem extends Component {
         if(!data.auctionExpirySet) {
           this.setState({error: 'The auction for this item has not begun yet.'})
         } else if (moment(this.state.currentTime) < moment(data.auctionExpiry)) {
-          this.joinAuction()
           this.setState({auctionStarted: true})
           this.setState({auctionExpiry: data.auctionExpiry})
           this.setState({auctionExpirySet: true})
@@ -116,6 +106,7 @@ class AuctionItem extends Component {
           } else {
             let message = {
               'message': 'postbid',
+              'gameID': this.props.gameId,
               'auctionID': this.state.auctionID,
               'bid': data.bid,
               'userHandle': data.userHandle,
