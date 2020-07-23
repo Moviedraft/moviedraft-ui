@@ -50,23 +50,17 @@ class ProfilePic extends Component {
 
     this.s3Client.uploadFile(this.state.selectedFile, newFileName)
     .then(data => {
-      let queryIndex = this.props.picture.lastIndexOf('?') > -1 ? this.props.picture.lastIndexOf('?') : this.props.picture.length
-      let parsedUrl = this.props.picture.substr(0, queryIndex)
-      if (data.location === parsedUrl) {
-        this.props.updateProfilePic(data.location)
-        this.resetStates()
-      } else {
-        let body = {
-          'picture': data.location
-        }
-        apiPatch('users/current', body)
-        .then(data => {
-          if (data !== null) {
-            this.props.updateProfilePic(data.picture)
-            this.resetStates()
-          }
-        })
+      let body = {
+        'picture': data.location
       }
+
+      apiPatch('users/current', body)
+      .then(data => {
+        if (data !== null) {
+          this.props.updateProfilePic(data.picture)
+          this.resetStates()
+        }
+      })
     })
     .catch(err => console.error(err))
   }
