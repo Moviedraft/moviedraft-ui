@@ -8,7 +8,7 @@ class AuctionItem extends Component {
   constructor(props){
     super(props)
     this.state = {
-      auctionStarted: false,
+      auctionStarted: this.props.auctionStarted,
       currentTime: this.props.currentTime,
       auctionExpiry: this.props.auctionExpiry,
       auctionExpirySet: this.props.auctionExpirySet,
@@ -34,6 +34,7 @@ class AuctionItem extends Component {
 
   componentDidUpdate(prevProps) {
     if (prevProps.auctionExpiry !== this.props.auctionExpiry) {
+      this.setState({auctionStarted: this.props.auctionStarted})
       this.setState({currentTime: this.props.currentTime})
       this.setState({auctionExpiry: this.props.auctionExpiry})
       this.setState({currentHighBid: this.props.bid})
@@ -74,6 +75,16 @@ class AuctionItem extends Component {
           this.setState({auctionStarted: true})
           this.setState({auctionExpiry: data.auctionExpiry})
           this.setState({auctionExpirySet: true})
+
+          if (this.state.highestBidder === '') {
+            let message = {
+              'message': 'beginauction',
+              'gameID': this.props.gameId,
+              'movieID': this.props.movie.id,
+              'auctionExpiry': data.auctionExpiry
+            }
+            this.props.webSocket.send(JSON.stringify(message))
+          }
         } else {
           this.setState({error: 'The auction has completed for this item.'})
         }

@@ -57,7 +57,7 @@ class Timer extends Component {
   resetTimer(time) {
     getCurrentTime().then(data => {
       let duration = moment.duration(moment(time).diff(moment(data.time)))
-      this.setState({time: duration.seconds()})
+      this.setState({time: Math.round(duration.asSeconds())})
     })
   }
 
