@@ -38,8 +38,9 @@ class AuctionHome extends Component {
     this.setDuration = this.setDuration.bind(this)
     this.getBids = this.getBids.bind(this)
     this.fetchPlayers = this.fetchPlayers.bind(this)
-    this.endAuction = this.endAuction.bind(this)
+    this.beginAuction = this.beginAuction.bind(this)
     this.updateHighBid = this.updateHighBid.bind(this)
+    this.endAuction = this.endAuction.bind(this)
     this.renderAuctionPage = this.renderAuctionPage.bind(this)
     this.renderAuctionEndButton = this.renderAuctionEndButton.bind(this)
   }
@@ -52,6 +53,10 @@ class AuctionHome extends Component {
 
     this.webSocket.onmessage = (event) => {
       let eventData = JSON.parse(event.data)
+
+      if(eventData.message.hasOwnProperty('action') && eventData.message.action === 'beginauction') {
+        this.beginAuction(eventData.message)
+      }
 
       if(eventData.message.hasOwnProperty('action') && eventData.message.action === 'closeAuction') {
         window.location.reload(true)
@@ -138,7 +143,13 @@ class AuctionHome extends Component {
       if (data === null) {
         this.props.handleError('Unable to retrieve auction bids. Please refresh and try again.')
       } else {
-        this.setState({bids: data.bids})
+        let bids = data.bids
+        bids.map(bid => ({
+          ...bid,
+          auctionStarted: false
+        }))
+
+        this.setState({bids: bids})
         this.setState({bidsLoaded: true})
       }
     })
@@ -166,6 +177,29 @@ class AuctionHome extends Component {
     })
   }
 
+  beginAuction(message) {
+    getCurrentTime().then(data => {
+      this.setState({currentTime: data.time})
+    })
+
+    const index = this.state.bids.findIndex(existingBid => existingBid.game_id === message.gameID && existingBid.movie_id === message.movieID)
+
+    if (index > -1) {
+      let bidsCopy = [...this.state.bids]
+      bidsCopy[index].auctionExpiry = message.auctionExpiry.toUpperCase()
+      bidsCopy[index].auctionExpirySet = true
+      bidsCopy[index].auctionStarted = true
+      bidsCopy[index].bid = 0
+      bidsCopy[index].userHandle = ''
+
+      this.setState({bids: bidsCopy})
+    }
+
+    if (this.refs.timer !== undefined) {
+      this.refs.timer.resetTimer(this.state.auctionExpiry)
+    }
+  }
+
   updateHighBid(bid) {
     getCurrentTime().then(data => {
       this.setState({currentTime: data.time})
@@ -175,6 +209,7 @@ class AuctionHome extends Component {
 
     if (index > -1) {
       let bidsCopy = [...this.state.bids]
+      bidsCopy[index].auctionStarted = true
       bidsCopy[index].userHandle = bid.userHandle
       bidsCopy[index].bid = parseInt(bid.bid, 10)
       bidsCopy[index].currentHighBid = bid.bid
@@ -187,7 +222,7 @@ class AuctionHome extends Component {
     }
 
     if (this.refs.timer !== undefined) {
-      this.refs.timer.resetTimer(this.state.auctionExpiry)
+      this.refs.timer.resetTimer(bid.auctionExpiry.toUpperCase())
     }
   }
 
@@ -264,6 +299,7 @@ class AuctionHome extends Component {
         currentTime={this.state.currentTime}
         auctionItemsExpireInSeconds={this.props.auctionItemsExpireInSeconds}
         currentUserTotalBids={this.state.currentUserTotalBids}
+        auctionStarted={this.state.bids.find(bid => bid.movie_id === movie.id).auctionStarted}
         auctionExpiry={this.state.bids.find(bid => bid.movie_id === movie.id).auctionExpiry}
         auctionExpirySet={this.state.bids.find(bid => bid.movie_id === movie.id).auctionExpirySet}
         dollarSpendingCap={this.state.bids.find(bid => bid.movie_id === movie.id).dollarSpendingCap}
