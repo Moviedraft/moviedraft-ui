@@ -169,7 +169,7 @@ class AuctionItem extends Component {
   }
 
   renderAuctionItem() {
-    if (this.state.auctionExpirySet &&
+    if ((this.props.auctionExpirySet || this.state.auctionExpirySet) &&
       (this.state.currentHighBid >= this.state.dollarSpendingCap ||
       moment(this.state.currentTime) >= moment(this.state.auctionExpiry))) {
 
