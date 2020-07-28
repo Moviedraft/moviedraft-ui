@@ -35,8 +35,8 @@ class AuctionItem extends Component {
   componentDidUpdate(prevProps) {
     if (prevProps.auctionExpiry !== this.props.auctionExpiry) {
       this.setState({auctionStarted: this.props.auctionStarted})
-      this.setState({auctionExpiry: this.props.auctionExpiry})
       this.setState({currentTime: this.props.currentTime})
+      this.setState({auctionExpiry: this.props.auctionExpiry})
       this.setState({currentHighBid: this.props.bid})
       this.setState({highestBidder: this.props.userHandle})
       this.setState({bid: parseInt(this.props.bid, 10) + 1})
