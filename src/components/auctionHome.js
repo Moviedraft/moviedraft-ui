@@ -68,6 +68,14 @@ class AuctionHome extends Component {
       }
     }
 
+    this.webSocket.onclose = () => {
+      this.leaveGameAuction()
+    }
+
+    window.addEventListener('beforeunload', () =>{
+      this.leaveGameAuction()
+    })
+
     this.setDuration()
     this.getBids()
     this.fetchPlayers()
