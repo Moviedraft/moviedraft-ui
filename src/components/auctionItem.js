@@ -8,7 +8,6 @@ class AuctionItem extends Component {
   constructor(props){
     super(props)
     this.state = {
-      auctionStarted: this.props.auctionStarted,
       currentTime: this.props.currentTime,
       auctionExpiry: this.props.auctionExpiry,
       auctionExpirySet: this.props.auctionExpirySet,
@@ -34,7 +33,6 @@ class AuctionItem extends Component {
 
   componentDidUpdate(prevProps) {
     if (prevProps.auctionExpiry !== this.props.auctionExpiry) {
-      this.setState({auctionStarted: this.props.auctionStarted})
       this.setState({currentTime: this.props.currentTime})
       this.setState({auctionExpiry: this.props.auctionExpiry})
       this.setState({currentHighBid: this.props.bid})
@@ -72,7 +70,6 @@ class AuctionItem extends Component {
         if(!data.auctionExpirySet) {
           this.setState({error: 'The auction for this item has not begun yet.'})
         } else if (moment(this.state.currentTime) < moment(data.auctionExpiry)) {
-          this.setState({auctionStarted: true})
           this.setState({auctionExpiry: data.auctionExpiry})
           this.setState({auctionExpirySet: true})
 
@@ -190,7 +187,7 @@ class AuctionItem extends Component {
       )
     }
 
-    return !this.state.auctionStarted ? (
+    return !this.props.auctionExpirySet && !this.state.auctionExpirySet ? (
       <div className='movieParent'>
         {this.renderMoviePoster()}
         <button
