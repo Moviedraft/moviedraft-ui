@@ -94,12 +94,12 @@ class AuctionHome extends Component {
     }, 1000)
 
     this.setState({auctionCountdownIntervalId: intervalId})
-    this.setState({auctionDurationLoaded: true})
-
-    if (this.state.auctionDuration <= 0) {
-      let message = 'System: ' + this.state.currentUser.userHandle + ' has entered the auction room.'
-      this.sendMessage(message)
-    }
+    this.setState({auctionDurationLoaded: true}, () => {
+      if (this.state.auctionDuration && this.state.auctionDuration <= 0) {
+        let message = 'System: ' + this.state.currentUser.userHandle + ' has entered the auction room.'
+        this.sendMessage(message)
+      }
+    })
 
     this._isMounted = true
   }
@@ -109,7 +109,7 @@ class AuctionHome extends Component {
     clearInterval(this.state.auctionCountdownIntervalId)
     this.leaveGameAuction()
 
-    if (this.state.auctionDuration <= 0) {
+    if (this.state.auctionDuration && this.state.auctionDuration <= 0) {
       let message = 'System: ' + this.state.currentUser.userHandle + ' has left the auction room.'
       this.sendMessage(message)
     }
