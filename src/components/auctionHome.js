@@ -109,7 +109,6 @@ class AuctionHome extends Component {
     clearInterval(this.state.auctionCountdownIntervalId)
     this.leaveGameAuction()
 
-    console.log(this.state.auctionDuration)
     if (this.state.auctionDuration && this.state.auctionDuration <= 0) {
       let message = 'System: ' + this.state.currentUser.userHandle + ' has left the auction room.'
       this.sendMessage(message)
