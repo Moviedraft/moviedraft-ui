@@ -69,9 +69,11 @@ class CreateEditGameStep2 extends Component {
             id='auctionItemExpiryTimeSeconds'
             name='auctionItemExpiryTimeSeconds'
             type='number'
-            min='30'
+            min='10'
+            max='60'
             value={this.props.auctionItemExpiryTimeSeconds}
-            onChange={this.props.handleChange} />
+            onChange={this.props.handleChange}
+            onKeyDown={(e) => { e.preventDefault() }} />
         </div>
         <label htmlFor='Movies'>
           Select movies for your game (based on game start and end dates):
