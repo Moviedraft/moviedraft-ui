@@ -33,6 +33,7 @@ class AuctionItem extends Component {
 
   componentDidUpdate(prevProps) {
     if (prevProps.auctionExpiry !== this.props.auctionExpiry) {
+      this.setState({error: ''})
       this.setState({currentTime: this.props.currentTime})
       this.setState({auctionExpiry: this.props.auctionExpiry})
       this.setState({currentHighBid: this.props.bid})
