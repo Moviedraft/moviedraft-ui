@@ -193,7 +193,7 @@ class AuctionItem extends Component {
         <button
           className='auctionButton'
           onClick={() => this.beginAuction(this.props.movie.id)}>
-          JOIN AUCTION
+          BEGIN AUCTION
         </button>
         <p>{this.state.error}</p>
       </div>
