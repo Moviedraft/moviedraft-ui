@@ -88,14 +88,17 @@ class User extends Component {
       } else {
         localStorage.setItem('CouchSportsHandle', data.userHandle)
 
-        this.setState({userId: data.id})
-        this.setState({firstName: data.firstName})
-        this.setState({lastName: data.lastName})
-        this.setState({userHandle: data.userHandle})
-        this.setState({email: data.email})
-        this.setState({picture: data.picture})
-        this.setState({userGames: data.games})
-        this.setState({userLoaded: true})
+        let statesToSet = {
+          userId: data.id,
+          firstName: data.firstName,
+          lastName: data.lastName,
+          userHandle: data.userHandle,
+          email: data.email,
+          picture: data.picture,
+          userGames: data.games,
+          userLoaded: true
+        }
+        this.setState(statesToSet)
       }
     })
   }
@@ -109,7 +112,7 @@ class User extends Component {
       return <Error errorMessage={this.state.errorMessage} />;
     }
 
-    if (this.state.userLoaded === false) {
+    if (!this.state.userLoaded) {
       return null
     }
 

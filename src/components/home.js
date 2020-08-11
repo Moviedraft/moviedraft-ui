@@ -33,8 +33,11 @@ class Home extends Component {
       if (data === null) {
         this.setState({errorMessage: 'Unable to retrieve user information. Please try logging out and back in.'})
       } else {
-        this.setState({currentUser: data})
-        this.setState({dataLoaded: true})
+        let statesToSet = {
+          currentUser: data,
+          dataLoaded: true
+        }
+        this.setState(statesToSet)
       }
     })
   }
@@ -43,7 +46,7 @@ class Home extends Component {
     if (!this.state.dataLoaded) {
       return null
     }
-    
+
     if (this.state.errorMessage !== '') {
       return <Error errorMessage={this.state.errorMessage} />;
     }
