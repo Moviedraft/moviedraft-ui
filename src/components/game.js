@@ -7,7 +7,6 @@ import GameHome from './gameHome.js'
 import Error from './error.js'
 
 class Game extends Component {
-  _gameRetrieved = false
   constructor(props){
     super(props)
     this.state = {
@@ -22,7 +21,8 @@ class Game extends Component {
       commissionerId: '',
       currentUser: null,
       auctionComplete: false,
-      loaded: false,
+      userLoaded: false,
+      gameLoaded: false,
       errorMessage: ''
     }
 
@@ -36,13 +36,22 @@ class Game extends Component {
     this.setState({errorMessage: message})
   }
 
+  componentDidMount() {
+    this.fetchCurrentUser()
+    this.fetchGame()
+  }
+
   fetchCurrentUser() {
     apiGet('users/current')
     .then(data => {
       if (data === null) {
         this.props.handleError('Unable to load your user information. Please refresh and try again.')
       } else {
-        this.setState({currentUser: data})
+        let userStates = {
+          currentUser: data,
+          userLoaded: true
+        }
+        this.setState(userStates)
       }
     })
   }
@@ -53,22 +62,25 @@ class Game extends Component {
       if (data === null) {
         this.handleError('Unable to load game. Please refresh and try again.')
       } else {
-        this.setState({gameName: data.gameName})
-        this.setState({auctionDate: moment(data.auctionDate)})
-        this.setState({movies: data.movies.sort((movie1, movie2) => {
-          if (moment(movie1.releaseDate) > moment(movie2.releaseDate)) return 1
-          if (moment(movie1.releaseDate) < moment(movie2.releaseDate)) return -1
-          if (movie1.title > movie2.title) return 1
-          if (movie1.title < movie2.title) return -1
-          return 1
-        })})
-        this.setState({auctionComplete: data.auctionComplete})
-        this.setState({commissionerId: data.commissionerId})
-        this.setState({auctionItemsExpireInSeconds: data.auctionItemsExpireInSeconds})
-        this.setState({dollarSpendingCap: data.dollarSpendingCap})
-        this.setState({startDate: data.startDate})
-        this.setState({endDate: data.endDate})
-        this.setState({loaded: true})
+        let gameStates = {
+          gameName: data.gameName,
+          auctionDate: moment(data.auctionDate),
+          movies: data.movies.sort((movie1, movie2) => {
+            if (moment(movie1.releaseDate) > moment(movie2.releaseDate)) return 1
+            if (moment(movie1.releaseDate) < moment(movie2.releaseDate)) return -1
+            if (movie1.title > movie2.title) return 1
+            if (movie1.title < movie2.title) return -1
+            return 1
+          }),
+          auctionComplete: data.auctionComplete,
+          commissionerId: data.commissionerId,
+          auctionItemsExpireInSeconds: data.auctionItemsExpireInSeconds,
+          dollarSpendingCap: data.dollarSpendingCap,
+          startDate: data.startDate,
+          endDate: data.endDate,
+          gameLoaded: true
+        }
+        this.setState(gameStates)
       }
     })
   }
@@ -99,13 +111,7 @@ class Game extends Component {
       return <Error errorMessage={this.state.errorMessage} />;
     }
 
-    if (!this._gameRetrieved) {
-      this.fetchGame()
-      this.fetchCurrentUser()
-      this._gameRetrieved = true
-    }
-
-    if (this._gameRetrieved && this.state.loaded) {
+    if (this.state.userLoaded && this.state.gameLoaded) {
       return this.state.auctionComplete ?
       (
         <div>
