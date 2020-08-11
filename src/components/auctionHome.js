@@ -13,6 +13,7 @@ class AuctionHome extends Component {
   constructor(props){
     super(props)
     this.state = {
+      movies: this.props.movies,
       auctionDurationLoaded: false,
       currentUser: this.props.currentUser,
       currentTime: '',
@@ -190,7 +191,8 @@ class AuctionHome extends Component {
       this.setState({currentTime: data.time})
     })
 
-    const index = this.state.bids.findIndex(existingBid => existingBid.game_id === message.gameID && existingBid.movie_id === message.movieID)
+    let index = this.state.bids.findIndex(existingBid => existingBid.game_id === message.gameID && existingBid.movie_id === message.movieID)
+    let movieIndex = this.state.movies.findIndex(movie => movie.id === message.movieID)
 
     if (index > -1) {
       let bidsCopy = [...this.state.bids]
@@ -199,6 +201,8 @@ class AuctionHome extends Component {
       bidsCopy[index].auctionStarted = true
       bidsCopy[index].bid = 0
       bidsCopy[index].userHandle = ''
+
+      this.state.movies.splice(0, 0, this.state.movies.splice(movieIndex, 1)[0])
 
       this.setState({bids: bidsCopy})
     }
@@ -299,7 +303,7 @@ class AuctionHome extends Component {
   }
 
   renderAuctionPage() {
-    return this.props.movies.map((movie) => {
+    return this.state.movies.map((movie) => {
       return <AuctionItem
         key={movie.id}
         movie={movie}
