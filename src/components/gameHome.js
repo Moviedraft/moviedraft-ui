@@ -6,6 +6,7 @@ import WeekendBoxOffice from './weekendBoxOffice.js'
 import FlavorText from './flavorText.js'
 import UpcomingMovies from './upcomingMovies.js'
 import Poll from './poll.js'
+import SideBet from './sideBet.js'
 import Chat from './chat.js'
 
 class GameHome extends Component {
@@ -94,6 +95,13 @@ class GameHome extends Component {
             gameId={this.props.gameId}
             handleError={this.props.handleError} />
           <Poll
+            updateComponentLoadedFlag={this.updateComponentLoadedFlag}
+            componentName='pollLoaded'
+            gameId={this.props.gameId}
+            commissionerId={this.props.commissionerId}
+            userId={this.state.userId}
+            handleError={this.props.handleError} />
+          <SideBet
             updateComponentLoadedFlag={this.updateComponentLoadedFlag}
             componentName='pollLoaded'
             gameId={this.props.gameId}
