@@ -2,28 +2,36 @@ import React, { Component } from 'react'
 import Modal from 'react-modal'
 import moment from 'moment'
 import { apiGet, apiPost, apiPatch } from '../utilities/apiUtility.js'
-import '../styles/poll.css'
+import '../styles/sideBet.css'
 
 class SideBet extends Component {
+  _sideBetColumnNames = ['Player', 'Bet']
+  _formatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 0
+  })
+
   constructor(props){
     super(props)
     this.state = {
-      vote: '',
-      voteSubmitted: false,
-      newSideBetChoice: null,
+      currentSideBet: null,
+      sideBetLoaded: false,
+      bet: 0,
+      newSideBetMovieChoice: null,
       movies: [],
-      prizeAmount: 0,
+      prizeInMillions: 0,
       sideBetCloseDate: null,
-      choices: [],
-      createSideBetModalOpen: false
+      createSideBetModalOpen: false,
+      error: ''
     }
 
     this.handleKeyPress = this.handleKeyPress.bind(this)
     this.handleChange = this.handleChange.bind(this)
     this.handleCloseCreateSideBetModal = this.handleCloseCreateSideBetModal.bind(this)
-    this.handleCreateSideBet = this.handleCreateSideBet.bind(this)
+    this.createSideBet = this.createSideBet.bind(this)
     this.fetchSideBet = this.fetchSideBet.bind(this)
-    this.submitVote = this.submitVote.bind(this)
+    this.submitBet = this.submitBet.bind(this)
     this.checkDisabled = this.checkDisabled.bind(this)
   }
 
@@ -33,9 +41,9 @@ class SideBet extends Component {
 
   handleCheckbox(event, movie) {
     if(event.target.checked) {
-      this.setState({newSideBetChoice: movie})
+      this.setState({newSideBetMovieChoice: movie})
     } else {
-      this.setState({newSideBetChoice: null})
+      this.setState({newSideBetMovieChoice: null})
     }
   }
 
@@ -56,13 +64,34 @@ class SideBet extends Component {
     this.setState({createSideBetModalOpen: false})
   }
 
-  handleCreateSideBet() {
-    console.log('side bet created')
+  createSideBet() {
+    let body = {
+      'prizeInMillions': this.state.prizeInMillions,
+      'movieId': this.state.newSideBetMovieChoice.id,
+      'closeDate': moment(this.state.sideBetCloseDate).format()
+    }
+
+    apiPost(`games/${this.props.gameId}/sidebet`, body)
+    .then(data => {
+      if (data === null) {
+        this.props.handleError('Unable to create side bet. Please refresh and try again.')
+      } else {
+        this.setState({currentSideBet: data.sideBet})
+        this.setState({sideBetLoaded: true})
+        this.setState({createSideBetModalOpen: false})
+      }
+    })
   }
 
   fetchSideBet() {
-    console.log('side bet fetched')
-    this.props.updateComponentLoadedFlag(this.props.componentName)
+    apiGet(`games/${this.props.gameId}/sidebet`)
+    .then(data => {
+      if (data !== null) {
+        this.setState({currentSideBet: data.sideBet})
+        this.setState({sideBetLoaded: true})
+        this.props.updateComponentLoadedFlag(this.props.componentName)
+      }
+    })
   }
 
   fetchMovies() {
@@ -88,45 +117,41 @@ class SideBet extends Component {
       if (data === null) {
         this.props.handleError('Could not load movies. Please try again.')
       } else {
-        console.log(data)
         this.setState({movies: data.movies})
       }
     })
   }
 
-  submitVote(vote) {
-    let body = { vote: vote }
+  submitBet(bet) {
+    this.setState({error: ''})
 
-    console.log('vote submitted')
+    let body = {
+      bet: this.state.bet
+    }
+
+    apiPatch(`games/${this.props.gameId}/sidebet`, body)
+    .then(data => {
+      if (data.hasOwnProperty('message')) {
+        this.setState({error: data.message})
+      } else {
+        this.setState({currentSideBet: data.sideBet})
+      }
+    })
   }
 
   checkDisabled() {
     return (
-      this.state.newSideBetChoice === null ||
+      this.state.newSideBetMovieChoice === null ||
       this.state.sideBetCloseDate === null
     )
   }
 
-  renderPollDiv() {
-    return this._pollLoaded ?
-      (
-        <div className='pollBox'>
-          {this.renderCreatePollButton()}
-          {this.renderPoll()}
-        </div>
-      ) : (
-        <div className='pollBox'>
-          {this.renderCreatePollButton()}
-        </div>
-      )
-  }
-
-  renderCreatePollButton() {
+  renderCreateSideBetButton() {
     return this.props.commissionerId === this.props.userId ?
       (
-        <div id='createPollButtonDiv'>
+        <div id='createSideBetButtonDiv'>
           <button
-            id='createPollButton'
+            id='createSideBetButton'
             onClick={() => {
               this.fetchMovies()
               this.setState({createSideBetModalOpen: true})
@@ -137,14 +162,6 @@ class SideBet extends Component {
       ) : (
         null
       )
-  }
-
-  renderQuestion() {
-    return (
-      <div>
-        {this.state.question}
-      </div>
-    )
   }
 
   renderMovieDivs() {
@@ -168,73 +185,96 @@ class SideBet extends Component {
     )
   }
 
-  renderChoices() {
-    return (
-      <div id='PollChoices'>
-        {this.state.choices.map((choice, i) => {
-          return (
-            <div key={i}>
-              <input
-                type='radio'
-                id={'choice' + i}
-                name='choices'
-                value={choice.displayText}
-                onClick={(event) => this.setVote(event.target.value)} />
-              <label htmlFor={'choice' + i}>{choice.displayText}</label><br />
-            </div>
-          )
-        })}
-      </div>
-    )
+  renderSideBetDiv() {
+    return this.state.sideBetLoaded ?
+      (
+        <div className='sideBetBox'>
+          {this.renderCreateSideBetButton()}
+          {this.renderSideBet()}
+        </div>
+      ) : (
+        <div className='sideBetBox'>
+          {this.renderCreateSideBetButton()}
+        </div>
+      )
   }
 
-  renderResults() {
-    let data = this.state.choices.map(choice => {
-      return [choice.displayText, choice.votes]
-    })
+  renderSideBet() {
+    if (this.state.currentSideBet.bets.some(bet => bet.userHandle === this.props.userHandle)) {
+      return (
+        <div>
+          <table className='playersTable'
+            id='sideBetTable'>
+            <thead>
+              <tr>
+                {this._sideBetColumnNames.map((columnName, i) => (
+                  <th key={i}>
+                    {columnName}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {this.state.currentSideBet.bets.map((bet, i) => (
+                <tr key={i}>
+                  <td title='player'>{bet.userHandle}</td>
+                  <td title='bet'>{this._formatter.format(bet.bet)}</td>
+                </tr>))}
+            </tbody>
+          </table>
+        </div>
+      )
+    }
 
-    return (
-      <div id='pollResults'>
-        <h4>
-          {this.renderQuestion()}
-        </h4>
-      </div>
-    )
-  }
+    if (moment(moment().format()).isBefore(moment(this.state.currentSideBet.closeDate))) {
+      return (
+        <div>
+          <div>
+            Estimate the opening weekend domestic gross of the movie and win the prize amount which will be added to your total gross earnings.
+            Winner is whoever estimated closest to without going over for the opening weekend box office.
+            <br/><span className='sideBetSpan'>You only have one chance to make a bet... choose wisely.</span><br/><br/>
+          </div>
+          <div>
+            <span className='sideBetSpan'>Movie:</span> {this.state.currentSideBet.movieTitle}
+          </div>
+          <div>
+            <span className='sideBetSpan'>Prize Amount:</span> ${this.state.currentSideBet.prizeInMillions},000,000
+          </div>
+          $
+          <input
+            className='form-control'
+            id='bet'
+            name='bet'
+            type='number'
+            min='0'
+            step='1000000'
+            onChange={this.handleChange} />
+          <div>
+            <button
+              id='betButton'
+              onClick={() => this.submitBet(this.state.bet)}
+              disabled={this.state.bet === 0}>
+              PLACE BET
+            </button>
+          </div>
+          <div>
+            {this.state.error}
+          </div>
+        </div>
+      )
+    }
 
-  renderPoll() {
-    return  !this.state.voteSubmitted ?
-    (
-      <div>
-        {this.renderQuestion()}
-        {this.renderChoices()}
-        <button
-          id='voteButton'
-          onClick={() => this.submitVote(this.state.vote)}
-          disabled={this.state.vote === ''}>
-          VOTE
-        </button>
-        <button
-          id='resultsButton'
-          onClick={() => {this.fetchPoll(); this.setState({voteSubmitted: true})}}>
-          VIEW RESULTS
-        </button>
-      </div>
-    ) : (
-      <div>
-        {this.renderResults()}
-      </div>
-    )
+    return null
   }
 
   render() {
     return (
-      <div id='pollBox'>
+      <div id='sideBetBox'>
         <h2>Side Bet</h2>
-        {this.renderPollDiv()}
+        {this.renderSideBetDiv()}
         <Modal
           isOpen={this.state.createSideBetModalOpen}
-          id='createPollModal'
+          id='createSideBetModal'
           className='modal'
           onRequestClose={this.handleKeyPress}>
           <button
@@ -255,8 +295,8 @@ class SideBet extends Component {
             $
             <input
               className='form-control'
-              id='prizeAmount'
-              name='prizeAmount'
+              id='prizeInMillions'
+              name='prizeInMillions'
               type='number'
               min='0'
               defaultValue='0'
@@ -274,9 +314,9 @@ class SideBet extends Component {
               onKeyDown={(e) => { e.preventDefault() }} />
             <button
               id='closeModalButton'
-              onClick={this.handleCreatePoll}
+              onClick={this.createSideBet}
               disabled={this.checkDisabled()}>
-              CREATE POLL
+              CREATE SIDE BET
             </button>
           </div>
         </Modal>

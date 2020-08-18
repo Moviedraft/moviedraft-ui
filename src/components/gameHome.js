@@ -14,6 +14,7 @@ class GameHome extends Component {
     super(props)
     this.state = {
       userId: '',
+      userHandle: '',
       userLoaded: false,
       gamePlayersLoaded: false,
       weekendBoxOfficeLoaded: false,
@@ -42,6 +43,7 @@ class GameHome extends Component {
         this.props.handleError('Unable to load your user information. Please refresh and try again.')
       } else {
         this.setState({userId: data.id})
+        this.setState({userHandle: data.userHandle})
         this.setState({userLoaded: true})
       }
     })
@@ -107,6 +109,7 @@ class GameHome extends Component {
             gameId={this.props.gameId}
             commissionerId={this.props.commissionerId}
             userId={this.state.userId}
+            userHandle={this.state.userHandle}
             handleError={this.props.handleError} />
         </div>
         <Chat
