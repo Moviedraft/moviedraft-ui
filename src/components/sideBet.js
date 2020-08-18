@@ -42,8 +42,6 @@ class SideBet extends Component {
   handleCheckbox(event, movie) {
     if(event.target.checked) {
       this.setState({newSideBetMovieChoice: movie})
-    } else {
-      this.setState({newSideBetMovieChoice: null})
     }
   }
 
@@ -173,7 +171,7 @@ class SideBet extends Component {
           type='radio'
           value={movie.id}
           id={movie.title}
-          name={movie.title}
+          name='movieList'
           onChange={(event) => this.handleCheckbox(event, movie)} />
         <label htmlFor={movie.title}>
           {movie.title} - {moment.utc(movie.releaseDate).format('ll')}
@@ -239,6 +237,9 @@ class SideBet extends Component {
           </div>
           <div>
             <span className='sideBetSpan'>Prize Amount:</span> ${this.state.currentSideBet.prizeInMillions},000,000
+          </div>
+          <div>
+            <span className='sideBetSpan'>Close Date (end of day):</span> {moment(this.state.currentSideBet.closeDate).format('ll')}
           </div>
           $
           <input
