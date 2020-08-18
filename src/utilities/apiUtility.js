@@ -32,7 +32,7 @@ export const apiGet = async(endpoint)=> {
 export const apiPatch = async(endpoint, body)=> {
   let response = await apiRequestWithBody(endpoint, 'PATCH', body)
 
-  return response.status === 200 ? response.json() : null
+  return response.json()
 }
 
 export const apiPost = async(endpoint, body)=> {
