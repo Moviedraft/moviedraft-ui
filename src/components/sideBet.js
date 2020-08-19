@@ -66,7 +66,7 @@ class SideBet extends Component {
     let body = {
       'prizeInMillions': this.state.prizeInMillions,
       'movieId': this.state.newSideBetMovieChoice.id,
-      'closeDate': moment(this.state.sideBetCloseDate).format()
+      'closeDate': moment(this.state.sideBetCloseDate).endOf('day').format()
     }
 
     apiPost(`games/${this.props.gameId}/sidebet`, body)
@@ -239,7 +239,7 @@ class SideBet extends Component {
             <span className='sideBetSpan'>Prize Amount:</span> ${this.state.currentSideBet.prizeInMillions},000,000
           </div>
           <div>
-            <span className='sideBetSpan'>Close Date (end of day):</span> {moment(this.state.currentSideBet.closeDate).format('ll')}
+            <span className='sideBetSpan'>Close Date:</span> {moment(this.state.currentSideBet.closeDate).format('LLL')}
           </div>
           $
           <input
