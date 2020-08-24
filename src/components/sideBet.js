@@ -144,24 +144,6 @@ class SideBet extends Component {
     )
   }
 
-  renderCreateSideBetButton() {
-    return this.props.commissionerId === this.props.userId ?
-      (
-        <div id='createSideBetButtonDiv'>
-          <button
-            id='createSideBetButton'
-            onClick={() => {
-              this.fetchMovies()
-              this.setState({createSideBetModalOpen: true})
-            }}>
-            CREATE SIDE BET
-            </button>
-        </div>
-      ) : (
-        null
-      )
-  }
-
   renderMovieDivs() {
     return this.state.movies && this.state.movies.length ?
     (
@@ -194,6 +176,32 @@ class SideBet extends Component {
         <div className='sideBetBox'>
           {this.renderCreateSideBetButton()}
         </div>
+      )
+  }
+
+  renderSideBetHeader() {
+    return this.props.commissionerId === this.props.userId || this.state.sideBetLoaded ? (
+      <h2>Side Bet</h2>
+    ) : (
+      null
+    )
+  }
+
+  renderCreateSideBetButton() {
+    return this.props.commissionerId === this.props.userId ?
+      (
+        <div id='createSideBetButtonDiv'>
+          <button
+            id='createSideBetButton'
+            onClick={() => {
+              this.fetchMovies()
+              this.setState({createSideBetModalOpen: true})
+            }}>
+            CREATE SIDE BET
+            </button>
+        </div>
+      ) : (
+        null
       )
   }
 
@@ -271,7 +279,7 @@ class SideBet extends Component {
   render() {
     return (
       <div id='sideBetBox'>
-        <h2>Side Bet</h2>
+        {this.renderSideBetHeader()}
         {this.renderSideBetDiv()}
         <Modal
           isOpen={this.state.createSideBetModalOpen}
