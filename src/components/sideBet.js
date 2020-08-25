@@ -209,6 +209,7 @@ class SideBet extends Component {
     if (this.state.currentSideBet.bets.some(bet => bet.userHandle === this.props.userHandle)) {
       return (
         <div>
+          {this.renderSideBetInformation(false)}
           <table className='playersTable'
             id='sideBetTable'>
             <thead>
@@ -240,15 +241,7 @@ class SideBet extends Component {
             Winner is whoever estimated closest to without going over for the opening weekend box office.
             <br/><span className='sideBetSpan'>You only have one chance to make a bet... choose wisely.</span><br/><br/>
           </div>
-          <div>
-            <span className='sideBetSpan'>Movie:</span> {this.state.currentSideBet.movieTitle}
-          </div>
-          <div>
-            <span className='sideBetSpan'>Prize Amount:</span> ${this.state.currentSideBet.prizeInMillions},000,000
-          </div>
-          <div>
-            <span className='sideBetSpan'>Close Date:</span> {moment(this.state.currentSideBet.closeDate).format('LLL')}
-          </div>
+          {this.renderSideBetInformation(true)}
           $
           <input
             className='form-control'
@@ -274,6 +267,31 @@ class SideBet extends Component {
     }
 
     return null
+  }
+
+  renderSideBetInformation(withDate) {
+    return withDate ? (
+      <div>
+        <div>
+          <span className='sideBetSpan'>Movie:</span> {this.state.currentSideBet.movieTitle}
+        </div>
+        <div>
+          <span className='sideBetSpan'>Prize Amount:</span> ${this.state.currentSideBet.prizeInMillions},000,000
+        </div>
+        <div>
+          <span className='sideBetSpan'>Close Date:</span> {moment(this.state.currentSideBet.closeDate).format('LLL')}
+        </div>
+      </div>
+    ) : (
+      <div>
+        <div>
+          <span className='sideBetSpan'>Movie:</span> {this.state.currentSideBet.movieTitle}
+        </div>
+        <div>
+          <span className='sideBetSpan'>Prize Amount:</span> ${this.state.currentSideBet.prizeInMillions},000,000
+        </div>
+      </div>
+    )
   }
 
   render() {
