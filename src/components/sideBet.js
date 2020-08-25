@@ -36,7 +36,7 @@ class SideBet extends Component {
   }
 
   componentDidMount() {
-    this.fetchSideBet()
+    this.fetchSideBet('current')
   }
 
   handleCheckbox(event, movie) {
@@ -81,8 +81,8 @@ class SideBet extends Component {
     })
   }
 
-  fetchSideBet() {
-    apiGet(`games/${this.props.gameId}/sidebet`)
+  fetchSideBet(status) {
+    apiGet(`games/${this.props.gameId}/sidebet?status=${status}`)
     .then(data => {
       if (data !== null) {
         this.setState({currentSideBet: data.sideBet})
