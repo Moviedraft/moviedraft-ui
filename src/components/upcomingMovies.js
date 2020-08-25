@@ -33,30 +33,7 @@ class UpcomingMovies extends Component {
         this.props.handleError('Unable to load upcoming movies. Please refresh and try again.')
       } else {
         data.movies.forEach((movie) => {
-          let bid = this.fetchBid(this.props.gameId, movie.id)
-          if (bid) {
-            let upcomingMovie = {
-              id: movie.id,
-              title: movie.title,
-              releaseDate: movie.releaseDate,
-              owner: bid.userHandle,
-              purchasePrice: bid.purchasePrice
-            }
-            this.setState({
-              upcomingMovies:[...this.state.upcomingMovies, upcomingMovie]
-            });
-          } else {
-            let upcomingMovie = {
-              id: movie.id,
-              title: movie.title,
-              releaseDate: movie.releaseDate,
-              owner: null,
-              purchasePrice: null
-            }
-            this.setState({
-              upcomingMovies:[...this.state.upcomingMovies, upcomingMovie]
-            });
-          }
+          this.fetchBid(this.props.gameId, movie)
         });
       }
 
@@ -64,10 +41,32 @@ class UpcomingMovies extends Component {
     })
   }
 
-  fetchBid(gameId, movieId) {
-    apiGet('bids/' + gameId + '/' + movieId)
+  fetchBid(gameId, movie) {
+    apiGet('bids/' + gameId + '/' + movie.id)
     .then(data => {
-      return data !== null ? data : null
+      if (data) {
+        let upcomingMovie = {
+          id: movie.id,
+          title: movie.title,
+          releaseDate: movie.releaseDate,
+          owner: data.userHandle,
+          purchasePrice: data.bid
+        }
+        this.setState({
+          upcomingMovies:[...this.state.upcomingMovies, upcomingMovie]
+        });
+      } else {
+        let upcomingMovie = {
+          id: movie.id,
+          title: movie.title,
+          releaseDate: movie.releaseDate,
+          owner: null,
+          purchasePrice: null
+        }
+        this.setState({
+          upcomingMovies:[...this.state.upcomingMovies, upcomingMovie]
+        });
+      }
     })
   }
 
