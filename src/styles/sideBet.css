@@ -34,3 +34,7 @@
     width: 40%;
   }
 }
+
+[winner='true'] {
+    background-color: #FFFF66 !important;
+}

@@ -16,7 +16,9 @@ class SideBet extends Component {
     super(props)
     this.state = {
       currentSideBet: null,
-      sideBetLoaded: false,
+      previousSideBet: null,
+      currentSideBetLoaded: false,
+      previousSideBetLoaded: false,
       bet: 0,
       newSideBetMovieChoice: null,
       movies: [],
@@ -37,6 +39,7 @@ class SideBet extends Component {
 
   componentDidMount() {
     this.fetchSideBet('current')
+    this.fetchSideBet('previous')
   }
 
   handleCheckbox(event, movie) {
@@ -74,8 +77,9 @@ class SideBet extends Component {
       if (data === null) {
         this.props.handleError('Unable to create side bet. Please refresh and try again.')
       } else {
+        this.fetchSideBet('previous')
         this.setState({currentSideBet: data.sideBet})
-        this.setState({sideBetLoaded: true})
+        this.setState({currentSideBetLoaded: true})
         this.setState({createSideBetModalOpen: false})
       }
     })
@@ -85,8 +89,15 @@ class SideBet extends Component {
     apiGet(`games/${this.props.gameId}/sidebet?status=${status}`)
     .then(data => {
       if (data !== null) {
-        this.setState({currentSideBet: data.sideBet})
-        this.setState({sideBetLoaded: true})
+        if (data.sideBet.status === 'current') {
+          this.setState({currentSideBet: data.sideBet})
+          this.setState({currentSideBetLoaded: true})
+        }
+        if (data.sideBet.status === 'previous') {
+          this.setState({previousSideBet: data.sideBet})
+          this.setState({previousSideBetLoaded: true})
+        }
+
         this.props.updateComponentLoadedFlag(this.props.componentName)
       }
     })
@@ -166,21 +177,23 @@ class SideBet extends Component {
   }
 
   renderSideBetDiv() {
-    return this.state.sideBetLoaded ?
+    return this.state.currentSideBetLoaded ?
       (
         <div className='sideBetBox'>
           {this.renderCreateSideBetButton()}
           {this.renderSideBet()}
+          {this.renderPreviousSideBet()}
         </div>
       ) : (
         <div className='sideBetBox'>
           {this.renderCreateSideBetButton()}
+          {this.renderPreviousSideBet()}
         </div>
       )
   }
 
   renderSideBetHeader() {
-    return this.props.commissionerId === this.props.userId || this.state.sideBetLoaded ? (
+    return this.props.commissionerId === this.props.userId || (this.state.currentSideBetLoaded || this.state.previousSideBetLoaded) ? (
       <h2>Side Bet</h2>
     ) : (
       null
@@ -267,6 +280,47 @@ class SideBet extends Component {
     }
 
     return null
+  }
+
+  renderPreviousSideBet() {
+    return this.state.previousSideBetLoaded ? (
+      <div>
+        <h3>Previous Side Bet</h3>
+        <div>
+          <span className='sideBetSpan'>Movie:</span> {this.state.previousSideBet.movieTitle}
+        </div>
+        <div>
+          <span className='sideBetSpan'>WeekendGross: $</span> {this._formatter.format(this.state.previousSideBet.weekendGross)}
+        </div>
+        <div>
+          <span className='sideBetSpan'>Prize Amount:</span> ${this.state.previousSideBet.prizeInMillions},000,000
+        </div>
+        <table className='playersTable'
+          id='sideBetTable'>
+          <thead>
+            <tr>
+              {this._sideBetColumnNames.map((columnName, i) => (
+                <th key={i}>
+                  {columnName}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {this.state.previousSideBet.bets.map((bet, i) => (
+              <tr
+                key={i}
+                winner={bet.userHandle === this.state.previousSideBet.winner ? 'true' : undefined}
+              >
+                <td title='player'>{bet.userHandle}</td>
+                <td title='bet'>{this._formatter.format(bet.bet)}</td>
+              </tr>))}
+          </tbody>
+        </table>
+      </div>
+    ) : (
+      null
+    )
   }
 
   renderSideBetInformation(withDate) {
