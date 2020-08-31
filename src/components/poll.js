@@ -13,6 +13,7 @@ class Poll extends Component {
     super(props)
     this.state = {
       vote: '',
+      voters: [],
       voteSubmitted: false,
       question: '',
       choices: [],
@@ -95,6 +96,7 @@ class Poll extends Component {
       } else {
         this.setState({question: data.question})
         this.setState({choices: data.choices})
+        this.setState({voters: data.voters})
         this._pollLoaded = true
         this.props.updateComponentLoadedFlag(this.props.componentName)
       }
@@ -194,7 +196,7 @@ class Poll extends Component {
   }
 
   renderPoll() {
-    return  !this.state.voteSubmitted ?
+    return  !this.state.voteSubmitted && !this.state.voters.some(voter => this.props.userId === voter) ?
     (
       <div>
         {this.renderQuestion()}
