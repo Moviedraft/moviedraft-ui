@@ -24,7 +24,7 @@ class UpcomingMovies extends Component {
   }
 
   fetchUpcomingMovies() {
-    let startDate = moment().utc().startOf('isoWeek').add(4, 'day').format();
+    let startDate = moment().utc().startOf('isoWeek').add(2, 'day').format();
     let endDate = moment().utc().startOf('isoWeek').add(1, 'week').format();
 
     apiGet('movies?startDate=' + startDate + '&endDate=' + endDate)
