@@ -71,13 +71,18 @@ class flavorText extends Component {
   }
 
   async patchInputValue() {
+    if (this.state.text === this.state.previousText) {
+      this.setState({editMode: false})
+      return
+    }
+
     let body = {
       'text': this.state.text
     }
 
     await apiPatch('/games/' + this.props.gameId + '/flavortext/' + this.props.flavorType, body)
     .then(data => {
-      if (data === null) {
+      if (data.hasOwnProperty('message')) {
         this.props.handleError('Unable to save edited flavor text. Please refresh and try again.')
       } else {
         this.setState({text: data.flavorText.text})
