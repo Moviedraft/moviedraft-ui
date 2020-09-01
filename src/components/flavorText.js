@@ -7,6 +7,7 @@ class flavorText extends Component {
     super(props)
     this.state = {
       text: '',
+      previousText: '',
       editMode: false,
       defaultCreate: true
     }
@@ -38,6 +39,7 @@ class flavorText extends Component {
   }
 
   editFlavorText() {
+    this.setState({previousText: this.state.text})
     this.setState({editMode: true})
   }
 
@@ -86,6 +88,8 @@ class flavorText extends Component {
   }
 
   cancelEdit() {
+    this.setState({text: this.state.previousText})
+    this.setState({previousText: ''})
     this.setState({editMode: false})
   }
 
