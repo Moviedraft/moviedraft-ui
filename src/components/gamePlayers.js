@@ -5,7 +5,7 @@ import '../styles/gamePlayers.css'
 
 class GamePlayers extends Component {
   _playersLoaded = false
-  _playerColumnNames = ['Rank', 'Player', 'Total Gross', 'Total Spent', 'Movies Purchased']
+  _playerColumnNames = ['Rank', 'Player', 'Total Earnings', 'Movie Gross', 'Bonus Earnings', 'Total Spent', 'Movies Purchased']
   _valueColumnNames = ['Rank', 'Player', 'Value']
   _formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
@@ -29,7 +29,7 @@ class GamePlayers extends Component {
       if (data === null) {
         this.props.handleError('Unable to retrieve player information. Please refresh and try again.')
       } else {
-        let sortedPlayers = data.players.sort((a, b) => b.totalGross - a.totalGross)
+        let sortedPlayers = data.players.sort((a, b) => (b.totalGross + (b.bonusInMillions * 1000000)) - (a.totalGross + (a.bonusInMillions * 1000000)))
         this.setState({players: sortedPlayers})
         this.props.updateComponentLoadedFlag(this.props.componentName)
       }
@@ -55,7 +55,9 @@ class GamePlayers extends Component {
               <tr key={player.id}>
                 <td title='rank'>{++i}</td>
                 <td title='player'>{player.userHandle}</td>
-                <td title='total gross'>{this._formatter.format(player.totalGross)}</td>
+                <td title='total earnings'>{this._formatter.format(player.totalGross + (player.bonusInMillions * 1000000))}</td>
+                <td title='movie gross'>{this._formatter.format(player.totalGross)}</td>
+                <td title='bonus earnings'>{this._formatter.format(player.bonusInMillions * 1000000)}</td>
                 <td title='total spent'>{this._formatter.format(player.totalSpent)}</td>
                 <td title='movies purchased'>{player.movies.map(movie => {
                     return moment(movie.releaseDate).isBetween(this.props.startDate, this.props.endDate) ?
