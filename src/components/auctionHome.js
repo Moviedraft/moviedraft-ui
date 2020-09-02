@@ -63,6 +63,10 @@ class AuctionHome extends Component {
         window.location.reload(true)
       }
 
+      if(eventData.message.hasOwnProperty('action') && eventData.message.action === 'joinedgameauction') {
+        this.fetchPlayers()
+      }
+
       if(eventData.message.hasOwnProperty('auctionID')) {
         this.updateHighBid(eventData.message)
         this.fetchPlayers()
