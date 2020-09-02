@@ -49,6 +49,16 @@ class GameHome extends Component {
     })
   }
 
+  renderNotice() {
+    return (
+      <div>
+        <h3>NOTICE: </h3>
+        Box office information is updated daily at approximately 12pm PST/PDT.
+        Weekend box office information is updated on Mondays at approximately 12pm PST/PDT.
+      </div>
+    )
+  }
+
   render() {
     if (this.userLoaded === false ||
         this.gamePlayersLoaded === false ||
@@ -63,6 +73,7 @@ class GameHome extends Component {
     return (
       <div>
         <div id='gameHomeDiv'>
+          {this.renderNotice()}
           <GamePlayers
             updateComponentLoadedFlag={this.updateComponentLoadedFlag}
             componentName='gamePlayersLoaded'
