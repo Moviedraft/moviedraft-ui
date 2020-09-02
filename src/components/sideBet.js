@@ -33,6 +33,7 @@ class SideBet extends Component {
     this.handleCloseCreateSideBetModal = this.handleCloseCreateSideBetModal.bind(this)
     this.createSideBet = this.createSideBet.bind(this)
     this.fetchSideBet = this.fetchSideBet.bind(this)
+    this.fetchMovies = this.fetchMovies.bind(this)
     this.submitBet = this.submitBet.bind(this)
     this.checkDisabled = this.checkDisabled.bind(this)
   }
@@ -127,6 +128,7 @@ class SideBet extends Component {
         this.props.handleError('Could not load movies. Please try again.')
       } else {
         this.setState({movies: data.movies})
+        this.setState({createSideBetModalOpen: true})
       }
     })
   }
@@ -206,10 +208,7 @@ class SideBet extends Component {
         <div id='createSideBetButtonDiv'>
           <button
             id='createSideBetButton'
-            onClick={() => {
-              this.fetchMovies()
-              this.setState({createSideBetModalOpen: true})
-            }}>
+            onClick={() => {this.fetchMovies()}}>
             CREATE SIDE BET
             </button>
         </div>
