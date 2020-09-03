@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { navigate } from '@reach/router'
 import Dropdown from 'react-bootstrap/Dropdown'
-import DropdownButton from 'react-bootstrap/DropdownButton'
 import { apiGet } from '../utilities/apiUtility.js'
 import '../styles/account.css'
 import DownArrow from '../downArrow.png'

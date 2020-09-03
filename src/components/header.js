@@ -1,5 +1,4 @@
-import React, { Component } from 'react';
-import { navigate } from "@reach/router"
+import React, { Component } from 'react'
 import Navbar from 'react-bootstrap/Navbar'
 import Nav from 'react-bootstrap/Nav'
 import '../styles/header.css'
