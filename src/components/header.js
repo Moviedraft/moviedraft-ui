@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { navigate } from "@reach/router"
+import Navbar from 'react-bootstrap/Navbar'
+import Nav from 'react-bootstrap/Nav'
 import '../styles/header.css'
 import Login from './login.js'
 import Account from './account.js'
@@ -12,7 +14,6 @@ class Header extends Component {
       loggedIn: false
     }
 
-    this.onClick = this.onClick.bind(this)
     this.loggedIn = this.loggedIn.bind(this)
   }
 
@@ -20,10 +21,6 @@ class Header extends Component {
     if (localStorage.getItem('CouchSportsToken') && moment() < moment(localStorage.getItem('CouchSportsTokenExpiry'))) {
       this.setState({loggedIn: true})
     }
-  }
-
-  onClick() {
-    navigate('/user')
   }
 
   loggedIn(loggedIn) {
@@ -57,14 +54,18 @@ class Header extends Component {
 
   render() {
     return (
-      <div id='headerContainer'>
-        <span id='companyName' onClick={this.onClick}>CouchSports</span>
-        {this.renderGameInfo()}
-        <div id='accountContainer'>
+      <Navbar>
+        <Nav.Item>
+          <Navbar.Brand href='/user' id='companyName'>Couchsports</Navbar.Brand>
+        </Nav.Item>
+        <Nav.Item className='mx-auto '>
+          {this.renderGameInfo()}
+        </Nav.Item>
+        <Nav.Item className='ml-auto'>
           {this.renderAccountButton()}
-        </div>
-      </div>
-    );
+        </Nav.Item>
+      </Navbar>
+    )
   }
 }
 

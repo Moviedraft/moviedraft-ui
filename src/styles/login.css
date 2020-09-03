@@ -1,5 +1,5 @@
-button {
+#googleLoginContainer {
   position: absolute;
-  top: 0.5em !important;
+  top: 0.8em !important;
   right: 0.5em !important;
 }

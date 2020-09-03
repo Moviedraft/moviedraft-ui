@@ -1,26 +1,15 @@
-#headerContainer {
-  width: 99%;
-  overflow: auto;
-}
-
 #companyName {
-  display: inline-block;
   font-family: 'Bungee Inline';
   font-size: 2em;
-  margin-left: 0.5em;
-  margin-top: -0.4em;
-  text-align: left;
-  padding: 0;
-  cursor: pointer;
-  float: left;
+}
+
+.navbar {
+  align-items: normal;
+  height: 80px;
 }
 
 #gameInfo {
-  width: 70%;
-  display: inline-block;
-  height: 100%;
-  text-align: center;
-  float: left;
+  visibility: hidden;
 }
 
 #headerGameName {
@@ -28,10 +17,9 @@
   font-size: 2em;
 }
 
-#accountContainer {
-  display: inline-block;
-  width: 16%;
-  float: left;
-  overflow: visible;
-  position: absolute;
+@media screen and (min-width: 600px) {
+  #gameInfo {
+    visibility: visible;
+    text-align: center;
+  }
 }
