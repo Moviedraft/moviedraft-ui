@@ -12,10 +12,11 @@ class AuctionItem extends Component {
       auctionExpiry: this.props.auctionExpiry,
       auctionExpirySet: this.props.auctionExpirySet,
       dollarSpendingCap: this.props.dollarSpendingCap,
-      minBid: 0,
+      minimumBid: this.props.minimumBid ?? 0,
       currentHighBid: this.props.bid ?? 0,
       highestBidder: this.props.userHandle ?? '',
-      bid: this.props.bid && this.props.bid > 1 ? parseInt(this.props.bid, 10) + 1 : 1,
+      bid: this.props.bid && this.props.bid >= this.props.minimumBid ?
+        parseInt(this.props.bid, 10) + 1 : this.props.minimumBid,
       timerDone: false,
       error: '',
       auctionID: this.props.gameId + this.props.movie.id
@@ -38,7 +39,8 @@ class AuctionItem extends Component {
       this.setState({auctionExpiry: this.props.auctionExpiry})
       this.setState({currentHighBid: this.props.bid})
       this.setState({highestBidder: this.props.userHandle})
-      this.setState({bid: parseInt(this.props.bid, 10) + 1})
+      this.setState({bid: this.props.bid >= this.props.minimumBid ?
+        parseInt(this.props.bid, 10) + 1 : this.props.minimumBid})
 
       if (this.refs.timer !== undefined) {
         this.refs.timer.resetTimer(this.props.auctionExpiry)
@@ -212,7 +214,7 @@ class AuctionItem extends Component {
           id='bid'
           name='bid'
           type='number'
-          min={this.state.minBid}
+          min={this.state.minimumBid}
           step='1'
           value={this.state.bid}
           onChange={(event) => this.updateBid(event)}

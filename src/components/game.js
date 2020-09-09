@@ -15,6 +15,7 @@ class Game extends Component {
       auctionDate: '',
       auctionItemsExpireInSeconds: 0,
       dollarSpendingCap: 0,
+      minimumBid: 0,
       startDate: '',
       endDate: '',
       movies: [],
@@ -76,6 +77,7 @@ class Game extends Component {
           commissionerId: data.commissionerId,
           auctionItemsExpireInSeconds: data.auctionItemsExpireInSeconds,
           dollarSpendingCap: data.dollarSpendingCap,
+          minimumBid: data.minimumBid,
           startDate: data.startDate,
           endDate: data.endDate,
           gameLoaded: true
@@ -94,6 +96,7 @@ class Game extends Component {
       auctionItemsExpireInSeconds={this.state.auctionItemsExpireInSeconds}
       auctionDate={this.state.auctionDate}
       dollarSpendingCap={this.state.dollarSpendingCap}
+      minimumBid={this.state.minimumBid}
       handleError={this.handleError} />
   }
 

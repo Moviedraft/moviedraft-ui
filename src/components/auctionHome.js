@@ -22,7 +22,8 @@ class AuctionHome extends Component {
       players: [],
       playersLoaded: false,
       bids: [],
-      bidsLoaded: false
+      bidsLoaded: false,
+      minimumBid: this.props.minimumBid
     }
 
     this.webSocket = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL)
@@ -320,6 +321,7 @@ class AuctionHome extends Component {
         auctionExpirySet={this.state.bids.find(bid => bid.movie_id === movie.id).auctionExpirySet}
         dollarSpendingCap={this.state.bids.find(bid => bid.movie_id === movie.id).dollarSpendingCap}
         bid={this.state.bids.find(bid => bid.movie_id === movie.id).bid}
+        minimumBid={this.state.minimumBid}
         userHandle={this.state.bids.find(bid => bid.movie_id === movie.id).userHandle}
         fetchPlayers={this.fetchPlayers}
         webSocket={this.webSocket}
