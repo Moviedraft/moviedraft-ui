@@ -38,6 +38,20 @@ class CreateEditGameStep1 extends Component {
             onChange={this.props.handleChange}
             onKeyPress={this.handleKeyPress} />
         </span>
+        <p>Select the minimum bid allowed for each auction item:</p>
+        <label htmlFor='minimumBid'>Minimum Bid:</label>
+        <span className='currencyinput'>$
+          <input
+            className='form-control'
+            id='minimumBid'
+            name='minimumBid'
+            type='number'
+            min='1'
+            max={this.props.auctionDollars}
+            value={this.props.minimumBid}
+            onChange={this.props.handleChange}
+            onKeyPress={this.handleKeyPress} />
+        </span>
       </div>
     )
   }

@@ -16,6 +16,7 @@ class EditGame extends Component {
       gameId: '',
       gameName: '',
       auctionDollars: 0,
+      minimumBid: 0,
       startDate: '',
       endDate: '',
       auctionDate: '',
@@ -73,6 +74,7 @@ class EditGame extends Component {
     this.setState({gameId: this.props.game._id})
     this.setState({gameName: this.props.game.gameName})
     this.setState({auctionDollars: this.props.game.dollarSpendingCap})
+    this.setState({minimumBid: this.props.game.minimumBid})
     this.setState({startDate: moment(this.props.game.startDate).format('YYYY-MM-DD')})
     this.setState({endDate: moment(this.props.game.endDate).format('YYYY-MM-DD')})
     this.setState({auctionDate: this.props.game.auctionDate})
@@ -139,6 +141,8 @@ class EditGame extends Component {
     let body = {
       playerIds: this.state.playerEmails,
       dollarSpendingCap: this.state.auctionDollars,
+      minimumBid: this.state.minimumBid < this.state.auctionDollars 
+        ? this.state.minimumBid : this.state.auctionDollars,
       rules: rules,
       auctionItemsExpireInSeconds: this.state.auctionItemExpiryTimeSeconds,
       movies: this.state.movies.map((movie) => movie.id),
@@ -237,7 +241,8 @@ class EditGame extends Component {
                 currentStep={this.state.currentStep}
                 handleChange={this.handleChange}
                 gameName={this.state.gameName}
-                auctionDollars={this.state.auctionDollars} />
+                auctionDollars={this.state.auctionDollars}
+                minimumBid={this.state.minimumBid} />
               <CreateEditGameStep2
                 currentStep={this.state.currentStep}
                 handleChange={this.handleChange}
