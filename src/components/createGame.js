@@ -15,6 +15,7 @@ class CreateGame extends Component {
       currentStep: 1,
       gameName: '',
       auctionDollars: 100,
+      minimumBid: 1,
       startDate: '',
       endDate: '',
       auctionDate: moment().add(1, 'days'),
@@ -71,6 +72,7 @@ class CreateGame extends Component {
     this.setState({currentStep: 1})
     this.setState({gameName: ''})
     this.setState({auctionDollars: 100})
+    this.setState({minimumBid: 1})
     this.setState({startDate: ''})
     this.setState({endDate: ''})
     this.setState({auctionDate: moment().add(1, 'days')})
@@ -109,6 +111,8 @@ class CreateGame extends Component {
     let body = {
       playerIds: this.state.playerEmails,
       dollarSpendingCap: this.state.auctionDollars,
+      minimumBid: this.state.minimumBid < this.state.auctionDollars
+        ? this.state.minimumBid : this.state.auctionDollars,
       rules: rules,
       auctionItemsExpireInSeconds: this.state.auctionItemExpiryTimeSeconds,
       movies: this.state.movies.filter(movie =>
@@ -208,7 +212,8 @@ class CreateGame extends Component {
                 currentStep={this.state.currentStep}
                 handleChange={this.handleChange}
                 gameName={this.state.gameName}
-                auctionDollars={this.state.auctionDollars} />
+                auctionDollars={this.state.auctionDollars}
+                minimumBid={this.state.minimumBid} />
               <CreateEditGameStep2
                 currentStep={this.state.currentStep}
                 handleChange={this.handleChange}
