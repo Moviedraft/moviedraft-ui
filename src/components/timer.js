@@ -25,6 +25,9 @@ class Timer extends Component {
 
   componentWillUnmount() {
     this.stopTimer()
+    this.setState = (state,callback)=>{
+        return
+    }
   }
 
   sendData() {
