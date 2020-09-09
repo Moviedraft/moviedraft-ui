@@ -11,6 +11,12 @@ class Login extends Component {
     }
   }
 
+  componentWillUnmount() {
+    this.setState = (state,callback)=>{
+        return
+    }
+  }
+
   render() {
     if (this.state.loggedIn) {
       navigate('/user')
