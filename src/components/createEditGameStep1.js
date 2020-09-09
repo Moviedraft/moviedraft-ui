@@ -33,7 +33,7 @@ class CreateEditGameStep1 extends Component {
             id='auctionDollars'
             name='auctionDollars'
             type='number'
-            min='0'
+            min='1'
             value={this.props.auctionDollars}
             onChange={this.props.handleChange}
             onKeyPress={this.handleKeyPress} />
