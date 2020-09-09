@@ -30,17 +30,15 @@ class Login extends Component {
     }
 
     return (
-        <div id='googleLoginContainer'>
-          <GoogleLogin
-            id='googleLogin'
-            clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
-            buttonText='LOGIN WITH GOOGLE'
-            onSuccess={responseGoogle}
-            onFailure={responseGoogle}
-            cookiePolicy={'single_host_origin'}
-          />
-        </div>
-    )
+        <GoogleLogin
+          id='googleLogin'
+          clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
+          buttonText='LOGIN WITH GOOGLE'
+          onSuccess={responseGoogle}
+          onFailure={responseGoogle}
+          cookiePolicy={process.env.REACT_APP_COOKIE_POLICY}
+        />
+    );
   }
 }
 
