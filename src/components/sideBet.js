@@ -112,14 +112,14 @@ class SideBet extends Component {
     let endDate = null
 
     if (today <= wednesday) {
-      startDate = moment().isoWeekday(wednesday).startOf('day').format()
-      endDate = moment().isoWeekday(friday).startOf('day').format()
+      startDate = moment().utc().isoWeekday(wednesday).startOf('day').format()
+      endDate = moment().utc().isoWeekday(friday).startOf('day').format()
     } else if (today <= friday) {
-      startDate = moment().isoWeekday(friday).startOf('day').format()
-      endDate = moment().isoWeekday(friday).startOf('day').format()
+      startDate = moment().utc().isoWeekday(friday).startOf('day').format()
+      endDate = moment().utc().isoWeekday(friday).startOf('day').format()
     } else {
-      startDate = moment().add(1, 'weeks').isoWeekday(wednesday).startOf('day').format()
-      endDate = moment().add(1, 'weeks').isoWeekday(friday).startOf('day').format()
+      startDate = moment().utc().add(1, 'weeks').isoWeekday(wednesday).startOf('day').format()
+      endDate = moment().utc().add(1, 'weeks').isoWeekday(friday).startOf('day').format()
     }
 
     apiGet(`movies?startDate=${startDate}&endDate=${endDate}`)
