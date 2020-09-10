@@ -55,10 +55,11 @@ class CreateEditGameStep2 extends Component {
             id='auctionDate'
             name='auctionDate'
             type='datetime-local'
-            min={moment().add(1, 'days').format('YYYY-MM-DDTHH:mm')}
+            min={moment().format('YYYY-MM-DDTHH:mm')}
             max={moment(this.props.startDate).format('YYYY-MM-DDTHH:mm')}
             value={moment(this.props.auctionDate).isValid() ?  moment(this.props.auctionDate).format('YYYY-MM-DDTHH:mm') : moment().add(1, 'days').format('YYYY-MM-DDTHH:mm')}
-            onChange={this.props.handleChange} />
+            onChange={this.props.handleChange}
+            onKeyDown={e => { e.preventDefault() }} />
         </div>
         <div id='auctionItemExpiryDiv'>
           <label htmlFor='auctionItemExpiryTimeSeconds'>
