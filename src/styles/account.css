@@ -10,6 +10,10 @@
   position: relative;
 }
 
+.buttonOutline {
+  border: 1px solid black;
+}
+
 .dropdown-menu {
   min-width: 3rem;
   margin-top: 3px !important;
