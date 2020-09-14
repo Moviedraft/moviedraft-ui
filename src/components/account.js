@@ -29,7 +29,7 @@ class Account extends Component {
     return (
       <div id='dropdownContainer'>
         <Dropdown>
-          <Dropdown.Toggle id='dropdown-basic' className='dropDownButton buttonOutline' variant='outline'>
+          <Dropdown.Toggle id='dropdown-basic' className='dropDownButton buttonOutline shadow-none' variant='outline'>
             <img
               id='AccountButtonProfilePic'
               src={this.props.picture ?? GenericPerson}
