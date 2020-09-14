@@ -57,10 +57,10 @@ class Header extends Component {
         <Nav.Item>
           <Navbar.Brand href='/user' id='companyName'>Couchsports</Navbar.Brand>
         </Nav.Item>
-        <Nav.Item className='mx-auto '>
+        <Nav.Item className='mx-auto' align="center">
           {this.renderGameInfo()}
         </Nav.Item>
-        <Nav.Item className='ml-auto'>
+        <Nav.Item className='ml-auto accountInfo'>
           {this.renderAccountButton()}
         </Nav.Item>
       </Navbar>

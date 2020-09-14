@@ -1,6 +1,7 @@
 #companyName {
   font-family: 'Bungee Inline';
   font-size: 2em;
+  margin-right: 0;
 }
 
 .navbar {
@@ -10,6 +11,10 @@
 
 #gameInfo {
   visibility: hidden;
+}
+
+.accountInfo {
+  margin-left: 0 !important;
 }
 
 #headerGameName {
