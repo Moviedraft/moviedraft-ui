@@ -1,4 +1,7 @@
 import React, { Component } from 'react'
+import Container from 'react-bootstrap/Container'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
 import { apiGet } from '../utilities/apiUtility.js'
 import '../styles/user.css'
 import Header from '../components/header.js'
@@ -115,6 +118,21 @@ class User extends Component {
     if (!this.state.userLoaded) {
       return null
     }
+
+    return (
+      <Container fluid>
+        <Header picture={this.state.picture}/>
+        <Row>
+          <Col id='profilePic' align='center' xs={12} sm={6}>
+            <ProfilePic
+              picture={this.state.picture}
+              userId={this.state.userId}
+              updateProfilePic={this.updateProfilePic}
+            />
+          </Col>
+        </Row>
+      </Container>
+    )
 
     return (
       <div id='userPage'>
