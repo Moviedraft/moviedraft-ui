@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import Navbar from 'react-bootstrap/Navbar'
-import Nav from 'react-bootstrap/Nav'
+import Container from 'react-bootstrap/Container'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
 import '../styles/header.css'
 import Login from './login.js'
 import Account from './account.js'
@@ -53,17 +55,19 @@ class Header extends Component {
 
   render() {
     return (
-      <Navbar>
-        <Nav.Item>
-          <Navbar.Brand href='/user' id='companyName'>Couchsports</Navbar.Brand>
-        </Nav.Item>
-        <Nav.Item className='mx-auto' align="center">
-          {this.renderGameInfo()}
-        </Nav.Item>
-        <Nav.Item className='ml-auto accountInfo'>
-          {this.renderAccountButton()}
-        </Nav.Item>
-      </Navbar>
+      <Container fluid>
+        <Row>
+          <Col xs={6} md={4}>
+            <Navbar.Brand href='/user' id='companyName'>Couchsports</Navbar.Brand>
+          </Col>
+          <Col align='center' xs={{ span: 12, order: 'last' }} md={{ span: 6 }}>
+            {this.renderGameInfo()}
+          </Col>
+          <Col className='accountInfo' align='right' xs={6} md={{ span: 2, order: 'last' }}>
+            {this.renderAccountButton()}
+          </Col>
+        </Row>
+      </Container>
     )
   }
 }

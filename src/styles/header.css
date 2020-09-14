@@ -2,15 +2,12 @@
   font-family: 'Bungee Inline';
   font-size: 2em;
   margin-right: 0;
+  color: black;
 }
 
 .navbar {
   align-items: normal;
   height: 80px;
-}
-
-#gameInfo {
-  visibility: hidden;
 }
 
 .accountInfo {
@@ -20,11 +17,4 @@
 #headerGameName {
   font-weight: bold;
   font-size: 2em;
-}
-
-@media screen and (min-width: 600px) {
-  #gameInfo {
-    visibility: visible;
-    text-align: center;
-  }
 }
