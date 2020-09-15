@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { navigate } from '@reach/router'
 import '../styles/login.css'
+import moment from 'moment'
 
 class Login extends Component {
   constructor(props){
@@ -14,23 +15,27 @@ class Login extends Component {
   }
 
   componentDidMount() {
-    window.gapi.load('auth2', () => {
-      window.gapi.auth2.init({
-        client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
-        cookiepolicy: process.env.REACT_APP_COOKIE_POLICY
-      }).then(() => {
-        window.gapi.signin2.render('signIn', {
-          'scope': 'profile email',
-          'width': 250,
-          'height': 50,
-          'longtitle': true,
-          'theme': 'light',
-          'onsuccess': this.onSuccess,
-          'onfailure': this.onFailure,
-          'prompt': 'consent'
-        })
-      })
-    })
+    if (localStorage.getItem('CouchSportsToken') === null ||
+        localStorage.getItem('CouchSportsToken') === undefined ||
+        moment() > moment(localStorage.getItem('CouchSportsTokenExpiry'))) {
+          window.gapi.load('auth2', () => {
+            window.gapi.auth2.init({
+              client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
+              cookiepolicy: process.env.REACT_APP_COOKIE_POLICY
+            }).then(() => {
+              window.gapi.signin2.render('signIn', {
+                'scope': 'profile email',
+                'width': 250,
+                'height': 50,
+                'longtitle': true,
+                'theme': 'light',
+                'onsuccess': this.onSuccess,
+                'onfailure': this.onFailure,
+                'prompt': 'consent'
+              })
+            })
+          })
+        }
   }
 
   componentWillUnmount() {
