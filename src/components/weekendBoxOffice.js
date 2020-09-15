@@ -62,7 +62,7 @@ class WeekendBoxOffice extends Component {
                 <td title='title'>{movie.title}</td>
                 <td title='weekend gross'>{this._formatter.format(movie.weekendGross)}</td>
                 <td title='owner'>{movie.owner ?? '-'}</td>
-                <td title='purchase price'>{this._formatter.format(movie.purchasePrice)}</td>
+                <td title='purchase price'>{movie.purchasePrice > 0 ? this._formatter.format(movie.purchasePrice) : '-'}</td>
                 <td title='total gross'>{this._formatter.format(movie.totalGross)}</td>
               </tr>))}
           </tbody>
