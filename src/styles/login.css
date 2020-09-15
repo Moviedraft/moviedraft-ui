@@ -3,3 +3,7 @@ button {
   top: 0.5em !important;
   right: 0.5em !important;
 }
+
+#signIn {
+  margin-top: 5px;
+}
