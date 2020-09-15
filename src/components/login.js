@@ -41,7 +41,7 @@ class Login extends Component {
 
   onSuccess(response) {
     let tokenId = response.getAuthResponse().id_token
-    window.gapi.auth2.getAuthInstance().disconnect()
+    window.gapi.auth2.getAuthInstance().signOut()
 
     fetch('https://api-dev.couchsports.ca/login/validate?id_token=' + tokenId)
       .then(res => res.json())
