@@ -4,6 +4,7 @@ import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import '../styles/header.css'
+import '../styles/global.css'
 import Login from './login.js'
 import Account from './account.js'
 import moment from 'moment'
@@ -57,13 +58,13 @@ class Header extends Component {
     return (
       <Container fluid>
         <Row>
-          <Col xs={6} md={4}>
+          <Col className='no-padding' xs={6} md={4}>
             <Navbar.Brand href='/user' id='companyName'>Couchsports</Navbar.Brand>
           </Col>
           <Col align='center' xs={{ span: 12, order: 'last' }} md={{ span: 6 }}>
             {this.renderGameInfo()}
           </Col>
-          <Col className='accountInfo' align='right' xs={6} md={{ span: 2, order: 'last' }}>
+          <Col className='accountInfo no-padding' align='right' xs={6} md={{ span: 2, order: 'last' }}>
             {this.renderAccountButton()}
           </Col>
         </Row>
