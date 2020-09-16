@@ -10,6 +10,11 @@
   width: 100%;
 }
 
+.editButton {
+  border: 1px solid black;
+  margin: 3px;
+}
+
 @media screen and (max-width: 600px) {
   .userHandle {
     font-size: 2em;
@@ -19,7 +24,5 @@
 
   .editButton {
     float: right;
-    border: 1px solid black;
-    margin: 3px;
   }
 }
