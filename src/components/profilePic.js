@@ -97,7 +97,8 @@ class ProfilePic extends Component {
         <input
           id='files'
           type='file'
-          onChange={this.previewImage} />
+          onChange={this.previewImage}
+          hidden />
       </div>
     )
   }
