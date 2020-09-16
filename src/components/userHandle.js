@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { apiPatch } from '../utilities/apiUtility.js'
+import Button from 'react-bootstrap/Button'
 import '../styles/userHandle.css'
 
 class UserHandle extends Component {
@@ -55,7 +56,7 @@ class UserHandle extends Component {
 
   render() {
     return (
-      <table>
+      <table id='userHandleTable'>
         <tbody>
           <tr>
             <td>
@@ -76,23 +77,29 @@ class UserHandle extends Component {
             <td>
               {this.state.editMode ? (
                 <div>
-                <button
-                id='editButton'
-                onClick={this.onClick}>
+                <Button
+                  className='editButton'
+                  onClick={this.onClick}
+                  variant='outline'
+                >
                   <i className='material-icons'>clear</i>
-                </button>
-                <button
-                id='editButton'
-                onClick={this.patchUserHandle}>
+                </Button>
+                <Button
+                  className='editButton'
+                  onClick={this.patchUserHandle}
+                  variant='outline'
+                >
                   <i className='material-icons'>done</i>
-                </button>
+                </Button>
                 </div>
               ) : (
-                <button
-                id='editButton'
-                onClick={this.onClick}>
+                <Button
+                  className='editButton'
+                  onClick={this.onClick}
+                  variant='outline'
+                >
                   <i className='material-icons'>border_color</i>
-                </button>
+                </Button>
               )}
             </td>
           </tr>

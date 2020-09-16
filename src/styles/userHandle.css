@@ -1,4 +1,25 @@
+#userHandleTable {
+  table-layout: fixed;
+  width: 100%;
+  column-width: 100px;
+}
+
 .userHandle {
   font-size: 2em;
   font-weight: bold;
+  width: 100%;
+}
+
+@media screen and (max-width: 600px) {
+  .userHandle {
+    font-size: 2em;
+    font-weight: bold;
+    width: 150%;
+  }
+
+  .editButton {
+    float: right;
+    border: 1px solid black;
+    margin: 3px;
+  }
 }
