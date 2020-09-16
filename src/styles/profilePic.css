@@ -15,7 +15,7 @@
   position: relative;
   border: 1px solid black;
   display: inline-block;
-  width: 150px;
+  width: 125px;
   text-align: center;
   font-weight: bold;
   border-radius: 5px;
@@ -24,12 +24,17 @@
 
 #selectImage label {
   display: inline-block;
-  width: 150px;
-  margin: 3px;
+  width: 100%;
+  height: 100%;
+  margin: 0;
 }
 
 #selectImage input {
   display: none;
+}
+
+#selectImage label:hover {
+  cursor: pointer;
 }
 
 #uploadButtons Button {
