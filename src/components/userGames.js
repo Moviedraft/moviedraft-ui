@@ -1,6 +1,9 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import { Link } from '@reach/router'
-import moment from 'moment';
+import Container from 'react-bootstrap/Container'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
+import moment from 'moment'
 import { apiGet, apiPost, apiDelete } from '../utilities/apiUtility.js'
 import EditGame from './editGame.js'
 import '../styles/userGames.css'
@@ -20,7 +23,8 @@ class UserGames extends Component {
     this.renderEditButton = this.renderEditButton.bind(this)
     this.editGameCallbackFunction = this.editGameCallbackFunction.bind(this)
     this.renderDeleteButton = this.renderDeleteButton.bind(this)
-    this.renderGameDivs = this.renderGameDivs.bind(this)
+    this.renderGamesPlaying = this.renderGamesPlaying.bind(this)
+    this.renderGamesInvited = this.renderGamesInvited.bind(this)
   }
 
   sendData(gameId) {
@@ -62,10 +66,6 @@ class UserGames extends Component {
   }
 
   renderEditButton(commissionerId, gameId, auctionDate) {
-    console.log(commissionerId)
-    console.log(gameId)
-    console.log(auctionDate)
-    console.log(this.props.userId)
     return this.props.userId === commissionerId && moment() < moment(auctionDate)?
       (
         <button
@@ -95,18 +95,9 @@ class UserGames extends Component {
       )
   }
 
-  renderGameDivs(games) {
-    return (
-      <div>
-        {this.renderGamesPlaying(games)}
-        {this.renderGamesInvited(games)}
-      </div>
-    )
-  }
-
   renderGamesPlaying(games) {
     return (
-      <div className='playingGame'>
+      <div>
         {games.map((game, i) => {
           return game.joined ? (
             <div key={i}>
@@ -128,7 +119,7 @@ class UserGames extends Component {
 
   renderGamesInvited(games) {
     return (
-      <div className='playingGame'>
+      <div>
         {games.map((game, i) => {
           return !game.joined ? (
             <div key={i}>
@@ -161,6 +152,24 @@ class UserGames extends Component {
   }
 
   render() {
+    return (
+      <Container fluid>
+        <Row>
+          <Col sm={12} md={6}>
+            <div className='userGameContainer'>
+              <h3 id='playingGameHeader'>Games Playing</h3>
+              {this.renderGamesPlaying(this.props.userGames)}
+            </div>
+          </Col>
+          <Col sm={12} md={6}>
+            <div className='userGameContainer'>
+              <h3 id='invitedGameHeader'>Games Invited</h3>
+              {this.renderGamesInvited(this.props.userGames)}
+            </div>
+          </Col>
+        </Row>
+      </Container>
+    )
     return (
       <div id='userGames'>
         <div>

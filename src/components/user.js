@@ -120,39 +120,37 @@ class User extends Component {
     }
 
     return (
-      <Container fluid>
-        <Header picture={this.state.picture}/>
-        <Row>
-          <Col id='profilePic' align='center' xs={12} sm={6}>
-            <ProfilePic
-              picture={this.state.picture}
-              userId={this.state.userId}
-              updateProfilePic={this.updateProfilePic}
-            />
-          </Col>
-          <Col className='no-padding' align='center' xs={12} sm={6}>
-            <div id='userHandleContainer'>
-              <UserHandle
-                parentCallback={this.userHandlecallbackFunction}
-                handleError={this.handleError}
-                userHandle={this.state.userHandle}
+      <div>
+        <Container fluid>
+          <Header picture={this.state.picture}/>
+          <Row>
+            <Col id='profilePic' align='center' xs={12} sm={6}>
+              <ProfilePic
+                picture={this.state.picture}
+                userId={this.state.userId}
+                updateProfilePic={this.updateProfilePic}
               />
-              <span id='emailSpan'>{this.state.email}</span>
-            </div>
-          </Col>
-        </Row>
-        <Row>
-          <Col xs={12}>
-            <UserGames
-              parentCallback={this.userGamesCallbackFunction}
-              deleteGameCallbackFunction={this.deleteGameCallbackFunction}
-              userId={this.state.userId}
-              userGames={this.state.userGames}
-              updateGameNameCallbackFunction={this.updateGameNameCallbackFunction}
-              handleError={this.handleError} />
-          </Col>
-        </Row>
-      </Container>
+            </Col>
+            <Col className='no-padding' align='center' xs={12} sm={6}>
+              <div id='userHandleContainer'>
+                <UserHandle
+                  parentCallback={this.userHandlecallbackFunction}
+                  handleError={this.handleError}
+                  userHandle={this.state.userHandle}
+                />
+                <span id='emailSpan'>{this.state.email}</span>
+              </div>
+            </Col>
+          </Row>
+        </Container>
+        <UserGames
+          parentCallback={this.userGamesCallbackFunction}
+          deleteGameCallbackFunction={this.deleteGameCallbackFunction}
+          userId={this.state.userId}
+          userGames={this.state.userGames}
+          updateGameNameCallbackFunction={this.updateGameNameCallbackFunction}
+          handleError={this.handleError} />
+      </div>
     )
 
     return (
