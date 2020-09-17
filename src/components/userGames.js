@@ -62,6 +62,10 @@ class UserGames extends Component {
   }
 
   renderEditButton(commissionerId, gameId, auctionDate) {
+    console.log(commissionerId)
+    console.log(gameId)
+    console.log(auctionDate)
+    console.log(this.props.userId)
     return this.props.userId === commissionerId && moment() < moment(auctionDate)?
       (
         <button
@@ -91,37 +95,57 @@ class UserGames extends Component {
       )
   }
 
-  renderGameDivs(array) {
-    return array.map(item =>
-      item.joined ? (
-        <div key={item.id} className='userGamesData'>
-          <div className='playingGame'>
-            <Link
-              to={`/games/${item.game_id}`}
-              state={{gameId: `${item.game_id}`}}>
-              {item.gameName}
-            </Link>
-            {this.renderEditButton(item.commissioner_id, item.game_id, item.auctionDate)}
-            {this.renderDeleteButton(item.commissioner_id, item.game_id)}
-          </div>
-          <div className='invitedGame'></div>
-        </div>
-      ) : (
-        <div key={item.id}>
-          <div className='playingGame'></div>
-          <div className='invitedGame'>
-            <div className='invitedGameRow'>
-              {item.gameName}
+  renderGameDivs(games) {
+    return (
+      <div>
+        {this.renderGamesPlaying(games)}
+        {this.renderGamesInvited(games)}
+      </div>
+    )
+  }
+
+  renderGamesPlaying(games) {
+    return (
+      <div className='playingGame'>
+        {games.map((game, i) => {
+          return game.joined ? (
+            <div key={i}>
+              <Link
+                to={`/games/${game.game_id}`}
+                state={{gameId: `${game.game_id}`}}>
+                {game.gameName}
+              </Link>
+              {this.renderEditButton(game.commissioner_id, game.game_id, game.auctionDate)}
+              {this.renderDeleteButton(game.commissioner_id, game.game_id)}
+            </div>
+          ) : (
+            null
+          )
+        })}
+      </div>
+    )
+  }
+
+  renderGamesInvited(games) {
+    return (
+      <div className='playingGame'>
+        {games.map((game, i) => {
+          return !game.joined ? (
+            <div key={i}>
+              <span>{game.gameName}</span>
               <button
-              id='joinButton'
-              onClick={() => this.onClick(item.game_id)}>
+                id='joinButton'
+                onClick={() => this.onClick(game.game_id)}
+              >
                 <b>JOIN</b>
               </button>
             </div>
-          </div>
-        </div>
-      )
-    );
+          ) : (
+            null
+          )
+        })}
+      </div>
+    )
   }
 
   renderEditGameModal() {
