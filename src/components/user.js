@@ -141,6 +141,17 @@ class User extends Component {
             </div>
           </Col>
         </Row>
+        <Row>
+          <Col xs={12}>
+            <UserGames
+              parentCallback={this.userGamesCallbackFunction}
+              deleteGameCallbackFunction={this.deleteGameCallbackFunction}
+              userId={this.state.userId}
+              userGames={this.state.userGames}
+              updateGameNameCallbackFunction={this.updateGameNameCallbackFunction}
+              handleError={this.handleError} />
+          </Col>
+        </Row>
       </Container>
     )
 
