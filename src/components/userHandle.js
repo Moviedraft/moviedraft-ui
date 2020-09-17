@@ -56,55 +56,57 @@ class UserHandle extends Component {
 
   render() {
     return (
-      <table id='userHandleTable'>
-        <tbody>
-          <tr>
-            <td>
-              {this.state.editMode ? (
-                <input
-                  autoFocus
-                  className='userHandle'
-                  type='text'
-                  placeholder={this.props.userHandle}
-                  value={this.state.newUserHandle}
-                  onChange={evt => this.updateInputValue(evt)}
-                  onKeyPress={this.handleKeyPress}
-                />
-              ) : (
-                <div className='userHandle'>{this.props.userHandle}</div>
-              )}
-            </td>
-            <td>
-              {this.state.editMode ? (
-                <div>
-                <Button
-                  className='editButton'
-                  onClick={this.onClick}
-                  variant='outline'
-                >
-                  <i className='material-icons editIcons'>clear</i>
-                </Button>
-                <Button
-                  className='editButton'
-                  onClick={this.patchUserHandle}
-                  variant='outline'
-                >
-                  <i className='material-icons editIcons'>done</i>
-                </Button>
-                </div>
-              ) : (
-                <Button
-                  className='editButton'
-                  onClick={this.onClick}
-                  variant='outline'
-                >
-                  <i className='material-icons editIcons'>border_color</i>
-                </Button>
-              )}
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div id='userHandleTableContainer'>
+        <table id='userHandleTable'>
+          <tbody>
+            <tr>
+              <td>
+                {this.state.editMode ? (
+                  <input
+                    autoFocus
+                    className='userHandle'
+                    type='text'
+                    placeholder={this.props.userHandle}
+                    value={this.state.newUserHandle}
+                    onChange={evt => this.updateInputValue(evt)}
+                    onKeyPress={this.handleKeyPress}
+                  />
+                ) : (
+                  <div className='userHandle'>{this.props.userHandle}</div>
+                )}
+              </td>
+              <td>
+                {this.state.editMode ? (
+                  <div>
+                  <Button
+                    className='editButton'
+                    onClick={this.onClick}
+                    variant='outline'
+                  >
+                    <i className='material-icons editIcons'>clear</i>
+                  </Button>
+                  <Button
+                    className='editButton'
+                    onClick={this.patchUserHandle}
+                    variant='outline'
+                  >
+                    <i className='material-icons editIcons'>done</i>
+                  </Button>
+                  </div>
+                ) : (
+                  <Button
+                    className='editButton'
+                    onClick={this.onClick}
+                    variant='outline'
+                  >
+                    <i className='material-icons editIcons'>border_color</i>
+                  </Button>
+                )}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     )
   }
 }
