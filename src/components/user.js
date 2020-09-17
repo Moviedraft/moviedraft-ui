@@ -137,7 +137,7 @@ class User extends Component {
                 handleError={this.handleError}
                 userHandle={this.state.userHandle}
               />
-            <span id='emailSpan'>{this.state.email}</span>
+              <span id='emailSpan'>{this.state.email}</span>
             </div>
           </Col>
         </Row>
