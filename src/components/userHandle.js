@@ -82,14 +82,14 @@ class UserHandle extends Component {
                   onClick={this.onClick}
                   variant='outline'
                 >
-                  <i className='material-icons'>clear</i>
+                  <i className='material-icons editIcons'>clear</i>
                 </Button>
                 <Button
                   className='editButton'
                   onClick={this.patchUserHandle}
                   variant='outline'
                 >
-                  <i className='material-icons'>done</i>
+                  <i className='material-icons editIcons'>done</i>
                 </Button>
                 </div>
               ) : (
@@ -98,7 +98,7 @@ class UserHandle extends Component {
                   onClick={this.onClick}
                   variant='outline'
                 >
-                  <i className='material-icons'>border_color</i>
+                  <i className='material-icons editIcons'>border_color</i>
                 </Button>
               )}
             </td>

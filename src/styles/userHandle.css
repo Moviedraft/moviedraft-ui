@@ -13,13 +13,19 @@
 .editButton {
   border: 1px solid black;
   margin: 3px;
+  width: 45px;
 }
 
-@media screen and (max-width: 600px) {
+.editIcons {
+  margin-left: -2px;
+  vertical-align: middle;
+}
+
+@media screen and (max-width: 575px) {
   .userHandle {
     font-size: 2em;
     font-weight: bold;
-    width: 150%;
+    width: 130%;
   }
 
   .editButton {

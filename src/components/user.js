@@ -130,7 +130,7 @@ class User extends Component {
               updateProfilePic={this.updateProfilePic}
             />
           </Col>
-          <Col id='profilePic' align='center' xs={12} sm={6}>
+          <Col align='center' xs={12} sm={6}>
             <UserHandle
               parentCallback={this.userHandlecallbackFunction}
               handleError={this.handleError}
