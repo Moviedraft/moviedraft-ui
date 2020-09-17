@@ -17,6 +17,7 @@ class Header extends Component {
     }
 
     this.loggedIn = this.loggedIn.bind(this)
+    this.renderAccountButton = this.renderAccountButton.bind(this)
   }
 
   componentDidMount() {
@@ -42,29 +43,14 @@ class Header extends Component {
       )
   }
 
-  renderGameInfo() {
-    return this.props.gameName && this.props.startDate && this.props.endDate ?
-    (
-      <div id='gameInfo'>
-        <div id='headerGameName'>{this.props.gameName}</div>
-        <div id='headerGameDates'>{moment(this.props.startDate).format('LL') + ' - ' + moment(this.props.endDate).format('LL')}</div>
-      </div>
-    ) : (
-      <div id='gameInfo'>&nbsp;</div>
-    )
-  }
-
   render() {
     return (
       <Container fluid>
         <Row>
-          <Col className='no-padding' xs={6} md={4}>
+          <Col className='no-padding' xs={6}>
             <Navbar.Brand href='/user' id='companyName'>Couchsports</Navbar.Brand>
           </Col>
-          <Col align='center' xs={{ span: 12, order: 'last' }} md={{ span: 6 }}>
-            {this.renderGameInfo()}
-          </Col>
-          <Col className='accountInfo no-padding' align='right' xs={6} md={{ span: 2, order: 'last' }}>
+          <Col className='accountInfo no-padding' align='right' xs={6}>
             {this.renderAccountButton()}
           </Col>
         </Row>

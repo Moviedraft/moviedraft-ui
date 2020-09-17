@@ -58,7 +58,7 @@ class Login extends Component {
 
     return (
       <div id='signIn' onClick={this.signIn}>
-        <img src='https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png' />
+        <img src='https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png' alt='profile pic'/>
         <span className='lg-view'>Sign in With Google</span>
         <span className='sm-view'>Sign In</span>
       </div>

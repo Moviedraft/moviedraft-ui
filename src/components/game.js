@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import moment from 'moment'
 import { apiGet } from '../utilities/apiUtility.js'
+import '../styles/game.css'
 import Header from '../components/header.js'
 import AuctionHome from './auctionHome.js'
 import GameHome from './gameHome.js'
@@ -87,6 +88,18 @@ class Game extends Component {
     })
   }
 
+  renderGameInfo() {
+    return this.state.gameName && this.state.startDate && this.state.endDate ?
+    (
+      <div id='gameInfo'>
+        <div id='GameName'>{this.state.gameName}</div>
+        <div id='GameDates'>{moment(this.state.startDate).format('LL') + ' - ' + moment(this.state.endDate).format('LL')}</div>
+      </div>
+    ) : (
+      <div id='gameInfo'>&nbsp;</div>
+    )
+  }
+
   renderAuctionHome() {
     return <AuctionHome
       movies={this.state.movies}
@@ -124,6 +137,7 @@ class Game extends Component {
             endDate={this.state.endDate}
             picture={this.state.currentUser.picture} />
           <div>
+            {this.renderGameInfo()}
             {this.renderGameHome()}
           </div>
         </div>
@@ -136,6 +150,7 @@ class Game extends Component {
             endDate={this.state.endDate}
             picture={this.state.currentUser.picture} />
           <div>
+            {this.renderGameInfo()}
             {this.renderAuctionHome()}
           </div>
         </div>
