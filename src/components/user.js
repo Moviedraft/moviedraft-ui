@@ -130,12 +130,15 @@ class User extends Component {
               updateProfilePic={this.updateProfilePic}
             />
           </Col>
-          <Col align='center' xs={12} sm={6}>
-            <UserHandle
-              parentCallback={this.userHandlecallbackFunction}
-              handleError={this.handleError}
-              userHandle={this.state.userHandle}
-            />
+          <Col className='no-padding' align='center' xs={12} sm={6}>
+            <div id='userHandleContainer'>
+              <UserHandle
+                parentCallback={this.userHandlecallbackFunction}
+                handleError={this.handleError}
+                userHandle={this.state.userHandle}
+              />
+            <span id='emailSpan'>{this.state.email}</span>
+            </div>
           </Col>
         </Row>
       </Container>

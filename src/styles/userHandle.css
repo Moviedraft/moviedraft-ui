@@ -1,7 +1,12 @@
-#userHandleTableContainer {
-    display: table-cell;
-    vertical-align: middle;
-    height: 133px;
+#userHandleContainer {
+  height: 133px;
+  display: table-cell;
+  vertical-align: middle;
+}
+
+#emailSpan {
+  float: left;
+  margin-left: 12px;
 }
 
 #userHandleTable {
