@@ -23,3 +23,20 @@
       padding: 0;
     }
 }
+
+.icon-buttons {
+  border: 1px solid black;
+  margin: 3px;
+  width: 45px;
+}
+
+.icons {
+  margin-left: -2px;
+  vertical-align: middle;
+}
+
+@media screen and (max-width: 575px) {
+  .icon-buttons {
+    float: right;
+  }
+}

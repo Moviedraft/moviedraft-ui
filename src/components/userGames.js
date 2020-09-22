@@ -3,10 +3,12 @@ import { Link } from '@reach/router'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
+import Button from 'react-bootstrap/Button'
 import moment from 'moment'
 import { apiGet, apiPost, apiDelete } from '../utilities/apiUtility.js'
 import EditGame from './editGame.js'
 import '../styles/userGames.css'
+import '../styles/global.css'
 
 class UserGames extends Component {
   constructor(props){
@@ -68,11 +70,13 @@ class UserGames extends Component {
   renderEditButton(commissionerId, gameId, auctionDate) {
     return this.props.userId === commissionerId && moment() < moment(auctionDate)?
       (
-        <button
-        className='adminButtons'
-        onClick={() => { this.getGame(gameId) }}>
-          <b>EDIT GAME</b>
-        </button>
+        <Button
+          variant='outlone'
+          className='icon-buttons'
+          onClick={() => { this.getGame(gameId) }}
+        >
+          <i className='material-icons icons'>border_color</i>
+        </Button>
       ) : (
         null
       )
@@ -85,11 +89,12 @@ class UserGames extends Component {
   renderDeleteButton(commissionerId, gameId) {
     return this.props.userId === commissionerId ?
       (
-        <button
-        className='adminButtons'
-        onClick={() => this.deleteGame(gameId)}>
-          <b>DELETE GAME</b>
-        </button>
+        <Button
+          variant='outlone'
+          className='icon-buttons'
+          onClick={() => this.deleteGame(gameId)}>
+            <i className='material-icons icons'>clear</i>
+        </Button>
       ) : (
         null
       )
@@ -100,7 +105,10 @@ class UserGames extends Component {
       <div>
         {games.map((game, i) => {
           return game.joined ? (
-            <div key={i}>
+            <div
+              className='user-game-div'
+              key={i}
+            >
               <Link
                 to={`/games/${game.game_id}`}
                 state={{gameId: `${game.game_id}`}}>
@@ -122,14 +130,17 @@ class UserGames extends Component {
       <div>
         {games.map((game, i) => {
           return !game.joined ? (
-            <div key={i}>
+            <div
+              className='user-game-div'
+              key={i}>
               <span>{game.gameName}</span>
-              <button
-                id='joinButton'
+              <Button
+                variant='outline'
+                className='icon-buttons'
                 onClick={() => this.onClick(game.game_id)}
               >
-                <b>JOIN</b>
-              </button>
+                <i className='material-icons icons'>person_add_alt_1</i>
+              </Button>
             </div>
           ) : (
             null
@@ -169,16 +180,6 @@ class UserGames extends Component {
           </Col>
         </Row>
       </Container>
-    )
-    return (
-      <div id='userGames'>
-        <div>
-          <h3 id='playingGameHeader'>Games You are Playing</h3>
-          <h3 id='invitedGameHeader'>Games You are Invited To</h3>
-        </div>
-        {this.renderGameDivs(this.props.userGames)}
-        {this.renderEditGameModal()}
-      </div>
     )
   }
 }

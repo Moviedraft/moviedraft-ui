@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { apiPatch } from '../utilities/apiUtility.js'
 import Button from 'react-bootstrap/Button'
 import '../styles/userHandle.css'
+import '../styles/global.css'
 
 class UserHandle extends Component {
   constructor(props){
@@ -79,27 +80,27 @@ class UserHandle extends Component {
                 {this.state.editMode ? (
                   <div>
                   <Button
-                    className='editButton'
+                    className='icon-buttons'
                     onClick={this.onClick}
                     variant='outline'
                   >
-                    <i className='material-icons editIcons'>clear</i>
+                    <i className='material-icons icons'>clear</i>
                   </Button>
                   <Button
-                    className='editButton'
+                    className='icon-buttons'
                     onClick={this.patchUserHandle}
                     variant='outline'
                   >
-                    <i className='material-icons editIcons'>done</i>
+                    <i className='material-icons icons'>done</i>
                   </Button>
                   </div>
                 ) : (
                   <Button
-                    className='editButton'
+                    className='icon-buttons'
                     onClick={this.onClick}
                     variant='outline'
                   >
-                    <i className='material-icons editIcons'>border_color</i>
+                    <i className='material-icons icons'>border_color</i>
                   </Button>
                 )}
               </td>
