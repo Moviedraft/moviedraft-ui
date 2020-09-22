@@ -14,7 +14,7 @@
   border: 1px solid black;
   border-radius: 5px;
   margin-top: 10px;
-  margin-botton: 10px;
+  margin-bottom: 10px;
 }
 
 .user-game-div > span {
@@ -28,10 +28,57 @@
   vertical-align: middle;
   margin-top: 10px;
   margin-left: 3px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  width: 250px;
+}
+
+@media screen and (max-width: 390px) {
+  .user-game-div > a {
+    width: 175px;
+  }
+}
+
+@media screen and (min-width: 500px) {
+  .user-game-div > a {
+    width: 350px;
+  }
+}
+
+@media screen and (min-width: 766px) {
+  .user-game-div > a {
+    width: 200px;
+  }
+}
+
+@media screen and (min-width: 1000px) {
+  .user-game-div > a {
+    width: 350px;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .user-game-div > a {
+    width: 450px;
+  }
+}
+
+@media screen and (min-width: 1300px) {
+  .user-game-div > a {
+    width: 500px;
+  }
+}
+
+@media screen and (min-width: 1400px) {
+  .user-game-div > a {
+    width: 550px;
+  }
 }
 
 .user-game-div > button {
   float: right;
+  display: inline-block;
 }
 
 .user-games-div > a:link {
