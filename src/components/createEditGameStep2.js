@@ -1,90 +1,98 @@
-import React, { Component } from 'react';
-import moment from 'moment';
+import React, { Component } from 'react'
+import moment from 'moment'
+import Form from 'react-bootstrap/Form'
 import '../styles/createEditGameStep2.css'
 import Movies from './movies.js'
 
 class CreateEditGameStep2 extends Component {
-    constructor(props){
-      super(props)
-      this.state = {
-      }
+  constructor(props){
+    super(props)
+    this.state = {
     }
+  }
 
   render() {
     if (this.props.currentStep !== 2) {
       return null
     }
 
-    return(
-      <div id='createGameStep2Div' className='form-group'>
-        <p>Choose the start, end and auction dates for your game as well as the movies.</p>
-        <div id='startDateDiv'>
-          <label htmlFor='startDate'>
-            Start Date:
-            </label>
-          <input
-            className='form-control'
+    return (
+      <Form>
+        <Form.Group>
+          <Form.Label>Start Date</Form.Label>
+          <Form.Control
+            type='date'
             id='startDate'
             name='startDate'
-            type='date'
             placeholder='YYYY-MM-DD'
-            min={moment().add(1, 'days').format('YYYY-MM-DD')}
+            min={moment().format('YYYY-MM-DD')}
             value={this.props.startDate}
-            onChange={this.props.handleChange} />
-        </div>
-        <div id='endDateDiv'>
-          <label htmlFor='endDate'>
-            End Date (at least three months after start date):
-          </label>
-          <input
-            className='form-control'
+            onChange={this.props.handleChange}
+          />
+          <Form.Text className='text-muted'>
+            Choose the start date for your draft season.
+          </Form.Text>
+        </Form.Group>
+
+        <Form.Group>
+          <Form.Label>End Date</Form.Label>
+          <Form.Control
+            type='date'
             id='endDate'
             name='endDate'
-            type='date'
             placeholder='YYYY-MM-DD'
             min={moment().add(3, 'M').format('YYYY-MM-DD')}
             value={this.props.endDate}
-            onChange={this.props.handleChange} />
-        </div>
-        <div id='auctionDateDiv'>
-          <label htmlFor='auctionDate'>
-            Auction Date (must be before start date):
-          </label>
-          <input
-            className='form-control'
+            onChange={this.props.handleChange}
+          />
+          <Form.Text className='text-muted'>
+            Choose the end date for your draft season.
+          </Form.Text>
+        </Form.Group>
+
+        <Form.Group>
+          <Form.Label>Auction Date</Form.Label>
+          <Form.Control
+            type='datetime-local'
             id='auctionDate'
             name='auctionDate'
-            type='datetime-local'
             min={moment().format('YYYY-MM-DDTHH:mm')}
             max={moment(this.props.startDate).format('YYYY-MM-DDTHH:mm')}
             value={moment(this.props.auctionDate).isValid() ?  moment(this.props.auctionDate).format('YYYY-MM-DDTHH:mm') : moment().add(1, 'days').format('YYYY-MM-DDTHH:mm')}
             onChange={this.props.handleChange}
-            onKeyDown={e => { e.preventDefault() }} />
-        </div>
-        <div id='auctionItemExpiryDiv'>
-          <label htmlFor='auctionItemExpiryTimeSeconds'>
-            How long (in seconds) do you want the auction to last for each movie?
-          </label>
-          <input
-            className='form-control'
+            onKeyDown={e => { e.preventDefault() }}
+          />
+          <Form.Text className='text-muted'>
+            Choose the date and time you want to hold your auction.
+          </Form.Text>
+        </Form.Group>
+
+        <Form.Group>
+          <Form.Label>Auction Item Expiry (seconds)</Form.Label>
+          <Form.Control
+            type='number'
             id='auctionItemExpiryTimeSeconds'
             name='auctionItemExpiryTimeSeconds'
-            type='number'
             min='10'
             max='60'
             value={this.props.auctionItemExpiryTimeSeconds}
             onChange={this.props.handleChange}
-            onKeyDown={(e) => { e.preventDefault() }} />
-        </div>
-        <label htmlFor='Movies'>
-          Select movies for your game (based on game start and end dates):
-        </label>
-        <Movies
-          startDate={this.props.startDate}
-          endDate={this.props.endDate}
-          movies={this.props.movies}
-          handleError={this.props.handleError} />
-      </div>
+            onKeyDown={e => { e.preventDefault() }}
+          />
+          <Form.Text className='text-muted'>
+            Choose how long (in seconds) you want the auction to last for each movie.
+          </Form.Text>
+        </Form.Group>
+
+        <Form.Group>
+          <Form.Label>Movies to be Auctioned</Form.Label>
+            <Movies
+              startDate={this.props.startDate}
+              endDate={this.props.endDate}
+              movies={this.props.movies}
+              handleError={this.props.handleError} />
+        </Form.Group>
+      </Form>
     )
   }
 }
