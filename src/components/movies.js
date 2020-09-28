@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import moment from 'moment'
+import Form from 'react-bootstrap/Form'
 import { apiGet } from '../utilities/apiUtility.js'
 import '../styles/movies.css'
 
@@ -59,40 +60,43 @@ class Movies extends Component {
 
     renderMovieDivs(movies) {
       return this.state.movieList.map(movie =>
-        <div key={movie.id} className='movie'>
-          <input
-            type='checkbox'
-            value={movie.id}
+        <div
+          className='movieWrapper'
+          key={movie.id}
+        >
+          <Form.Check
             id={movie.title}
             name={movie.title}
+            value={movie.id}
+            label={movie.title + ' - ' + moment.utc(movie.releaseDate).format('ll')}
             checked={(this.props.movies && this.props.movies.some(propMovie => movie.id === propMovie.id))}
-            onChange={(event) => this.handleCheckbox(event, movie)} />
-          <label htmlFor={movie.title}>
-            {movie.title} - {moment.utc(movie.releaseDate).format('ll')}
-          </label>
+            onChange={(event) => this.handleCheckbox(event, movie)}
+          />
         </div>
-        )
+      )
     }
 
     render() {
       if (this.state.movieList.length > 0) {
         return (
-          <div id='moviesWrapper'>
-            <div>
-              <input
-                type='checkbox'
-                id='selectAllMovies'
-                name='selectAllMovies'
-                onChange={(event => this.handleSelectAll(event))}
-                checked={this.state.movieList.every(x => this.props.movies.some(y => x.id === y.id))} />
-              <label
-                htmlFor='selectAllMovies'
-                id='selectAllMoviesCheckbox' >
-                Select All
-              </label>
-            </div>
-            {this.renderMovieDivs(this.state.movieList)}
-          </div>
+          <Form>
+            <Form.Group id='movieFormGroup'>
+              <Form.Label>Movies to Auction</Form.Label>
+              <Form.Text className='text-muted'>
+                Select the Movies you would like to be auctioned.
+              </Form.Text>
+              <div id='selectAllWrapper'>
+                <Form.Check
+                  label='select all'
+                  id='selectAllMovies'
+                  name='selectAllMovies'
+                  onChange={(event => this.handleSelectAll(event))}
+                  checked={this.state.movieList.every(x => this.props.movies.some(y => x.id === y.id))}
+                />
+              </div>
+              {this.renderMovieDivs(this.state.movieList)}
+            </Form.Group>
+          </Form>
         )
       }
 
