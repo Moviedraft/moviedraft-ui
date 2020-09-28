@@ -1,5 +1,10 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
+import Form from 'react-bootstrap/Form'
+import Container from 'react-bootstrap/Container'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
 import '../styles/valueMultiplierRule.css'
+import '../styles/global.css'
 
 class valueMultiplierRule extends Component {
   constructor(props){
@@ -51,7 +56,7 @@ class valueMultiplierRule extends Component {
   }
 
   calculateValueMultiplierEarnings(movieValue, valueMultiplier) {
-    let grossEarnings = movieValue * valueMultiplier + this.state.movieGross
+    let grossEarnings = parseInt(movieValue * valueMultiplier) + parseInt(this.state.movieGross, 10)
     return (Math.round(grossEarnings * 100) / 100).toFixed(2);
   }
 
@@ -75,120 +80,147 @@ class valueMultiplierRule extends Component {
 
     return !this.props.valueMultiplierRule.valueMultiplierActive ?
       null :
-      <div>
-        <div className='rulesHeader'>
-          <div className='rulesHeaderCell'>
-            Movie gross income
-          </div>
-          <div className='rulesHeaderCell'>
-            Auction purchase price
-          </div>
-          <div className='rulesHeaderCell'>
-            Movie Value
-          </div>
-          <div className='rulesHeaderCell'>
-            Value Multiplier lower Threshold
-          </div>
-          <div className='rulesHeaderCell'>
-            Value Multiplier upper Threshold
-          </div>
-          <div className='rulesHeaderCell'>
-            Value Multiplier
-          </div>
-          <div className='rulesHeaderCell'>
-            Total Gross Earnings
-          </div>
-        </div>
-        <div className='rulesValues'>
-          <div className='rulesCell'>
-            <span className='rulesCurrencyInput'>$
-              <input
-                className='rulesCell valueMultiplierNumberInput'
-                id='movieGross'
-                name='movieGross'
+      <Container fluid>
+        <Row>
+          <Col>
+            <Form.Label>Movie gross income</Form.Label>
+              <div className='input-group-prepend'>
+                <span className='input-group-text'>$</span>
+                <Form.Control
+                  className='number-input-field'
+                  id='movieGross'
+                  name='movieGross'
+                  type='number'
+                  min='0'
+                  step='1000000'
+                  value={this.state.movieGross}
+                  onChange={this.updateMovieGross}
+                />
+            </div>
+            <Form.Text className='text-muted'>
+              Adjust the movie domestic gross value.
+            </Form.Text>
+          </Col>
+          <Col>
+            <Form.Label>Auction purchase price</Form.Label>
+              <div className='input-group-prepend'>
+                <span className='input-group-text'>$</span>
+                <Form.Control
+                  className='number-input-field'
+                  id='purchasePrice'
+                  name='purchasePrice'
+                  type='number'
+                  min='1'
+                  step='0.5'
+                  defaultValue={this.state.purchasePrice}
+                  onChange={this.updatePurchasePrice}
+                />
+            </div>
+            <Form.Text className='text-muted'>
+              Adjust the purchase price for this movie to calculate value.
+            </Form.Text>
+          </Col>
+        </Row>
+        <Row>
+          <Col xs={6}>
+            <Form.Label>Movie Value</Form.Label>
+            <div className='input-group-prepend'>
+              <span className='input-group-text'>$</span>
+              <Form.Control
+                readOnly
                 type='number'
-                min='0'
-                step='1000000'
-                value={this.state.movieGross}
-                onChange={this.updateMovieGross} />
-            </span>
-          </div>
-          <div className='rulesCell'>
-            <span className='rulesCurrencyInput'>$
-              <input
-                className='rulesCell valueMultiplierNumberInput'
-                id='purchasePrice'
-                name='purchasePrice'
+                placeholder={movieValue}
+              />
+            </div>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <Form.Label>Value Multiplier Lower Threshold</Form.Label>
+              <div className='input-group-prepend'>
+                <span className='input-group-text'>$</span>
+                <Form.Control
+                  className='number-input-field'
+                  id='lowerThreshold'
+                  name='lowerThreshold'
+                  type='number'
+                  min='0'
+                  step='1000000'
+                  defaultValue={this.props.valueMultiplierRule.lowerThreshold}
+                  onChange={event => {
+                    event.target = {type:event.target.type, value:event.target.value, name:'lowerThreshold'}
+                    this.updateValueMultiplierRule(event)
+                    }}
+                />
+            </div>
+            <Form.Text className='text-muted'>
+              Adjust the lower threshold for when the lower value multiplier comes into effect.
+            </Form.Text>
+          </Col>
+          <Col>
+            <Form.Label>Value Multiplier Upper Threshold</Form.Label>
+              <div className='input-group-prepend'>
+                <span className='input-group-text'>$</span>
+                <Form.Control
+                  className='number-input-field'
+                  id='upperThreshold'
+                  name='upperThreshold'
+                  type='number'
+                  min='0'
+                  step='1000000'
+                  defaultValue={this.props.valueMultiplierRule.upperThreshold}
+                  onChange={event => {
+                    event.target = {type:event.target.type, value:event.target.value, name:'upperThreshold'}
+                    this.updateValueMultiplierRule(event)
+                    }}
+                />
+            </div>
+            <Form.Text className='text-muted'>
+              Adjust the upper threshold for when the lower value multiplier comes into effect.
+            </Form.Text>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <Form.Label>Value Multiplier</Form.Label>
+            <div className='input-group-prepend'>
+              <span className='input-group-text'>$</span>
+              <Form.Control
+                readOnly
                 type='number'
-                min='1'
-                step='0.5'
-                defaultValue={this.state.purchasePrice}
-                onChange={this.updatePurchasePrice} />
-            </span>
-          </div>
-          <div className='rulesCell'>
-            <span className='rulesCurrencyInput'>
-              ${movieValue}
-            </span>
-          </div>
-          <div className='rulesCell'>
-            <span className='rulesCurrencyInput'>$
-              <input
-                className='rulesCell valueMultiplierNumberInput'
-                id='lowerThreshold'
-                name='lowerThreshold'
+                placeholder={valueMultiplier}
+              />
+            </div>
+          </Col>
+          <Col xs={6}>
+            <Form.Label>Total Gross Earnings</Form.Label>
+            <div className='input-group-prepend'>
+              <span className='input-group-text'>$</span>
+              <Form.Control
+                readOnly
                 type='number'
-                min='0'
-                step='1000000'
-                defaultValue={this.props.valueMultiplierRule.lowerThreshold}
-                onChange={event => {
-                  event.target = {type:event.target.type, value:event.target.value, name:'lowerThreshold'}
-                  this.updateValueMultiplierRule(event)
-                  }} />
-            </span>
-          </div>
-          <div className='rulesCell'>
-            <span className='rulesCurrencyInput'>$
-              <input
-                className='rulesCell valueMultiplierNumberInput'
-                id='upperThreshold'
-                name='upperThreshold'
-                type='number'
-                min='0'
-                step='1000000'
-                defaultValue={this.props.valueMultiplierRule.upperThreshold}
-                onChange={event => {
-                  event.target = {type:event.target.type, value:event.target.value, name:'upperThreshold'}
-                  this.updateValueMultiplierRule(event)
-                  }} />
-            </span>
-          </div>
-          <div className='rulesCell'>
-            {valueMultiplier}
-          </div>
-          <div className='rulesCell'>
-            <span className='rulesCurrencyInput'>
-              ${totalEarnings}
-            </span>
-          </div>
-        </div>
-      </div>
+                placeholder={totalEarnings}
+              />
+            </div>
+          </Col>
+        </Row>
+      </Container>
   }
 
   render() {
     return (
       <div>
-        <div className='rulesTitle'>
-          <input
-            type='checkbox'
-            id='valueMultiplierActive'
-            name='valueMultiplierActive'
-            checked={this.props.valueMultiplierRule.valueMultiplierActive}
-            onChange={this.handleCheckbox} />
-          <label htmlFor='valueMultiplierActive'>
-            {this.props.valueMultiplierRule.displayTitle}
-          </label>
-        </div>
+        <Form.Group>
+          <div id='valueMultiplierCheckWrapper'>
+            <Form.Check
+              label={this.props.valueMultiplierRule.displayTitle}
+              id='valueMultiplierActive'
+              name='valueMultiplierActive'
+              checked={this.props.valueMultiplierRule.valueMultiplierActive}
+              onChange={this.handleCheckbox}
+            />
+          </div>
+        </Form.Group>
         {this.renderValueMultiplierRule()}
       </div>
     )

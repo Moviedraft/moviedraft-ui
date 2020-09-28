@@ -56,25 +56,23 @@ class GrossCapRule extends Component {
       <Container fluid>
         <Row>
           <Col>
-            <Form.Group>
-              <Form.Label>Movie gross income</Form.Label>
-                <div className='input-group-prepend'>
-                  <span className='input-group-text'>$</span>
-                  <Form.Control
-                    className='number-input-field'
-                    id='movieGross'
-                    name='movieGross'
-                    type='number'
-                    min='0'
-                    step='1000000'
-                    value={this.state.movieGross}
-                    onChange={this.updateMovieGross}
-                  />
-              </div>
-              <Form.Text className='text-muted'>
-                Adjust the movie domestic gross value.
-              </Form.Text>
-            </Form.Group>
+            <Form.Label>Movie gross income</Form.Label>
+            <div className='input-group-prepend'>
+              <span className='input-group-text'>$</span>
+              <Form.Control
+                className='number-input-field'
+                id='movieGross'
+                name='movieGross'
+                type='number'
+                min='0'
+                step='1000000'
+                value={this.state.movieGross}
+                onChange={this.updateMovieGross}
+              />
+            </div>
+            <Form.Text className='text-muted'>
+              Adjust the movie domestic gross value.
+            </Form.Text>
           </Col>
           <Col>
             <Form.Label>Cap value</Form.Label>
@@ -124,14 +122,14 @@ class GrossCapRule extends Component {
           </Col>
           <Col>
             <Form.Label>Total Gross Earnings</Form.Label>
-              <div className='input-group-prepend'>
-                <span className='input-group-text'>$</span>
-                <Form.Control
-                  readOnly
-                  type='number'
-                  placeholder={this.calculateGrossCapEarnings()}
-                />
-              </div>
+            <div className='input-group-prepend'>
+              <span className='input-group-text'>$</span>
+              <Form.Control
+                readOnly
+                type='number'
+                placeholder={this.calculateGrossCapEarnings()}
+              />
+            </div>
           </Col>
         </Row>
       </Container>
