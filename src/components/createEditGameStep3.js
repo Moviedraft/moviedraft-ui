@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
+import Form from 'react-bootstrap/Form'
 import Rules from './rules.js'
 
 class CreateEditGameStep3 extends Component {
@@ -32,18 +33,18 @@ class CreateEditGameStep3 extends Component {
     }
 
     return (
-      <div className='form-group'>
-        <input
-          type='checkbox'
-          id='playWithRules'
-          name='playWithRules'
-          checked={this.props.playWithRules}
-          onChange={this.handleCheckbox} />
-        <label htmlFor='playWithRules'>
-          Do you want to play with additional rules?
-        </label>
+      <Form>
+        <Form.Group>
+          <Form.Check
+            id='playWithRules'
+            name='playWithRules'
+            label='Do you want to play with additional rules?'
+            checked={this.props.playWithRules}
+            onChange={this.handleCheckbox}
+          />
+        </Form.Group>
         {this.renderRules()}
-      </div>
+      </Form>
     )
   }
 }
