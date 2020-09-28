@@ -2,8 +2,10 @@ import React, { Component } from 'react'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
+import Button from 'react-bootstrap/Button'
 import { apiGet } from '../utilities/apiUtility.js'
 import '../styles/user.css'
+import '../styles/global.css'
 import Header from '../components/header.js'
 import UserHandle from './userHandle.js'
 import UserGames from './userGames.js'
@@ -143,56 +145,17 @@ class User extends Component {
             </Col>
           </Row>
         </Container>
-        <UserGames
-          parentCallback={this.userGamesCallbackFunction}
-          deleteGameCallbackFunction={this.deleteGameCallbackFunction}
-          userId={this.state.userId}
-          userGames={this.state.userGames}
-          updateGameNameCallbackFunction={this.updateGameNameCallbackFunction}
-          handleError={this.handleError} />
-      </div>
-    )
-
-    return (
-      <div id='userPage'>
-        <Header
-          picture={this.state.picture}/>
-        <div id='profilePic'>
-          <ProfilePic
-            picture={this.state.picture}
-            userId={this.state.userId}
-            updateProfilePic={this.updateProfilePic} />
-          <div id='userHandleWrapper'>
-            <ul id='userTitle'>
-              <li>
-                <UserHandle
-                  parentCallback={this.userHandlecallbackFunction}
-                  handleError={this.handleError}
-                  userHandle={this.state.userHandle}
-                />
-              </li>
-              <li>
-                <div>{this.state.email}</div>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div id='userInfo'>
-          <ul>
-            <li>
-              <span>First Name: {this.state.firstName}</span>
-            </li>
-            <li>
-              <span>Last Name: {this.state.lastName}</span>
-            </li>
-            <li>
-              <button
-                id='createGameButton'
-                onClick={() => this.onClick()}>
-                <b>CREATE GAME</b>
-              </button>
-            </li>
-          </ul>
+        <div
+          id='createGameButtonWrapper'
+        >
+          <Button
+            variant='outline'
+            id='createGameButton'
+            onClick={() => this.onClick()}
+          >
+            <i className='material-icons icons'>create</i>
+            <span>CREATE GAME</span>
+          </Button>
         </div>
         <UserGames
           parentCallback={this.userGamesCallbackFunction}

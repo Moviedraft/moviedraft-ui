@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import moment from 'moment'
+import Modal from 'react-bootstrap/Modal'
+import Button from 'react-bootstrap/Button'
 import { apiPost } from '../utilities/apiUtility.js'
 import '../styles/createGame.css'
-import Modal from 'react-modal'
 import CreateEditGameStep1 from './createEditGameStep1.js'
 import CreateEditGameStep2 from './createEditGameStep2.js'
 import CreateEditGameStep3 from './createEditGameStep3.js'
@@ -194,51 +195,58 @@ class CreateGame extends Component {
   render() {
     return (
       <Modal
-      isOpen={this.props.modalOpen}
-      className='modal'
-      onRequestClose={this.handleKeyPress}>
-        <button
-          id='closeModalButton'
-          onClick={this.handleCloseModal}>
-          Close Modal
-        </button>
-        <h1 id='createGameHeader'>Create Game</h1>
-        <p>Step {this.state.currentStep}</p>
-        <p>All fields are required to create a game.</p>
-          <form
-          onSubmit={e => { e.preventDefault(); }}>
-            <div>
-              <CreateEditGameStep1
-                currentStep={this.state.currentStep}
-                handleChange={this.handleChange}
-                gameName={this.state.gameName}
-                auctionDollars={this.state.auctionDollars}
-                minimumBid={this.state.minimumBid} />
-              <CreateEditGameStep2
-                currentStep={this.state.currentStep}
-                handleChange={this.handleChange}
-                startDate={this.state.startDate}
-                endDate={this.state.endDate}
-                auctionDate={this.state.auctionDate}
-                auctionItemExpiryTimeSeconds={this.state.auctionItemExpiryTimeSeconds}
-                movies={this.state.movies}
-                handleError={this.props.handleError} />
-              <CreateEditGameStep3
-                currentStep={this.state.currentStep}
-                handleChange={this.handleChange}
-                playWithRules={this.state.playWithRules}
-                grossCapRule={this.state.grossCapRule}
-                valueMultiplierRule={this.state.valueMultiplierRule} />
-              <CreateEditGameStep4
-                currentStep={this.state.currentStep}
-                handleChange={this.handleChange}
-                playerEmails={this.state.playerEmails} />
-            </div>
+        centered
+        show={this.props.modalOpen}
+        onHide={this.handleCloseModal}
+        backdrop='static'
+        animation={false}
+      >
+          <Modal.Header closeButton>
+            <Modal.Title>Create Game</Modal.Title>
+          </Modal.Header>
+
+          <Modal.Body>
+            <p>Step {this.state.currentStep}</p>
+            <p>All fields are required to create a game.</p>
+            <form
+              onSubmit={e => { e.preventDefault(); }}
+            >
+              <div>
+                <CreateEditGameStep1
+                  currentStep={this.state.currentStep}
+                  handleChange={this.handleChange}
+                  gameName={this.state.gameName}
+                  auctionDollars={this.state.auctionDollars}
+                  minimumBid={this.state.minimumBid} />
+                <CreateEditGameStep2
+                  currentStep={this.state.currentStep}
+                  handleChange={this.handleChange}
+                  startDate={this.state.startDate}
+                  endDate={this.state.endDate}
+                  auctionDate={this.state.auctionDate}
+                  auctionItemExpiryTimeSeconds={this.state.auctionItemExpiryTimeSeconds}
+                  movies={this.state.movies}
+                  handleError={this.props.handleError} />
+                <CreateEditGameStep3
+                  currentStep={this.state.currentStep}
+                  handleChange={this.handleChange}
+                  playWithRules={this.state.playWithRules}
+                  grossCapRule={this.state.grossCapRule}
+                  valueMultiplierRule={this.state.valueMultiplierRule} />
+                <CreateEditGameStep4
+                  currentStep={this.state.currentStep}
+                  handleChange={this.handleChange}
+                  playerEmails={this.state.playerEmails} />
+              </div>
+            </form>
+          </Modal.Body>
+
+          <Modal.Footer>
             <div id='buttonsDiv'>
               {this.previousButton()}
               {this.nextButton()}
             </div>
-        </form>
+          </Modal.Footer>
       </Modal>
     )
   }

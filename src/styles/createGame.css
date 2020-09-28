@@ -1,4 +1,4 @@
-.modal {
+/* .modal {
   display: block;
   margin-left: auto;
   margin-right: auto;
@@ -40,4 +40,8 @@
 
 #buttonsDiv {
   position: inherit !important;
+} */
+
+.modal-open {
+    overflow: hidden;
 }
