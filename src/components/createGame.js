@@ -208,6 +208,7 @@ class CreateGame extends Component {
         onHide={this.handleCloseModal}
         backdrop='static'
         animation={false}
+        dialogClassName='modal-width'
       >
           <Modal.Header closeButton>
             <Modal.Title>Create Game</Modal.Title>

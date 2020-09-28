@@ -53,3 +53,72 @@
   outline: none !important;
   outline-offset: none !important;
 }
+
+.modal-width {
+  width: 1000px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+@media screen and (max-width: 1040px) {
+  .modal-width {
+    width: 700px;
+    max-width: 700px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .modal-width {
+    width: 500px;
+    max-width: 500px;
+  }
+}
+
+@media screen and (max-width: 520px) {
+  .modal-width {
+    width: 450px;
+    max-width: 450px;
+  }
+}
+
+@media screen and (max-width: 470px) {
+  .modal-width {
+    width: 400px;
+    max-width: 400px;
+  }
+}
+
+@media screen and (max-width: 430px) {
+  .modal-width {
+    width: 375px;
+    max-width: 375px;
+  }
+}
+
+@media screen and (max-width: 410px) {
+  .modal-width {
+    width: 350px;
+    max-width: 350px;
+  }
+}
+
+@media screen and (max-width: 376px) {
+  .modal-width {
+    width: 300px;
+    max-width: 300px;
+  }
+}
+
+@media screen and (max-width: 350px) {
+  .modal-width {
+    width: 330px;
+    max-width: 330px;
+  }
+}
+
+@media screen and (max-width: 349px) {
+  .modal-width {
+    width: 250px;
+    max-width: 250px;
+  }
+}
