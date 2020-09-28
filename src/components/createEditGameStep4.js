@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
+import Form from 'react-bootstrap/Form'
 import '../styles/createEditGameStep4.css'
 
 class CreateEditGameStep4 extends Component {
@@ -88,19 +89,26 @@ class CreateEditGameStep4 extends Component {
     }
 
     return (
-      <div id='emailWrapper'>
-        <p>Emails must use the following Google domains: 'gmail.com', 'googlemail.com', or 'google.com'</p>
-        <input
-          ref="emailInput"
-          placeholder="Type or paste email addresses"
-          id='email'
-          name='email'
-          value={this.state.value}
-          onChange={this.handleChange}
-          onKeyDown={this.handleKeyDown}
-          onPaste={this.handlePaste} />
-          {this.renderEmails()}
-      </div>
+      <Form>
+        <Form.Group>
+          <Form.Label>Invite Players</Form.Label>
+            <Form.Control
+              ref='emailInput'
+              placeholder='Type or paste email addresses'
+              id='email'
+              name='email'
+              type='email'
+              value={this.state.value}
+              onChange={this.handleChange}
+              onKeyDown={this.handleKeyDown}
+              onPaste={this.handlePaste}
+            />
+          <Form.Text className='text-muted'>
+            Emails must use the following Google domains: 'gmail.com', 'googlemail.com', or 'google.com'
+          </Form.Text>
+        </Form.Group>
+        {this.renderEmails()}
+      </Form>
     )
   }
 }
