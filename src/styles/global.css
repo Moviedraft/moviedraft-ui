@@ -40,3 +40,16 @@
     float: right;
   }
 }
+
+.input-group-prepend > .input-group-text {
+  border-radius: 5px 0px 0px 5px;
+}
+
+.number-input-field {
+  border-radius: 0px 5px 5px 0px;
+}
+
+.close {
+  outline: none !important;
+  outline-offset: none !important;
+}

@@ -1,5 +1,7 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
+import Form from 'react-bootstrap/Form'
 import '../styles/createEditGameStep1.css'
+import '../styles/global.css'
 
 class CreateEditGameStep1 extends Component {
     constructor(props){
@@ -13,46 +15,63 @@ class CreateEditGameStep1 extends Component {
       return null
     }
 
-    return(
-      <div className='form-group'>
-        <p>Choose a name for your game.</p>
-        <label htmlFor='gameName'>Game Name:</label>
-        <input
-          className='form-control'
-          id='gameName'
-          name='gameName'
-          type='text'
-          placeholder='Enter game name'
-          value={this.props.gameName}
-          onChange={this.props.handleChange} />
-        <p>Select the amount of fake dollars each player can auction with:</p>
-        <label htmlFor='auctionDollars'>Auction Dollars:</label>
-        <span className='currencyinput'>$
-          <input
-            className='form-control'
-            id='auctionDollars'
-            name='auctionDollars'
-            type='number'
-            min='1'
-            value={this.props.auctionDollars}
+    return (
+      <Form>
+        <Form.Group>
+          <Form.Label>Game Name</Form.Label>
+          <Form.Control
+            placeholder='Game Name'
+            id='gameName'
+            name='gameName'
+            value={this.props.gameName}
             onChange={this.props.handleChange}
-            onKeyPress={this.handleKeyPress} />
-        </span>
-        <p>Select the minimum bid allowed for each auction item:</p>
-        <label htmlFor='minimumBid'>Minimum Bid:</label>
-        <span className='currencyinput'>$
-          <input
-            className='form-control'
-            id='minimumBid'
-            name='minimumBid'
-            type='number'
-            min='1'
-            max={this.props.auctionDollars}
-            value={this.props.minimumBid}
-            onChange={this.props.handleChange}
-            onKeyPress={this.handleKeyPress} />
-        </span>
-      </div>
+          />
+          <Form.Text className='text-muted'>
+            Enter the name you would like to call your game.
+          </Form.Text>
+        </Form.Group>
+
+        <Form.Group>
+          <Form.Label>Auction Dollars</Form.Label>
+            <div className='input-group-prepend'>
+              <span className='input-group-text'>$</span>
+              <Form.Control
+                className='number-input-field'
+                id='auctionDollars'
+                name='auctionDollars'
+                type='number'
+                min='1'
+                value={this.props.auctionDollars}
+                onChange={this.props.handleChange}
+                onKeyPress={this.handleKeyPress}
+              />
+          </div>
+          <Form.Text className='text-muted'>
+            Enter the amount of fake auction dollars you would like players to start with.
+          </Form.Text>
+        </Form.Group>
+
+        <Form.Group>
+          <Form.Label>Minimum Bid</Form.Label>
+            <div className='input-group-prepend'>
+              <span className='input-group-text'>$</span>
+              <Form.Control
+                className='number-input-field'
+                id='minimumBid'
+                name='minimumBid'
+                type='number'
+                min='1'
+                max={this.props.auctionDollars}
+                value={this.props.minimumBid}
+                onChange={this.props.handleChange}
+                onKeyPress={this.handleKeyPress}
+              />
+          </div>
+          <Form.Text className='text-muted'>
+            Enter the minimum bid for each movie.
+          </Form.Text>
+        </Form.Group>
+      </Form>
     )
   }
 }

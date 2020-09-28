@@ -1,47 +1,16 @@
-/* .modal {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 5em;
-  background-color: white;
-  border: 2px solid black;
-  outline: none;
-  width: max-content;
-  max-height: 50em;
-  overflow-y: auto;
-  overflow-x: auto;
-  bottom: 0;
+.modal-body > p {
+  font-weight: bold;
 }
-
-.modal * {
-  padding: 0.5em;
-}
-
-#createGameHeader {
-  padding: 0;
-}
-
-#closeModalButton {
-  position: inherit !important;
-  float: right;
-}
-
-#nextButton {
-  position: inherit !important;
-}
-
-#submitButton {
-  position: inherit !important;
-}
-
-#previousButton {
-  position: inherit !important;
-}
-
-#buttonsDiv {
-  position: inherit !important;
-} */
 
 .modal-open {
     overflow: hidden;
+}
+
+#submitButton {
+  border: 1px solid black;
+  margin-left: 10px;
+  font-weight: bold;
+  font-size: 1rem;
+  line-height: 1.7;
+  position: relative;
 }
