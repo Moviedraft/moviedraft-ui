@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from '@reach/router'
+import Modal from 'react-bootstrap/Modal'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
@@ -14,6 +15,9 @@ class UserGames extends Component {
   constructor(props){
     super(props)
     this.state = {
+      deleteConfirmModalOpen: false,
+      deleteGameId: '',
+      deleteGameName: '',
       editModalOpen: false,
       gameToEdit: null
     }
@@ -21,6 +25,7 @@ class UserGames extends Component {
     this.sendData = this.sendData.bind(this)
     this.onClick = this.onClick.bind(this)
     this.getGame = this.getGame.bind(this)
+    this.confirmDeleteGame = this.confirmDeleteGame.bind(this)
     this.deleteGame = this.deleteGame.bind(this)
     this.renderEditButton = this.renderEditButton.bind(this)
     this.editGameCallbackFunction = this.editGameCallbackFunction.bind(this)
@@ -52,9 +57,14 @@ class UserGames extends Component {
       } else if(data.hasOwnProperty('_id')) {
         this.setState({gameToEdit: data})
         this.setState({editModalOpen: true})
-        console.log(this.state.editModalOpen)
       }
     })
+  }
+
+  confirmDeleteGame(gameId, gameName) {
+    this.setState({deleteGameId: gameId})
+    this.setState({deleteGameName: gameName})
+    this.setState({deleteConfirmModalOpen: true})
   }
 
   deleteGame(gameId) {
@@ -63,9 +73,16 @@ class UserGames extends Component {
       if (data === null) {
         this.props.handleError(`Unable to delete gameId: ${gameId}. Please refresh and try again.`)
       } else {
+        this.setState({deleteGameId: ''})
+        this.setState({deleteGameName: ''})
+        this.handleCloseModal()
         this.props.deleteGameCallbackFunction(gameId)
       }
     })
+  }
+
+  handleCloseModal() {
+    this.setState({deleteConfirmModalOpen: false})
   }
 
   renderEditButton(commissionerId, gameId, auctionDate) {
@@ -87,13 +104,13 @@ class UserGames extends Component {
     this.setState({editModalOpen: editModalOpen})
   }
 
-  renderDeleteButton(commissionerId, gameId) {
+  renderDeleteButton(commissionerId, gameId, gameName) {
     return this.props.userId === commissionerId ?
       (
         <Button
           variant='outlone'
           className='icon-buttons'
-          onClick={() => this.deleteGame(gameId)}>
+          onClick={() => this.confirmDeleteGame(gameId, gameName)}>
             <i className='material-icons icons'>clear</i>
         </Button>
       ) : (
@@ -116,7 +133,7 @@ class UserGames extends Component {
                 {game.gameName}
               </Link>
               {this.renderEditButton(game.commissioner_id, game.game_id, game.auctionDate)}
-              {this.renderDeleteButton(game.commissioner_id, game.game_id)}
+              {this.renderDeleteButton(game.commissioner_id, game.game_id, game.gameName)}
             </div>
           ) : (
             null
@@ -183,6 +200,32 @@ class UserGames extends Component {
           </Row>
         </Container>
         {this.renderEditGameModal()}
+        <Modal
+          centered
+          show={this.state.deleteConfirmModalOpen}
+          onHide={this.handleCloseModal}
+          backdrop='static'
+          animation={false}
+        >
+          <Modal.Header closeButton></Modal.Header>
+          <Modal.Body>
+            <p>Are you sure you want to delete "{this.state.deleteGameName}"?</p>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              variant='secondary'
+              onClick={() => {this.handleCloseModal()}}
+            >
+              Close
+            </Button>
+            <Button
+              variant='primary'
+              onClick={() => {this.deleteGame(this.state.deleteGameId)}}
+            >
+              Delete
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </div>
     )
   }
