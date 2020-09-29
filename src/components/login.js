@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { navigate } from '@reach/router'
 import '../styles/login.css'
+import '../styles/global.css'
 import moment from 'moment'
 
 class Login extends Component {
@@ -56,7 +57,11 @@ class Login extends Component {
     }
 
     return (
-      <div id='signIn' onClick={this.signIn}></div>
+      <div id='signIn' onClick={this.signIn}>
+        <img src='https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png' alt='profile pic'/>
+        <span className='lg-view'>Sign in With Google</span>
+        <span className='sm-view'>Sign In</span>
+      </div>
     )
   }
 }

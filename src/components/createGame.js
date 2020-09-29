@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 import moment from 'moment'
+import Modal from 'react-bootstrap/Modal'
+import Button from 'react-bootstrap/Button'
 import { apiPost } from '../utilities/apiUtility.js'
 import '../styles/createGame.css'
-import Modal from 'react-modal'
+import '../styles/global.css'
 import CreateEditGameStep1 from './createEditGameStep1.js'
 import CreateEditGameStep2 from './createEditGameStep2.js'
 import CreateEditGameStep3 from './createEditGameStep3.js'
@@ -150,12 +152,15 @@ class CreateGame extends Component {
   previousButton(){
     return (
       this.state.currentStep !== 1 ?
-      (<button
+      (<Button
+          variant='outline'
+          className='icon-buttons'
           id='previousButton'
           type='button'
-          onClick={this.prev}>
-          Previous
-        </button>)
+          onClick={this.prev}
+        >
+          <i className='material-icons icons'>navigate_before</i>
+        </Button>)
       : null
     )
   }
@@ -163,20 +168,24 @@ class CreateGame extends Component {
   nextButton(){
     return (
       this.state.currentStep < 4 ?
-        (<button
+        (<Button
+           variant='outline'
+           className='icon-buttons'
 			     id='nextButton'
            type='button'
-           onClick={this.next}>
-           Next
-         </button>)
+           onClick={this.next}
+          >
+           <i className='material-icons icons'>navigate_next</i>
+         </Button>)
        : this.state.currentStep === 4 ?
-       (<button
+       (<Button
+          variant='outline'
           id='submitButton'
           type='button'
           onClick={this.handleSubmit}
           disabled={this.checkDisabled()}>
           CREATE GAME
-        </button> )
+        </Button> )
       : null
     )
   }
@@ -194,19 +203,19 @@ class CreateGame extends Component {
   render() {
     return (
       <Modal
-      isOpen={this.props.modalOpen}
-      className='modal'
-      onRequestClose={this.handleKeyPress}>
-        <button
-          id='closeModalButton'
-          onClick={this.handleCloseModal}>
-          Close Modal
-        </button>
-        <h1 id='createGameHeader'>Create Game</h1>
-        <p>Step {this.state.currentStep}</p>
-        <p>All fields are required to create a game.</p>
-          <form
-          onSubmit={e => { e.preventDefault(); }}>
+        centered
+        show={this.props.modalOpen}
+        onHide={this.handleCloseModal}
+        backdrop='static'
+        animation={false}
+        dialogClassName='modal-width'
+      >
+          <Modal.Header closeButton>
+            <Modal.Title>Create Game</Modal.Title>
+          </Modal.Header>
+
+          <Modal.Body>
+            <p>All fields are required to create a game.</p>
             <div>
               <CreateEditGameStep1
                 currentStep={this.state.currentStep}
@@ -234,11 +243,16 @@ class CreateGame extends Component {
                 handleChange={this.handleChange}
                 playerEmails={this.state.playerEmails} />
             </div>
-            <div id='buttonsDiv'>
+          </Modal.Body>
+
+          <Modal.Footer>
+            <div>
               {this.previousButton()}
+            </div>
+            <div>
               {this.nextButton()}
             </div>
-        </form>
+          </Modal.Footer>
       </Modal>
     )
   }

@@ -1,6 +1,10 @@
-import React, { Component } from 'react';
-import { navigate } from "@reach/router"
+import React, { Component } from 'react'
+import Navbar from 'react-bootstrap/Navbar'
+import Container from 'react-bootstrap/Container'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
 import '../styles/header.css'
+import '../styles/global.css'
 import Login from './login.js'
 import Account from './account.js'
 import moment from 'moment'
@@ -12,18 +16,14 @@ class Header extends Component {
       loggedIn: false
     }
 
-    this.onClick = this.onClick.bind(this)
     this.loggedIn = this.loggedIn.bind(this)
+    this.renderAccountButton = this.renderAccountButton.bind(this)
   }
 
   componentDidMount() {
     if (localStorage.getItem('CouchSportsToken') && moment() < moment(localStorage.getItem('CouchSportsTokenExpiry'))) {
       this.setState({loggedIn: true})
     }
-  }
-
-  onClick() {
-    navigate('/user')
   }
 
   loggedIn(loggedIn) {
@@ -43,28 +43,19 @@ class Header extends Component {
       )
   }
 
-  renderGameInfo() {
-    return this.props.gameName && this.props.startDate && this.props.endDate ?
-    (
-      <div id='gameInfo'>
-        <div id='headerGameName'>{this.props.gameName}</div>
-        <div id='headerGameDates'>{moment(this.props.startDate).format('LL') + ' - ' + moment(this.props.endDate).format('LL')}</div>
-      </div>
-    ) : (
-      <div id='gameInfo'>&nbsp;</div>
-    )
-  }
-
   render() {
     return (
-      <div id='headerContainer'>
-        <span id='companyName' onClick={this.onClick}>CouchSports</span>
-        {this.renderGameInfo()}
-        <div id='accountContainer'>
-          {this.renderAccountButton()}
-        </div>
-      </div>
-    );
+      <Container fluid>
+        <Row>
+          <Col className='no-padding' xs={6}>
+            <Navbar.Brand href='/user' id='companyName'>Couchsports</Navbar.Brand>
+          </Col>
+          <Col className='accountInfo no-padding' align='right' xs={6}>
+            {this.renderAccountButton()}
+          </Col>
+        </Row>
+      </Container>
+    )
   }
 }
 

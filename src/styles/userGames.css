@@ -1,51 +1,104 @@
-#userGames {
-  clear: both;
-  height: 25em;
-  width: 100%;
-  display: table;
+@media screen and (max-width: 768px) {
+  .userGameContainer {
+    margin: 0 auto;
+  }
 }
 
-#userGames div {
-  display: table-row;
+.userGameContainer > h3 {
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
-#playingGameHeader {
-  width: 50%;
-  display: table-cell;
-  height: 2em;
+.user-game-div {
+  height: 50px;
+  border: 1px solid black;
+  border-radius: 5px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
-#invitedGameHeader {
-  width: 100%;
-  display: table-cell;
-  height: 2em;
+.user-game-div > span {
+  display: inline-block;
+  width: 300px;
+  margin-left: 3px;
 }
 
-.userGamesData {
-  display: table-row;
-  border: 1px solid blue;
+.user-game-div > a {
+  display: inline-block;
+  vertical-align: middle;
+  margin-top: 10px;
+  margin-left: 3px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  width: 250px;
 }
 
-.playingGame {
-  display: table-cell !important;
+@media screen and (min-width: 350px) {
+  .user-game-div > a {
+    width: 210px;
+  }
 }
 
-#invitedGameRow {
-  display: table-row;
+@media screen and (min-width: 400px) {
+  .user-game-div > a {
+    width: 255px;
+  }
 }
 
-.invitedGame {
-  display: table-cell !important;
+@media screen and (min-width: 500px) {
+  .user-game-div > a {
+    width: 350px;
+  }
 }
 
-#joinButton {
-  display: inline-block !important;
-  position: inherit;
-  margin-left: 1em;
+@media screen and (min-width: 766px) {
+  .user-game-div > a {
+    width: 200px;
+  }
 }
 
-.adminButtons {
-  display: inline-block !important;
-  position: relative;
-  margin-left: 1em;
+@media screen and (min-width: 1000px) {
+  .user-game-div > a {
+    width: 350px;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .user-game-div > a {
+    width: 450px;
+  }
+}
+
+@media screen and (min-width: 1300px) {
+  .user-game-div > a {
+    width: 500px;
+  }
+}
+
+@media screen and (min-width: 1400px) {
+  .user-game-div > a {
+    width: 550px;
+  }
+}
+
+.user-game-div > button {
+  float: right;
+  display: inline-block;
+}
+
+.user-games-div > a:link {
+  text-decoration: none;
+}
+
+.user-games-div > a:visited {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+a:active {
+  text-decoration: none;
 }

@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { navigate } from '@reach/router'
+import Dropdown from 'react-bootstrap/Dropdown'
 import { apiGet } from '../utilities/apiUtility.js'
 import '../styles/account.css'
 import DownArrow from '../downArrow.png'
@@ -9,26 +10,10 @@ class Account extends Component {
   constructor(props){
     super(props)
     this.state = {
-      showMenu: false
+
     }
 
-    this.showMenu = this.showMenu.bind(this)
-    this.closeMenu = this.closeMenu.bind(this)
     this.logOut = this.logOut.bind(this)
-  }
-
-  showMenu() {
-    this.setState({ showMenu: true }, () => {
-      document.addEventListener('click', this.closeMenu);
-    });
-  }
-
-  closeMenu(event) {
-    if (this.dropdownMenu !== null && !this.dropdownMenu.contains(event.target)) {
-      this.setState({ showMenu: false }, () => {
-        document.removeEventListener('click', this.closeMenu);
-      });
-    }
   }
 
   logOut() {
@@ -42,47 +27,28 @@ class Account extends Component {
 
   render() {
     return (
-     <div id='Account'>
-      <div id='AccountButtonDiv'>
-       <button
-         id='AccountButton'
-         onClick={() => this.showMenu()}>
-         <img
-          id='AccountButtonProfilePic'
-          src={this.props.picture ?? GenericPerson}
-          alt='Profile Pic' />
-         <img
-           id='DownArrow'
-           src={DownArrow}
-           alt='Down Arrow' />
-       </button>
-       </div>
+      <div id='dropdownContainer'>
+        <Dropdown>
+          <Dropdown.Toggle id='dropdown-basic' className='dropDownButton buttonOutline shadow-none' variant='outline'>
+            <img
+              id='AccountButtonProfilePic'
+              src={this.props.picture ?? GenericPerson}
+              alt='Profile Pic'
+            />
+            <img
+              id='DownArrow'
+              src={DownArrow}
+              alt='Down Arrow'
+            />
+          </Dropdown.Toggle>
 
-       {
-          this.state.showMenu ?
-          (
-            <div
-              className='menu'
-              ref={(element) => {
-                this.dropdownMenu = element;
-              }}>
-              <button
-                className='DropDownButton'
-                onClick={() => navigate('/user')}>
-                Account
-              </button>
-              <button
-                className='DropDownButton'
-                onClick={() => this.logOut()}>
-                Logout
-              </button>
-            </div>
-          ) : (
-              null
-          )
-        }
-     </div>
-   )
+          <Dropdown.Menu id='menu' className='dropdown-menu-right'>
+            <Dropdown.Item href='/user'>Account</Dropdown.Item>
+            <Dropdown.Item onClick={() => this.logOut()}>Logout</Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
+      </div>
+    )
   }
 }
 

@@ -1,4 +1,46 @@
+#userHandleContainer {
+  height: 133px;
+  display: table-cell;
+  vertical-align: middle;
+}
+
+#emailSpan {
+  float: left;
+  margin-left: 12px;
+}
+
+#userHandleTable {
+  table-layout: fixed;
+  width: 100%;
+  column-width: 100px;
+  vertical-align: middle;
+}
+
 .userHandle {
   font-size: 2em;
   font-weight: bold;
+  width: 100%;
+}
+
+.editButton {
+  border: 1px solid black;
+  margin: 3px;
+  width: 45px;
+}
+
+.editIcons {
+  margin-left: -2px;
+  vertical-align: middle;
+}
+
+@media screen and (max-width: 575px) {
+  .userHandle {
+    font-size: 2em;
+    font-weight: bold;
+    width: 130%;
+  }
+
+  .editButton {
+    float: right;
+  }
 }

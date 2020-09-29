@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import Button from 'react-bootstrap/Button'
 import '../styles/profilePic.css'
 import S3 from 'aws-s3'
 import moment from 'moment'
@@ -74,12 +75,18 @@ class ProfilePic extends Component {
     if (this.state.selectedFile !== null && this.state.filePreviewUrl !== null) {
       return (
         <div id='uploadButtons'>
-          <button onClick={event => this.uploadImage(event)}>
+          <Button
+            variant='outline'
+            onClick={event => this.uploadImage(event)}
+          >
             Upload
-          </button>
-          <button onClick={this.resetStates}>
+          </Button>
+          <Button
+            variant='outline'
+            onClick={this.resetStates}
+          >
             Cancel
-          </button>
+          </Button>
         </div>
       )
     }
@@ -90,7 +97,8 @@ class ProfilePic extends Component {
         <input
           id='files'
           type='file'
-          onChange={this.previewImage} />
+          onChange={this.previewImage}
+          hidden />
       </div>
     )
   }
@@ -98,12 +106,12 @@ class ProfilePic extends Component {
   render() {
     return (
       <div id='pofilePicWrapper'>
-        <img
-          id='picture'
-          style={this.state.imageLoaded ? {} : {display: 'none'}}
-          onLoad={() => this.setState({imageLoaded: true})}
-          src={this.state.filePreviewUrl ?? this.props.picture}
-          alt='Profile' />
+          <img
+            id='picture'
+            style={this.state.imageLoaded ? {} : {display: 'none'}}
+            onLoad={() => this.setState({imageLoaded: true})}
+            src={this.state.filePreviewUrl ?? this.props.picture}
+            alt='Profile' />
         <div id='upload'>
           {this.renderUploadProcess()}
         </div>
