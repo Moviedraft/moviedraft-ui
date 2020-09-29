@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 import moment from 'moment'
+import Modal from 'react-bootstrap/Modal'
+import Button from 'react-bootstrap/Button'
 import { apiPut } from '../utilities/apiUtility.js'
 import '../styles/createGame.css'
-import Modal from 'react-modal'
+import '../styles/global.css'
 import CreateEditGameStep1 from './createEditGameStep1.js'
 import CreateEditGameStep2 from './createEditGameStep2.js'
 import CreateEditGameStep3 from './createEditGameStep3.js'
@@ -141,7 +143,7 @@ class EditGame extends Component {
     let body = {
       playerIds: this.state.playerEmails,
       dollarSpendingCap: this.state.auctionDollars,
-      minimumBid: this.state.minimumBid < this.state.auctionDollars 
+      minimumBid: this.state.minimumBid < this.state.auctionDollars
         ? this.state.minimumBid : this.state.auctionDollars,
       rules: rules,
       auctionItemsExpireInSeconds: this.state.auctionItemExpiryTimeSeconds,
@@ -180,12 +182,15 @@ class EditGame extends Component {
   previousButton(){
     return (
       this.state.currentStep !== 1 ?
-      (<button
+      (<Button
+          variant='outline'
+          className='icon-buttons'
           id='previousButton'
           type='button'
-          onClick={this.prev}>
-          Previous
-        </button>)
+          onClick={this.prev}
+        >
+          <i className='material-icons icons'>navigate_before</i>
+        </Button>)
       : null
     )
   }
@@ -193,20 +198,24 @@ class EditGame extends Component {
   nextButton(){
     return (
       this.state.currentStep < 4 ?
-        (<button
+        (<Button
+           variant='outline'
+           className='icon-buttons'
 			     id='nextButton'
            type='button'
-           onClick={this.next}>
-           Next
-         </button>)
+           onClick={this.next}
+          >
+           <i className='material-icons icons'>navigate_next</i>
+         </Button>)
        : this.state.currentStep === 4 ?
-       (<button
+       (<Button
+          variant='outline'
           id='submitButton'
           type='button'
           onClick={this.handleSubmit}
           disabled={this.checkDisabled()}>
           SAVE GAME
-        </button> )
+        </Button>)
       : null
     )
   }
@@ -224,49 +233,53 @@ class EditGame extends Component {
   render() {
     return (
       <Modal
-      isOpen={this.props.modalOpen}
-      className='modal'
-      onRequestClose={this.handleKeyPress}>
-        <button
-          id='closeModalButton'
-          onClick={this.handleCloseModal}>
-          Close Modal
-        </button>
-        <h1 id='createGameHeader'>Edit Game</h1>
-        <p>Step {this.state.currentStep}</p>
-          <form
-          onSubmit={e => { e.preventDefault(); }}>
-            <div>
-              <CreateEditGameStep1
-                currentStep={this.state.currentStep}
-                handleChange={this.handleChange}
-                gameName={this.state.gameName}
-                auctionDollars={this.state.auctionDollars}
-                minimumBid={this.state.minimumBid} />
-              <CreateEditGameStep2
-                currentStep={this.state.currentStep}
-                handleChange={this.handleChange}
-                startDate={this.state.startDate}
-                endDate={this.state.endDate}
-                auctionDate={this.state.auctionDate}
-                auctionItemExpiryTimeSeconds={this.state.auctionItemExpiryTimeSeconds}
-                movies={this.state.movies} />
-              <CreateEditGameStep3
-                currentStep={this.state.currentStep}
-                handleChange={this.handleChange}
-                playWithRules={this.state.playWithRules}
-                grossCapRule={this.state.grossCapRule}
-                valueMultiplierRule={this.state.valueMultiplierRule} />
-              <CreateEditGameStep4
-                currentStep={this.state.currentStep}
-                handleChange={this.handleChange}
-                playerEmails={this.state.playerEmails} />
-            </div>
-            <div id='buttonsDiv'>
-              {this.previousButton()}
-              {this.nextButton()}
-            </div>
-        </form>
+        centered
+        show={this.props.modalOpen}
+        onHide={this.handleCloseModal}
+        backdrop='static'
+        animation={false}
+        dialogClassName='modal-width'
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Edit Game</Modal.Title>
+        </Modal.Header>
+
+        <Modal.Body>
+          <div>
+            <CreateEditGameStep1
+              currentStep={this.state.currentStep}
+              handleChange={this.handleChange}
+              gameName={this.state.gameName}
+              auctionDollars={this.state.auctionDollars}
+              minimumBid={this.state.minimumBid} />
+            <CreateEditGameStep2
+              currentStep={this.state.currentStep}
+              handleChange={this.handleChange}
+              startDate={this.state.startDate}
+              endDate={this.state.endDate}
+              auctionDate={this.state.auctionDate}
+              auctionItemExpiryTimeSeconds={this.state.auctionItemExpiryTimeSeconds}
+              movies={this.state.movies} />
+            <CreateEditGameStep3
+              currentStep={this.state.currentStep}
+              handleChange={this.handleChange}
+              playWithRules={this.state.playWithRules}
+              grossCapRule={this.state.grossCapRule}
+              valueMultiplierRule={this.state.valueMultiplierRule} />
+            <CreateEditGameStep4
+              currentStep={this.state.currentStep}
+              handleChange={this.handleChange}
+              playerEmails={this.state.playerEmails} />
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <div>
+            {this.previousButton()}
+          </div>
+          <div>
+            {this.nextButton()}
+          </div>
+        </Modal.Footer>
       </Modal>
     )
   }

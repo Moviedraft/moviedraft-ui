@@ -52,6 +52,7 @@ class UserGames extends Component {
       } else if(data.hasOwnProperty('_id')) {
         this.setState({gameToEdit: data})
         this.setState({editModalOpen: true})
+        console.log(this.state.editModalOpen)
       }
     })
   }
@@ -164,22 +165,25 @@ class UserGames extends Component {
 
   render() {
     return (
-      <Container fluid>
-        <Row>
-          <Col sm={12} md={6}>
-            <div className='userGameContainer'>
-              <h3 id='playingGameHeader'>Games Playing</h3>
-              {this.renderGamesPlaying(this.props.userGames)}
-            </div>
-          </Col>
-          <Col sm={12} md={6}>
-            <div className='userGameContainer'>
-              <h3 id='invitedGameHeader'>Games Invited</h3>
-              {this.renderGamesInvited(this.props.userGames)}
-            </div>
-          </Col>
-        </Row>
-      </Container>
+      <div>
+        <Container fluid>
+          <Row>
+            <Col sm={12} md={6}>
+              <div className='userGameContainer'>
+                <h3 id='playingGameHeader'>Games Playing</h3>
+                {this.renderGamesPlaying(this.props.userGames)}
+              </div>
+            </Col>
+            <Col sm={12} md={6}>
+              <div className='userGameContainer'>
+                <h3 id='invitedGameHeader'>Games Invited</h3>
+                {this.renderGamesInvited(this.props.userGames)}
+              </div>
+            </Col>
+          </Row>
+        </Container>
+        {this.renderEditGameModal()}
+      </div>
     )
   }
 }
