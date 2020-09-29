@@ -82,126 +82,160 @@ class valueMultiplierRule extends Component {
       null :
       <Container fluid>
         <Row>
-          <Col>
-            <Form.Label>Movie gross income</Form.Label>
-              <div className='input-group-prepend'>
-                <span className='input-group-text'>$</span>
-                <Form.Control
-                  className='number-input-field'
-                  id='movieGross'
-                  name='movieGross'
-                  type='number'
-                  min='0'
-                  step='1000000'
-                  value={this.state.movieGross}
-                  onChange={this.updateMovieGross}
-                />
-            </div>
-            <Form.Text className='text-muted'>
-              Adjust the movie domestic gross value.
+          <Form.Group>
+            <Form.Text>
+              Fields bordered in red are the fields that will be used to calculate the gross
+              total of a movie for game purposes.
             </Form.Text>
+            <Form.Text>
+              The value multiplier rule rewards players who buy movies that earn high gross incomes
+              for cheap prices during the auction. If a player's movie value (gross income / purchase price)
+              meets or exceeds defined thresholds, a multiplier will be applied to their value and that value
+              will be added to that movies gross total.
+            </Form.Text>
+            <Form.Text>
+              For example, if a player purchases a movie for $10 and that movie earns $100,000,000, their value
+              would be $10,000,000. If the "value multiplier lower threshold" was set to $8,000,000 that means
+              once a movie earns $8,000,000 a multiplier of two will be applied to their value. the calculated bonus
+              would be $20,000,000 and that bonus would be added to their movie's gross total.
+            </Form.Text>
+          </Form.Group>
+        </Row>
+        <Row>
+          <Col>
+            <Form.Group>
+              <Form.Label>Movie Gross Income</Form.Label>
+                <div className='input-group-prepend'>
+                  <span className='input-group-text'>$</span>
+                  <Form.Control
+                    className='number-input-field'
+                    id='movieGross'
+                    name='movieGross'
+                    type='number'
+                    min='0'
+                    step='1000000'
+                    value={this.state.movieGross}
+                    onChange={this.updateMovieGross}
+                  />
+              </div>
+              <Form.Text className='text-muted'>
+                Adjust the movie domestic gross value.
+              </Form.Text>
+            </Form.Group>
           </Col>
           <Col>
-            <Form.Label>Auction purchase price</Form.Label>
-              <div className='input-group-prepend'>
-                <span className='input-group-text'>$</span>
-                <Form.Control
-                  className='number-input-field'
-                  id='purchasePrice'
-                  name='purchasePrice'
-                  type='number'
-                  min='1'
-                  step='0.5'
-                  defaultValue={this.state.purchasePrice}
-                  onChange={this.updatePurchasePrice}
-                />
-            </div>
-            <Form.Text className='text-muted'>
-              Adjust the purchase price for this movie to calculate value.
-            </Form.Text>
+            <Form.Group>
+              <Form.Label>Auction Purchase Price</Form.Label>
+                <div className='input-group-prepend'>
+                  <span className='input-group-text'>$</span>
+                  <Form.Control
+                    className='number-input-field'
+                    id='purchasePrice'
+                    name='purchasePrice'
+                    type='number'
+                    min='1'
+                    step='0.5'
+                    defaultValue={this.state.purchasePrice}
+                    onChange={this.updatePurchasePrice}
+                  />
+              </div>
+              <Form.Text className='text-muted'>
+                Adjust the purchase price for this movie to calculate value.
+              </Form.Text>
+            </Form.Group>
           </Col>
         </Row>
         <Row>
+          <Col xs={12} sm={6}>
+            <Form.Group>
+              <Form.Label>Movie Value</Form.Label>
+              <div className='input-group-prepend'>
+                <span className='input-group-text'>$</span>
+                <Form.Control
+                  readOnly
+                  type='number'
+                  placeholder={movieValue}
+                />
+              </div>
+            </Form.Group>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <Form.Group>
+              <Form.Label>Value Multiplier Lower Threshold</Form.Label>
+                <div className='input-group-prepend important-field'>
+                  <span className='input-group-text'>$</span>
+                  <Form.Control
+                    className='number-input-field'
+                    id='lowerThreshold'
+                    name='lowerThreshold'
+                    type='number'
+                    min='0'
+                    step='1000000'
+                    defaultValue={this.props.valueMultiplierRule.lowerThreshold}
+                    onChange={event => {
+                      event.target = {type:event.target.type, value:event.target.value, name:'lowerThreshold'}
+                      this.updateValueMultiplierRule(event)
+                      }}
+                  />
+              </div>
+              <Form.Text className='text-muted'>
+                Adjust the lower threshold for when the lower value multiplier comes into effect.
+              </Form.Text>
+            </Form.Group>
+          </Col>
+          <Col>
+            <Form.Group>
+              <Form.Label>Value Multiplier Upper Threshold</Form.Label>
+                <div className='input-group-prepend important-field'>
+                  <span className='input-group-text'>$</span>
+                  <Form.Control
+                    className='number-input-field'
+                    id='upperThreshold'
+                    name='upperThreshold'
+                    type='number'
+                    min='0'
+                    step='1000000'
+                    defaultValue={this.props.valueMultiplierRule.upperThreshold}
+                    onChange={event => {
+                      event.target = {type:event.target.type, value:event.target.value, name:'upperThreshold'}
+                      this.updateValueMultiplierRule(event)
+                      }}
+                  />
+              </div>
+              <Form.Text className='text-muted'>
+                Adjust the upper threshold for when the lower value multiplier comes into effect.
+              </Form.Text>
+            </Form.Group>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <Form.Group>
+              <Form.Label>Value Multiplier</Form.Label>
+              <div className='input-group-prepend'>
+                <span className='input-group-text'>$</span>
+                <Form.Control
+                  readOnly
+                  type='number'
+                  placeholder={valueMultiplier}
+                />
+              </div>
+            </Form.Group>
+          </Col>
           <Col xs={6}>
-            <Form.Label>Movie Value</Form.Label>
-            <div className='input-group-prepend'>
-              <span className='input-group-text'>$</span>
-              <Form.Control
-                readOnly
-                type='number'
-                placeholder={movieValue}
-              />
-            </div>
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            <Form.Label>Value Multiplier Lower Threshold</Form.Label>
+            <Form.Group>
+              <Form.Label>Total Gross Earnings</Form.Label>
               <div className='input-group-prepend'>
                 <span className='input-group-text'>$</span>
                 <Form.Control
-                  className='number-input-field'
-                  id='lowerThreshold'
-                  name='lowerThreshold'
+                  readOnly
                   type='number'
-                  min='0'
-                  step='1000000'
-                  defaultValue={this.props.valueMultiplierRule.lowerThreshold}
-                  onChange={event => {
-                    event.target = {type:event.target.type, value:event.target.value, name:'lowerThreshold'}
-                    this.updateValueMultiplierRule(event)
-                    }}
+                  placeholder={totalEarnings}
                 />
-            </div>
-            <Form.Text className='text-muted'>
-              Adjust the lower threshold for when the lower value multiplier comes into effect.
-            </Form.Text>
-          </Col>
-          <Col>
-            <Form.Label>Value Multiplier Upper Threshold</Form.Label>
-              <div className='input-group-prepend'>
-                <span className='input-group-text'>$</span>
-                <Form.Control
-                  className='number-input-field'
-                  id='upperThreshold'
-                  name='upperThreshold'
-                  type='number'
-                  min='0'
-                  step='1000000'
-                  defaultValue={this.props.valueMultiplierRule.upperThreshold}
-                  onChange={event => {
-                    event.target = {type:event.target.type, value:event.target.value, name:'upperThreshold'}
-                    this.updateValueMultiplierRule(event)
-                    }}
-                />
-            </div>
-            <Form.Text className='text-muted'>
-              Adjust the upper threshold for when the lower value multiplier comes into effect.
-            </Form.Text>
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            <Form.Label>Value Multiplier</Form.Label>
-            <div className='input-group-prepend'>
-              <span className='input-group-text'>$</span>
-              <Form.Control
-                readOnly
-                type='number'
-                placeholder={valueMultiplier}
-              />
-            </div>
-          </Col>
-          <Col xs={6}>
-            <Form.Label>Total Gross Earnings</Form.Label>
-            <div className='input-group-prepend'>
-              <span className='input-group-text'>$</span>
-              <Form.Control
-                readOnly
-                type='number'
-                placeholder={totalEarnings}
-              />
-            </div>
+              </div>
+            </Form.Group>
           </Col>
         </Row>
       </Container>

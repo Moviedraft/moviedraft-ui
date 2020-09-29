@@ -77,7 +77,7 @@ class GrossCapRule extends Component {
         <Row>
           <Col>
             <Form.Group>
-              <Form.Label>Movie gross income</Form.Label>
+              <Form.Label>Movie Gross Income</Form.Label>
               <div className='input-group-prepend'>
                 <span className='input-group-text'>$</span>
                 <Form.Control
@@ -98,7 +98,7 @@ class GrossCapRule extends Component {
           </Col>
           <Col>
             <Form.Group>
-              <Form.Label>Cap value</Form.Label>
+              <Form.Label>Cap Value</Form.Label>
                 <div className='input-group-prepend important-field'>
                   <span className='input-group-text'>$</span>
                   <Form.Control
