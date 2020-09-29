@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import Form from 'react-bootstrap/Form'
-import '../styles/rules.css'
 import GrossCapRule from './grossCapRule.js'
 import ValueMultiplierRule from './valueMultiplierRule.js'
 
