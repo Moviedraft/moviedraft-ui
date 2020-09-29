@@ -76,80 +76,88 @@ class GrossCapRule extends Component {
         </Row>
         <Row>
           <Col>
-            <Form.Label>Movie gross income</Form.Label>
-            <div className='input-group-prepend'>
-              <span className='input-group-text'>$</span>
-              <Form.Control
-                className='number-input-field'
-                id='movieGross'
-                name='movieGross'
-                type='number'
-                min='0'
-                step='1000000'
-                value={this.state.movieGross}
-                onChange={this.updateMovieGross}
-              />
-            </div>
-            <Form.Text className='text-muted'>
-              Adjust the movie domestic gross value.
-            </Form.Text>
-          </Col>
-          <Col>
-            <Form.Label>Cap value</Form.Label>
-              <div className='input-group-prepend important-field'>
+            <Form.Group>
+              <Form.Label>Movie gross income</Form.Label>
+              <div className='input-group-prepend'>
                 <span className='input-group-text'>$</span>
                 <Form.Control
                   className='number-input-field'
-                  id='capValue'
-                  name='capValue'
+                  id='movieGross'
+                  name='movieGross'
                   type='number'
                   min='0'
                   step='1000000'
-                  defaultValue={this.props.grossCapRule.capValue}
-                  onChange={event => {
-                    event.target = {type:event.target.type, value:event.target.value, name:'capValue'}
-                    this.updateGrossCapRule(event)
-                    }}
+                  value={this.state.movieGross}
+                  onChange={this.updateMovieGross}
                 />
-            </div>
-            <Form.Text className='text-muted'>
-              Adjust the cap value for the threshold before a player earns diminishing returns.
-            </Form.Text>
+              </div>
+              <Form.Text className='text-muted'>
+                Adjust the movie domestic gross value.
+              </Form.Text>
+            </Form.Group>
+          </Col>
+          <Col>
+            <Form.Group>
+              <Form.Label>Cap value</Form.Label>
+                <div className='input-group-prepend important-field'>
+                  <span className='input-group-text'>$</span>
+                  <Form.Control
+                    className='number-input-field'
+                    id='capValue'
+                    name='capValue'
+                    type='number'
+                    min='0'
+                    step='1000000'
+                    defaultValue={this.props.grossCapRule.capValue}
+                    onChange={event => {
+                      event.target = {type:event.target.type, value:event.target.value, name:'capValue'}
+                      this.updateGrossCapRule(event)
+                      }}
+                  />
+              </div>
+              <Form.Text className='text-muted'>
+                Adjust the cap value for the threshold before a player earns diminishing returns.
+              </Form.Text>
+            </Form.Group>
           </Col>
         </Row>
         <Row>
           <Col>
-            <Form.Label>Cents on the Dollar</Form.Label>
-              <div className='input-group-prepend important-field'>
-                <span className='input-group-text'>$</span>
-                <Form.Control
-                  className='number-input-field'
-                  id='centsOnDollar'
-                  name='centsOnDollar'
-                  type='number'
-                  min='0'
-                  step='0.01'
-                  defaultValue={this.props.grossCapRule.centsOnDollar}
-                  onChange={event => {
-                    event.target = {type:event.target.type, value:event.target.value, name:'centsOnDollar'}
-                    this.updateGrossCapRule(event)
-                    }}
-                />
-            </div>
-            <Form.Text className='text-muted'>
-              Adjust the diminishing returns amount a player will recieve after the cap threshold has been reached.
-            </Form.Text>
+            <Form.Group>
+              <Form.Label>Cents on the Dollar</Form.Label>
+                <div className='input-group-prepend important-field'>
+                  <span className='input-group-text'>$</span>
+                  <Form.Control
+                    className='number-input-field'
+                    id='centsOnDollar'
+                    name='centsOnDollar'
+                    type='number'
+                    min='0'
+                    step='0.01'
+                    defaultValue={this.props.grossCapRule.centsOnDollar}
+                    onChange={event => {
+                      event.target = {type:event.target.type, value:event.target.value, name:'centsOnDollar'}
+                      this.updateGrossCapRule(event)
+                      }}
+                  />
+              </div>
+              <Form.Text className='text-muted'>
+                Adjust the diminishing returns amount a player will recieve after the cap threshold has been reached.
+              </Form.Text>
+            </Form.Group>
           </Col>
           <Col>
-            <Form.Label>Total Gross Earnings</Form.Label>
-            <div className='input-group-prepend'>
-              <span className='input-group-text'>$</span>
-              <Form.Control
-                readOnly
-                type='number'
-                placeholder={this.calculateGrossCapEarnings()}
-              />
-            </div>
+            <Form.Group>
+              <Form.Label>Total Gross Earnings</Form.Label>
+              <div className='input-group-prepend'>
+                <span className='input-group-text'>$</span>
+                <Form.Control
+                  readOnly
+                  type='number'
+                  placeholder={this.calculateGrossCapEarnings()}
+                />
+              </div>
+            </Form.Group>
           </Col>
         </Row>
       </Container>
