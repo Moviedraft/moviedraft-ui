@@ -27,6 +27,7 @@ class UserGames extends Component {
     this.getGame = this.getGame.bind(this)
     this.confirmDeleteGame = this.confirmDeleteGame.bind(this)
     this.deleteGame = this.deleteGame.bind(this)
+    this.handleCloseModal = this.handleCloseModal.bind(this)
     this.renderEditButton = this.renderEditButton.bind(this)
     this.editGameCallbackFunction = this.editGameCallbackFunction.bind(this)
     this.renderDeleteButton = this.renderDeleteButton.bind(this)
