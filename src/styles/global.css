@@ -122,3 +122,8 @@
     max-width: 250px;
   }
 }
+
+.important-field {
+  border: 1px solid red;
+  border-radius: 5px;
+}

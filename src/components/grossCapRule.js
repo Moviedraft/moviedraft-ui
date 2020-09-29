@@ -55,6 +55,26 @@ class GrossCapRule extends Component {
       null :
       <Container fluid>
         <Row>
+          <Form.Group>
+            <Form.Text>
+              Fields bordered in red are the fields that will be used to calculate the gross
+              total of a movie for game purposes.
+            </Form.Text>
+            <Form.Text>
+              The domestic gross cap rule will provide players diminishing returns on movies
+              once a movie reaches a defined threshold (cap value). This rule
+              helps to reel in larger blockbusters that would otherwise guarantee the win
+              for the player that owns them.
+            </Form.Text>
+            <Form.Text>
+              For example, you can set
+              a "cap value" of $225,000,000 and set the "cents on the dollar" to $0.40. This
+              means that once a movie passes $225,000,000 in gross income, that player will
+              only earn $0.40 cents on each additional dollar earned by that movie.
+            </Form.Text>
+          </Form.Group>
+        </Row>
+        <Row>
           <Col>
             <Form.Label>Movie gross income</Form.Label>
             <div className='input-group-prepend'>
@@ -76,7 +96,7 @@ class GrossCapRule extends Component {
           </Col>
           <Col>
             <Form.Label>Cap value</Form.Label>
-              <div className='input-group-prepend'>
+              <div className='input-group-prepend important-field'>
                 <span className='input-group-text'>$</span>
                 <Form.Control
                   className='number-input-field'
@@ -99,8 +119,8 @@ class GrossCapRule extends Component {
         </Row>
         <Row>
           <Col>
-            <Form.Label>Cents on Dollar</Form.Label>
-              <div className='input-group-prepend'>
+            <Form.Label>Cents on the Dollar</Form.Label>
+              <div className='input-group-prepend important-field'>
                 <span className='input-group-text'>$</span>
                 <Form.Control
                   className='number-input-field'
