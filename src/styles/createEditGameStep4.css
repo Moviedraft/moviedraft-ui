@@ -2,6 +2,12 @@
   width: 400px;
 }
 
+@media screen and (max-width: 480px) {
+  #email {
+    width: 250px;
+  }
+}
+
 .emailDivWrapper {
   background-color: #d4d5d6;
   font-size: 14px;

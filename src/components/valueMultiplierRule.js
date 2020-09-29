@@ -102,7 +102,7 @@ class valueMultiplierRule extends Component {
           </Form.Group>
         </Row>
         <Row>
-          <Col>
+          <Col xs={12} sm={6}>
             <Form.Group>
               <Form.Label>Movie Gross Income</Form.Label>
                 <div className='input-group-prepend'>
@@ -123,7 +123,7 @@ class valueMultiplierRule extends Component {
               </Form.Text>
             </Form.Group>
           </Col>
-          <Col>
+          <Col xs={12} sm={6}>
             <Form.Group>
               <Form.Label>Auction Purchase Price</Form.Label>
                 <div className='input-group-prepend'>
@@ -161,7 +161,7 @@ class valueMultiplierRule extends Component {
           </Col>
         </Row>
         <Row>
-          <Col>
+          <Col xs={12} sm={6}>
             <Form.Group>
               <Form.Label>Value Multiplier Lower Threshold</Form.Label>
                 <div className='input-group-prepend important-field'>
@@ -185,7 +185,7 @@ class valueMultiplierRule extends Component {
               </Form.Text>
             </Form.Group>
           </Col>
-          <Col>
+          <Col xs={12} sm={6}>
             <Form.Group>
               <Form.Label>Value Multiplier Upper Threshold</Form.Label>
                 <div className='input-group-prepend important-field'>
@@ -211,7 +211,7 @@ class valueMultiplierRule extends Component {
           </Col>
         </Row>
         <Row>
-          <Col>
+          <Col xs={12} sm={6}>
             <Form.Group>
               <Form.Label>Value Multiplier</Form.Label>
               <div className='input-group-prepend'>
@@ -224,7 +224,7 @@ class valueMultiplierRule extends Component {
               </div>
             </Form.Group>
           </Col>
-          <Col xs={6}>
+          <Col xs={12} sm={6}>
             <Form.Group>
               <Form.Label>Total Gross Earnings</Form.Label>
               <div className='input-group-prepend'>

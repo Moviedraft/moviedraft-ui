@@ -75,7 +75,7 @@ class GrossCapRule extends Component {
           </Form.Group>
         </Row>
         <Row>
-          <Col>
+          <Col xs={12} sm={6}>
             <Form.Group>
               <Form.Label>Movie Gross Income</Form.Label>
               <div className='input-group-prepend'>
@@ -96,7 +96,7 @@ class GrossCapRule extends Component {
               </Form.Text>
             </Form.Group>
           </Col>
-          <Col>
+          <Col xs={12} sm={6}>
             <Form.Group>
               <Form.Label>Cap Value</Form.Label>
                 <div className='input-group-prepend important-field'>
@@ -122,7 +122,7 @@ class GrossCapRule extends Component {
           </Col>
         </Row>
         <Row>
-          <Col>
+          <Col xs={12} sm={6}>
             <Form.Group>
               <Form.Label>Cents on the Dollar</Form.Label>
                 <div className='input-group-prepend important-field'>
@@ -146,7 +146,7 @@ class GrossCapRule extends Component {
               </Form.Text>
             </Form.Group>
           </Col>
-          <Col>
+          <Col xs={12} sm={6}>
             <Form.Group>
               <Form.Label>Total Gross Earnings</Form.Label>
               <div className='input-group-prepend'>
