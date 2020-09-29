@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import Form from 'react-bootstrap/Form'
-import '../styles/createEditGameStep1.css'
 import '../styles/global.css'
 
 class CreateEditGameStep1 extends Component {
