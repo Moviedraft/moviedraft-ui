@@ -54,12 +54,6 @@
   outline-offset: none !important;
 }
 
-.modal-width-sm {
-  width: 200px;
-  max-width: 200px;
-  margin: 0 auto;
-}
-
 .modal-width {
   width: 1000px;
   max-width: 1000px;
