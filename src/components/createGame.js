@@ -248,6 +248,8 @@ class CreateGame extends Component {
           <Modal.Footer>
             <div>
               {this.previousButton()}
+            </div>
+            <div>
               {this.nextButton()}
             </div>
           </Modal.Footer>
