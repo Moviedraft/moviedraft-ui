@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { apiGet } from '../utilities/apiUtility.js'
-import '../styles/upcomingMovies.css'
 import '../styles/global.css'
 import moment from 'moment'
 
