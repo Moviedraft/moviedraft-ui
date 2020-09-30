@@ -1,38 +1,29 @@
-#auctionHomeDiv {
-  height: 450px;
-  overflow:auto;
-}
-
-#auctionDateDiv {
-  margin-left: 1em;
-}
-
-#auctionPlayersDiv {
-  margin-left: 1em;
-  margin-bottom: 1em;
-}
-
-#auctionPlayersDiv h3 {
-  margin: 0;
-  margin-bottom: 0.5em;
-}
-
-#auctionPlayersDiv div span {
-  font-weight: bold;
+#auctionHomeContainer {
+  margin-top: 15px;
 }
 
 .auctionCountdownSpan {
   color: red;
 }
 
-#auctionEndButton {
-  min-height: 75px;
-  overflow: hidden;
+#closeAuctionButton {
+  margin-top: 15px;
+  margin-bottom: 15px;
+  border: 1px solid black;
+  font-weight: bold;
+  font-size: 1rem;
+  line-height: 1;
+  position: relative;
 }
 
-#auctionEndButton button {
-  position: relative;
-  padding: 0.5em;
-  margin-left: 1em;
-  margin-top: 1em;
+@media screen and (min-width: 600px) {
+  .money-remaining-cell {
+    width: 200px;
+  }
+}
+
+@media screen and (min-width: 1030px) {
+  #auctionPlayersTable {
+    width: 1000px;
+  }
 }
