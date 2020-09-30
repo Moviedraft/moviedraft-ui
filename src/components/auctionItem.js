@@ -180,7 +180,7 @@ class AuctionItem extends Component {
 
         if (this.state.highestBidder === '') {
           return (
-            <div className='auction-item-wrapper'>
+            <div>
               {this.renderMoviePoster()}
               <p>No bid placed</p>
             </div>
@@ -188,7 +188,7 @@ class AuctionItem extends Component {
         }
 
         return (
-          <div className='auction-item-wrapper'>
+          <div>
           {this.renderMoviePoster()}
           <p>The winner was {this.state.highestBidder} with ${this.state.currentHighBid}</p>
         </div>
@@ -196,7 +196,7 @@ class AuctionItem extends Component {
     }
 
     return !this.props.auctionExpirySet && !this.state.auctionExpirySet ? (
-      <div className='auction-item-wrapper'>
+      <div>
         {this.renderMoviePoster()}
         <Button
           variant='outline'
@@ -207,7 +207,7 @@ class AuctionItem extends Component {
         <p className='error-message'>{this.state.error}</p>
       </div>
     ) : (
-      <div className='auction-item-wrapper'>
+      <div>
         {this.renderMoviePoster()}
         <Timer ref='timer'
           parentCallback={this.timerDone}
@@ -247,7 +247,7 @@ class AuctionItem extends Component {
 
   render() {
     return (
-      <div>
+      <div className='auction-item-wrapper'>
         {this.renderAuctionItem()}
       </div>
     )
