@@ -1,14 +1,20 @@
 import React, { Component } from 'react'
 import moment from 'moment'
 import PubNub from 'pubnub'
+import Container from 'react-bootstrap/Container'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
+import Button from 'react-bootstrap/Button'
 import { apiGet, apiPatch } from '../utilities/apiUtility.js'
 import { getCurrentTime } from '../utilities/dateTimeUtility.js'
 import AuctionItem from './auctionItem.js'
 import Chat from './chat.js'
 import '../styles/auctionHome.css'
+import '../styles/global.css'
 
 class AuctionHome extends Component {
   _isMounted = false;
+  _auctionPlayersColumnNames = ['Name', 'Money Remaining', 'Movies Purchased'];
 
   constructor(props){
     super(props)
@@ -271,14 +277,14 @@ class AuctionHome extends Component {
     let seconds = this.state.auctionDuration.seconds()
 
     return moment() > moment(this.props.auctionDate) ?
-      <h3>
+      <h5>
         Auction will be held on {moment(this.props.auctionDate).format('LLLL')}
         <span className='auctionCountdownSpan'>
           &nbsp;
           (now)
         </span>
-      </h3> :
-      <h3>
+      </h5> :
+      <h5>
         Auction will be held on {moment(this.props.auctionDate).format('LLLL')}
         <span className='auctionCountdownSpan'>
           &nbsp;
@@ -287,21 +293,36 @@ class AuctionHome extends Component {
           {minutes < 10 ? '0' + minutes : minutes}.
           {seconds < 10 ? '0' + seconds : seconds} from now)
         </span>
-      </h3>
+      </h5>
   }
 
   renderAuctionPlayers() {
     return this.state.players.length > 0 ?
     (
-      this.state.players.map(player => {
-        let amountRemaining = this.props.dollarSpendingCap - player.totalSpent
-        let movieTitles =  player.movies.map(movie => movie.title + ' ($' + movie.cost + ')').join(', ')
-        return (
-          <div key={player.id}>
-            <span>{player.userHandle}</span>{' - $' + amountRemaining + ' - ' + movieTitles}
-          </div>
-        )
-      })
+      <table id='auctionPlayersTable' className='responsive-table'>
+        <thead>
+          <tr>
+            {this._auctionPlayersColumnNames.map((columnName, i) => (
+              <th key={i}>
+                {columnName}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {this.state.players.map((player, i) => {
+            return (
+              <tr key={player.id}>
+                <td title='name'>{player.userHandle}</td>
+                <td className='money-remaining-cell' title='money remaining'>${this.props.dollarSpendingCap - player.totalSpent}</td>
+                <td title='movies purchased'>
+                  {player.movies.length > 0 ? player.movies.map(movie => movie.title + ' ($' + movie.cost + ')').join(', ') : '-'}
+                </td>
+              </tr>
+            )
+          })}
+        </tbody>
+      </table>
     ) : (
       null
     )
@@ -309,34 +330,40 @@ class AuctionHome extends Component {
 
   renderAuctionPage() {
     return this.state.movies.map((movie) => {
-      return <AuctionItem
-        key={movie.id}
-        movie={movie}
-        gameId={this.props.gameId}
-        currentTime={this.state.currentTime}
-        auctionItemsExpireInSeconds={this.props.auctionItemsExpireInSeconds}
-        currentUserTotalBids={this.state.currentUserTotalBids}
-        auctionStarted={this.state.bids.find(bid => bid.movie_id === movie.id).auctionStarted}
-        auctionExpiry={this.state.bids.find(bid => bid.movie_id === movie.id).auctionExpiry}
-        auctionExpirySet={this.state.bids.find(bid => bid.movie_id === movie.id).auctionExpirySet}
-        dollarSpendingCap={this.state.bids.find(bid => bid.movie_id === movie.id).dollarSpendingCap}
-        bid={this.state.bids.find(bid => bid.movie_id === movie.id).bid}
-        minimumBid={this.state.minimumBid}
-        userHandle={this.state.bids.find(bid => bid.movie_id === movie.id).userHandle}
-        fetchPlayers={this.fetchPlayers}
-        webSocket={this.webSocket}
-        handleError={this.handleError}/>
+      return (
+        <Col key={movie.id} align='center' xs={12} sm={4}>
+          <AuctionItem
+            key={movie.id}
+            movie={movie}
+            gameId={this.props.gameId}
+            currentTime={this.state.currentTime}
+            auctionItemsExpireInSeconds={this.props.auctionItemsExpireInSeconds}
+            currentUserTotalBids={this.state.currentUserTotalBids}
+            auctionStarted={this.state.bids.find(bid => bid.movie_id === movie.id).auctionStarted}
+            auctionExpiry={this.state.bids.find(bid => bid.movie_id === movie.id).auctionExpiry}
+            auctionExpirySet={this.state.bids.find(bid => bid.movie_id === movie.id).auctionExpirySet}
+            dollarSpendingCap={this.state.bids.find(bid => bid.movie_id === movie.id).dollarSpendingCap}
+            bid={this.state.bids.find(bid => bid.movie_id === movie.id).bid}
+            minimumBid={this.state.minimumBid}
+            userHandle={this.state.bids.find(bid => bid.movie_id === movie.id).userHandle}
+            fetchPlayers={this.fetchPlayers}
+            webSocket={this.webSocket}
+            handleError={this.handleError}/>
+        </Col>
+      )
     })
   }
 
   renderAuctionEndButton() {
     return this.state.currentUser.id === this.props.commissionerId ?
       (
-        <div id='auctionEndButton'>
-          <button
+        <div id='closeAuctionButtonWrapper'>
+          <Button
+            id='closeAuctionButton'
+            variant='outline'
             onClick={() => this.endAuction()}>
             CLOSE AUCTION
-          </button>
+          </Button>
         </div>
       ) : (
         null
@@ -351,25 +378,33 @@ class AuctionHome extends Component {
     }
 
     return (
-      <div>
-        <div id='auctionDateDiv'>
-          {this.renderAuctionDate()}
-        </div>
-        <div id='auctionPlayersDiv'>
-          <h3>
-            Auction Details:
-          </h3>
-          {this.renderAuctionPlayers()}
-        </div>
-        <div id='auctionHomeDiv'>
+      <Container fluid id='auctionHomeContainer'>
+        <Row>
+          <Col>
+            {this.renderAuctionDate()}
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <h5>Player Auction Details:</h5>
+            {this.renderAuctionPlayers()}
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            {this.renderAuctionEndButton()}
+          </Col>
+        </Row>
+        <Row>
           {this.renderAuctionPage()}
-        </div>
-        <div>
-          {this.renderAuctionEndButton()}
-        </div>
-        <Chat
-          gameId={this.props.gameId} />
-      </div>
+        </Row>
+        <Row>
+          <Col>
+            <Chat
+              gameId={this.props.gameId} />
+          </Col>
+        </Row>
+      </Container>
     )
   }
 }
