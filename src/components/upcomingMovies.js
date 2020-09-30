@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { apiGet } from '../utilities/apiUtility.js'
 import '../styles/upcomingMovies.css'
+import '../styles/global.css'
 import moment from 'moment'
 
 class UpcomingMovies extends Component {
@@ -74,8 +75,7 @@ class UpcomingMovies extends Component {
     return (
       <div>
         <h2>Upcoming Movies</h2>
-        <table
-          id='upcomingMoviesTable'>
+        <table className='responsive-table'>
           <thead>
             <tr>
               {this._upcomingMoviesColumnNames.map((columnName, i) => (

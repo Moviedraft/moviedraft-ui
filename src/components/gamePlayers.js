@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import moment from 'moment'
 import { apiGet } from '../utilities/apiUtility.js'
 import '../styles/gamePlayers.css'
+import '../styles/global.css'
 
 class GamePlayers extends Component {
   _playersLoaded = false
@@ -40,7 +41,7 @@ class GamePlayers extends Component {
     return (
       <div>
         <h2>Player Rankings</h2>
-        <table className='playersTable'>
+        <table className='responsive-table'>
           <thead>
             <tr>
               {this._playerColumnNames.map((columnName, i) => (
@@ -71,7 +72,7 @@ class GamePlayers extends Component {
         <br/>
         <h2>Value Rankings</h2>
         <table
-          className='playersTable'
+          className='responsive-table'
           id='valueTable'>
           <thead>
             <tr>

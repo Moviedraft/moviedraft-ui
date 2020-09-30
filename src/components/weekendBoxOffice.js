@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { apiGet } from '../utilities/apiUtility.js'
 import '../styles/weekendBoxOffice.css'
+import '../styles/global.css'
 
 class WeekendBoxOffice extends Component {
   _weekendBoxOfficeLoaded = false
@@ -41,8 +42,7 @@ class WeekendBoxOffice extends Component {
     return (
       <div>
         <h2>Weekend Box Office</h2>
-        <table
-          id='weekendBoxOfficeTable'>
+        <table className='responsive-table'>
           <thead>
             <tr>
               {this._weekendBoxOfficeColumnNames.map((columnName, i) => (
