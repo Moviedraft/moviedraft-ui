@@ -1,8 +1,11 @@
 import React, { Component } from 'react'
 import moment from 'moment'
+import Button from 'react-bootstrap/Button'
+import Form from 'react-bootstrap/Form'
 import { apiGet, apiPost } from '../utilities/apiUtility.js'
-import '../styles/auctionItem.css';
-import Timer from './timer.js';
+import '../styles/auctionItem.css'
+import '../styles/global.css'
+import Timer from './timer.js'
 
 class AuctionItem extends Component {
   constructor(props){
@@ -149,8 +152,9 @@ class AuctionItem extends Component {
               alt='movie poster' />
           </a>
         </div>
-        <p>{this.props.movie.title}</p>
+        <p className='auction-movie-title'>{this.props.movie.title}</p>
         <p>{moment.utc(this.props.movie.releaseDate).format('dddd, MMMM Do YYYY')}</p>
+        <hr />
       </div>
     ) : (
       <div>
@@ -162,8 +166,9 @@ class AuctionItem extends Component {
             <i className='material-icons posterPlaceholder'>local_movies</i>
           </a>
         </div>
-        <p>{this.props.movie.title}</p>
+        <p className='auction-movie-title'>{this.props.movie.title}</p>
         <p>{moment.utc(this.props.movie.releaseDate).format('dddd, MMMM Do YYYY')}</p>
+        <hr />
       </div>
     )
   }
@@ -175,7 +180,7 @@ class AuctionItem extends Component {
 
         if (this.state.highestBidder === '') {
           return (
-            <div className='movieParent'>
+            <div className='auction-item-wrapper'>
               {this.renderMoviePoster()}
               <p>No bid placed</p>
             </div>
@@ -183,7 +188,7 @@ class AuctionItem extends Component {
         }
 
         return (
-          <div className='movieParent'>
+          <div className='auction-item-wrapper'>
           {this.renderMoviePoster()}
           <p>The winner was {this.state.highestBidder} with ${this.state.currentHighBid}</p>
         </div>
@@ -191,17 +196,18 @@ class AuctionItem extends Component {
     }
 
     return !this.props.auctionExpirySet && !this.state.auctionExpirySet ? (
-      <div className='movieParent'>
+      <div className='auction-item-wrapper'>
         {this.renderMoviePoster()}
-        <button
-          className='auctionButton'
+        <Button
+          variant='outline'
+          className='auction-button'
           onClick={() => this.beginAuction(this.props.movie.id)}>
           BEGIN AUCTION
-        </button>
-        <p>{this.state.error}</p>
+        </Button>
+        <p className='error-message'>{this.state.error}</p>
       </div>
     ) : (
-      <div className='movieParent'>
+      <div className='auction-item-wrapper'>
         {this.renderMoviePoster()}
         <Timer ref='timer'
           parentCallback={this.timerDone}
@@ -209,28 +215,32 @@ class AuctionItem extends Component {
         <p>
           {'Current bid: ' + this.state.highestBidder + ' $' + this.state.currentHighBid}
         </p>
-        <input
-          className='bidInput'
-          id='bid'
-          name='bid'
-          type='number'
-          min={this.state.minimumBid}
-          step='1'
-          value={this.state.bid}
-          onChange={(event) => this.updateBid(event)}
-          onKeyDown={this.handleKeyDown}
+        <div className='input-group-prepend bid-input'>
+          <span className='input-group-text'>$</span>
+          <Form.Control
+            type='number'
+            id='bid'
+            name='bid'
+            min={this.state.minimumBid}
+            step='1'
+            value={this.state.bid}
+            onChange={(event) => this.updateBid(event)}
+            onKeyDown={this.handleKeyDown}
           />
-        <button
-          className='auctionButton'
+        </div>
+        <Button
+          variant='outline'
+          className='auction-button'
           onClick={() => this.submitBid()}>
-          SUBMIT BID
-        </button>
-        <button
-          className='auctionButton'
+          SUBMIT
+        </Button>
+        <Button
+          variant='outline'
+          className='auction-button'
           onClick={() => this.allIn()}>
           ALL-IN
-        </button>
-        <p>{this.state.error}</p>
+        </Button>
+        <p className='error-message'>{this.state.error}</p>
       </div>
     )
   }
