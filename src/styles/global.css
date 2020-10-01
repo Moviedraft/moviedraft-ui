@@ -172,10 +172,6 @@
   border-bottom: 1px dotted #ddd;
 }
 
-.large-table-view {
-  display: none;
-}
-
 @media screen and (min-width: 850px) {
   .responsive-table {
     margin-top: 0;
@@ -203,12 +199,8 @@
     display: none;
   }
 
-  .small-table-view {
-    display: none;
-  }
-
-  .large-table-view {
-    display: initial;
+  .vertical-align-top {
+    vertical-align: top;
   }
 }
 
@@ -221,4 +213,10 @@
     float: left;
     text-transform: uppercase;
     font-weight: bold;
+}
+
+@media screen and (min-width: 1200px) {
+  .responsive-table-narrow {
+    width: 90%;
+  }
 }
