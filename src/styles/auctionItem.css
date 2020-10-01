@@ -64,16 +64,6 @@
   font-weight: bold;
 }
 
-.auction-horizontal-rule {
-  display: block;
-  height: 1px;
-  border: 0;
-  border-top: 1px solid #ccc;
-  margin: 1em 0;
-  padding: 0;
-  color: red;
-}
-
 .auction-button {
   border: 1px solid black;
   border-radius: 5px;
