@@ -54,6 +54,9 @@ class Header extends Component {
             {this.renderAccountButton()}
           </Col>
         </Row>
+        <Row>
+          <hr id='headerHorizontalRule' />
+        </Row>
       </Container>
     )
   }

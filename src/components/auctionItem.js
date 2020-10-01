@@ -168,7 +168,7 @@ class AuctionItem extends Component {
         </div>
         <p className='auction-movie-title'>{this.props.movie.title}</p>
         <p>{moment.utc(this.props.movie.releaseDate).format('dddd, MMMM Do YYYY')}</p>
-        <hr />
+        <hr id='auction-item-horizontal-rule' />
       </div>
     )
   }
