@@ -176,7 +176,7 @@
   display: none;
 }
 
-@media screen and (min-width: 600px) {
+@media screen and (min-width: 850px) {
   .responsive-table {
     margin-top: 0;
   }
