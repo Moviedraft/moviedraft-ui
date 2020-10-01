@@ -1,3 +1,4 @@
+
 #auctionHomeContainer {
   margin-top: 15px;
 }
@@ -14,12 +15,6 @@
   font-size: 1rem;
   line-height: 1;
   position: relative;
-}
-
-@media screen and (min-width: 600px) {
-  .money-remaining-cell {
-    width: 200px;
-  }
 }
 
 @media screen and (min-width: 1030px) {
