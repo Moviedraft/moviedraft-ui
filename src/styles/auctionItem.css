@@ -95,3 +95,8 @@
 .error-message {
   color: red;
 }
+
+hr {
+  width: 90%;
+  border: 1px solid grey;
+}
