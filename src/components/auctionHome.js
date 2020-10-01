@@ -316,18 +316,13 @@ class AuctionHome extends Component {
                 <td title='name'>{player.userHandle}</td>
                 <td title='money remaining'>${this.props.dollarSpendingCap - player.totalSpent}</td>
                 <td title='movies purchased'>
-                  <div className='large-table-view'>
-                    {player.movies.length > 0 ? player.movies.map(movie => movie.title + ' ($' + movie.cost + ')').join(', ') : '-'}
-                  </div>
-                  <div className='small-table-view'>
-                    {player.movies.map(movie => {
-                      return (
-                        <div key={player.id + movie.title}>
-                          { movie.title + ' ($' + movie.cost + ')' }
-                        </div>
-                      )
-                    })}
-                  </div>
+                  {player.movies.map(movie => {
+                    return (
+                      <div key={player.id + movie.title}>
+                        { movie.title + ' ($' + movie.cost + ')' }
+                      </div>
+                    )
+                  })}
                 </td>
               </tr>
             )

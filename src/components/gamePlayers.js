@@ -41,7 +41,7 @@ class GamePlayers extends Component {
     return (
       <div>
         <h2>Player Rankings</h2>
-        <table className='responsive-table'>
+        <table className='responsive-table responsive-table-narrow'>
           <thead>
             <tr>
               {this._playerColumnNames.map((columnName, i) => (
@@ -54,31 +54,22 @@ class GamePlayers extends Component {
           <tbody>
             {this.state.players.map((player, i) => (
               <tr key={player.id}>
-                <td title='rank'>{++i}</td>
-                <td title='player'>{player.userHandle}</td>
-                <td title='total earnings'>{this._formatter.format(player.totalGross + (player.bonusInMillions * 1000000))}</td>
-                <td title='movie gross'>{this._formatter.format(player.totalGross)}</td>
-                <td title='bonus earnings'>{this._formatter.format(player.bonusInMillions * 1000000)}</td>
-                <td title='total spent'>{this._formatter.format(player.totalSpent)}</td>
+                <td title='rank' className='vertical-align-top'>{++i}</td>
+                <td title='player' className='vertical-align-top'>{player.userHandle}</td>
+                <td title='total earnings' className='vertical-align-top'>{this._formatter.format(player.totalGross + (player.bonusInMillions * 1000000))}</td>
+                <td title='movie gross' className='vertical-align-top'>{this._formatter.format(player.totalGross)}</td>
+                <td title='bonus earnings' className='vertical-align-top'>{this._formatter.format(player.bonusInMillions * 1000000)}</td>
+                <td title='total spent' className='vertical-align-top'>{this._formatter.format(player.totalSpent)}</td>
                 <td title='movies purchased'>
-                  <div className='large-table-view'>
-                    {player.movies.map(movie => {
-                      return moment(movie.releaseDate).isBetween(this.props.startDate, this.props.endDate) ?
-                        movie.title + ' ($' + movie.cost + ')' :
-                        'REMOVED -' + movie.title + ' ($' + movie.cost + ')'
-                      }).join(', ')}
-                  </div>
-                  <div className='small-table-view'>
-                    {player.movies.map(movie => {
-                      return (
-                        <div key={player.id + movie.title}>
-                          { moment(movie.releaseDate).isBetween(this.props.startDate, this.props.endDate) ?
-                            movie.title + ' ($' + movie.cost + ')' :
-                            'REMOVED -' + movie.title + ' ($' + movie.cost + ')' }
-                        </div>
-                      )
-                    })}
-                  </div>
+                  {player.movies.map(movie => {
+                    return (
+                      <div key={player.id + movie.title}>
+                        { moment(movie.releaseDate).isBetween(this.props.startDate, this.props.endDate) ?
+                          movie.title + ' ($' + movie.cost + ')' :
+                          'REMOVED -' + movie.title + ' ($' + movie.cost + ')' }
+                      </div>
+                    )
+                  })}
                 </td>
               </tr>))}
           </tbody>
