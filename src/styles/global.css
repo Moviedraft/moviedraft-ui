@@ -138,22 +138,10 @@
   empty-cells: show;
 }
 
-@media screen and (min-width: 600px) {
-  .responsive-table {
-    margin-top: 0;
-  }
-}
-
 .responsive-table thead {
     visibility: hidden;
     background: #fafafa;
   }
-
-@media screen and (min-width: 600px) {
-  .responsive-table thead {
-    visibility: visible;
-  }
-}
 
 .responsive-table tr {
   border: 1px solid #ddd;
@@ -161,14 +149,6 @@
   padding: 5px;
   margin-bottom: 10px;
   display: block;
-}
-
-@media screen and (min-width: 600px) {
-  .responsive-table tr {
-    display: table-row;
-    border-bottom-width: 1px;
-    margin-bottom: 0;
-  }
 }
 
 .responsive-table tr:nth-child(even) {
@@ -192,12 +172,43 @@
   border-bottom: 1px dotted #ddd;
 }
 
+.large-table-view {
+  display: none;
+}
+
 @media screen and (min-width: 600px) {
+  .responsive-table {
+    margin-top: 0;
+  }
+
+  .responsive-table thead {
+    visibility: visible;
+  }
+
+  .responsive-table tr {
+    display: table-row;
+    border-bottom-width: 1px;
+    margin-bottom: 0;
+  }
+
   .responsive-table td{
     display: table-cell;
     text-align: left;
     font-size: 14px;
     border-bottom: none;
+  }
+
+  .responsive-table td::before {
+    content: '';
+    display: none;
+  }
+
+  .small-table-view {
+    display: none;
+  }
+
+  .large-table-view {
+    display: initial;
   }
 }
 
@@ -210,11 +221,4 @@
     float: left;
     text-transform: uppercase;
     font-weight: bold;
-}
-
-@media screen and (min-width: 600px) {
-  .responsive-table td::before {
-    content: '';
-    display: none;
-  }
 }

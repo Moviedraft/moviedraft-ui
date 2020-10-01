@@ -60,11 +60,25 @@ class GamePlayers extends Component {
                 <td title='movie gross'>{this._formatter.format(player.totalGross)}</td>
                 <td title='bonus earnings'>{this._formatter.format(player.bonusInMillions * 1000000)}</td>
                 <td title='total spent'>{this._formatter.format(player.totalSpent)}</td>
-                <td title='movies purchased'>{player.movies.map(movie => {
-                    return moment(movie.releaseDate).isBetween(this.props.startDate, this.props.endDate) ?
-                      movie.title + ' ($' + movie.cost + ')' :
-                      'REMOVED -' + movie.title + ' ($' + movie.cost + ')'
-                    }).join(', ')}
+                <td title='movies purchased'>
+                  <div className='large-table-view'>
+                    {player.movies.map(movie => {
+                      return moment(movie.releaseDate).isBetween(this.props.startDate, this.props.endDate) ?
+                        movie.title + ' ($' + movie.cost + ')' :
+                        'REMOVED -' + movie.title + ' ($' + movie.cost + ')'
+                      }).join(', ')}
+                  </div>
+                  <div className='small-table-view'>
+                    {player.movies.map(movie => {
+                      return (
+                        <div key={player.id + movie.title}>
+                          { moment(movie.releaseDate).isBetween(this.props.startDate, this.props.endDate) ?
+                            movie.title + ' ($' + movie.cost + ')' :
+                            'REMOVED -' + movie.title + ' ($' + movie.cost + ')' }
+                        </div>
+                      )
+                    })}
+                  </div>
                 </td>
               </tr>))}
           </tbody>
