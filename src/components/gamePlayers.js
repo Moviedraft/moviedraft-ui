@@ -66,7 +66,7 @@ class GamePlayers extends Component {
                       <div key={player.id + movie.title}>
                         { moment(movie.releaseDate).isBetween(this.props.startDate, this.props.endDate) ?
                           movie.title + ' ($' + movie.cost + ')' :
-                          'REMOVED -' + movie.title + ' ($' + movie.cost + ')' }
+                          'REMOVED - ' + movie.title + ' ($' + movie.cost + ')' }
                       </div>
                     )
                   })}
