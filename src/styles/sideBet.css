@@ -1,32 +1,18 @@
 #createSideBetButtonDiv {
-  position: relative;
-  height: 2.5em;
-  margin-top: -2em;
+  width: 100%;
+  height: 50px;
 }
 
-#createSideBetButton {
-  position: relative;
-}
-
-.sideBetBox {
-  padding: 0.5em;
-  margin-bottom: 1em;
-}
-
-#createSideBetModal {
-  overflow: hidden;
+#placeBetDiv {
+  margin-bottom: 5px;
 }
 
 .sideBetSpan {
   font-weight: bold;
 }
 
-#betButton {
-  position: relative;
-}
-
-#sideBetTable {
-  width: 100%;
+#bet {
+  width: 150px;
 }
 
 @media screen and (min-width: 600px) {

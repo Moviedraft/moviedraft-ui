@@ -1,4 +1,7 @@
 import React, { Component } from 'react'
+import Container from 'react-bootstrap/Container'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
 import { apiGet } from '../utilities/apiUtility.js'
 import '../styles/gameHome.css'
 import GamePlayers from './gamePlayers.js'
@@ -72,59 +75,95 @@ class GameHome extends Component {
 
     return (
       <div>
-        <div id='gameHomeDiv'>
-          {this.renderNotice()}
-          <GamePlayers
-            updateComponentLoadedFlag={this.updateComponentLoadedFlag}
-            componentName='gamePlayersLoaded'
-            gameId={this.props.gameId}
-            startDate={this.props.startDate}
-            endDate={this.props.endDate}
-            handleError={this.props.handleError} />
-          <WeekendBoxOffice
-            updateComponentLoadedFlag={this.updateComponentLoadedFlag}
-            componentName='weekendBoxOfficeLoaded'
-            gameId={this.props.gameId}
-            handleError={this.props.handleError} />
-          <FlavorText
-            updateComponentLoadedFlag={this.updateComponentLoadedFlag}
-            componentName='weekendFlavorTextLoaded'
-            flavorType='weekend'
-            commissionerId={this.props.commissionerId}
-            userId={this.state.userId}
-            gameId={this.props.gameId}
-            handleError={this.props.handleError} />
-          <UpcomingMovies
-            updateComponentLoadedFlag={this.updateComponentLoadedFlag}
-            componentName='upcomingMoviesLoaded'
-            gameId={this.props.gameId}
-            handleError={this.props.handleError} />
-          <FlavorText
-            updateComponentLoadedFlag={this.updateComponentLoadedFlag}
-            componentName='upcomingFlavorTextLoaded'
-            flavorType='upcoming'
-            commissionerId={this.props.commissionerId}
-            userId={this.state.userId}
-            gameId={this.props.gameId}
-            handleError={this.props.handleError} />
-          <Poll
-            updateComponentLoadedFlag={this.updateComponentLoadedFlag}
-            componentName='pollLoaded'
-            gameId={this.props.gameId}
-            commissionerId={this.props.commissionerId}
-            userId={this.state.userId}
-            handleError={this.props.handleError} />
-          <SideBet
-            updateComponentLoadedFlag={this.updateComponentLoadedFlag}
-            componentName='pollLoaded'
-            gameId={this.props.gameId}
-            commissionerId={this.props.commissionerId}
-            userId={this.state.userId}
-            userHandle={this.state.userHandle}
-            handleError={this.props.handleError} />
-        </div>
-        <Chat
-          gameId={this.props.gameId + '-game'} />
+        <Container fluid>
+          <Row>
+            <Col>
+              {this.renderNotice()}
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <GamePlayers
+                updateComponentLoadedFlag={this.updateComponentLoadedFlag}
+                componentName='gamePlayersLoaded'
+                gameId={this.props.gameId}
+                startDate={this.props.startDate}
+                endDate={this.props.endDate}
+                handleError={this.props.handleError} />
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <WeekendBoxOffice
+                updateComponentLoadedFlag={this.updateComponentLoadedFlag}
+                componentName='weekendBoxOfficeLoaded'
+                gameId={this.props.gameId}
+                handleError={this.props.handleError} />
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <FlavorText
+                updateComponentLoadedFlag={this.updateComponentLoadedFlag}
+                componentName='weekendFlavorTextLoaded'
+                flavorType='weekend'
+                commissionerId={this.props.commissionerId}
+                userId={this.state.userId}
+                gameId={this.props.gameId}
+                handleError={this.props.handleError} />
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <UpcomingMovies
+                updateComponentLoadedFlag={this.updateComponentLoadedFlag}
+                componentName='upcomingMoviesLoaded'
+                gameId={this.props.gameId}
+                handleError={this.props.handleError} />
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <FlavorText
+                updateComponentLoadedFlag={this.updateComponentLoadedFlag}
+                componentName='upcomingFlavorTextLoaded'
+                flavorType='upcoming'
+                commissionerId={this.props.commissionerId}
+                userId={this.state.userId}
+                gameId={this.props.gameId}
+                handleError={this.props.handleError} />
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <Poll
+                updateComponentLoadedFlag={this.updateComponentLoadedFlag}
+                componentName='pollLoaded'
+                gameId={this.props.gameId}
+                commissionerId={this.props.commissionerId}
+                userId={this.state.userId}
+                handleError={this.props.handleError} />
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <SideBet
+                updateComponentLoadedFlag={this.updateComponentLoadedFlag}
+                componentName='pollLoaded'
+                gameId={this.props.gameId}
+                commissionerId={this.props.commissionerId}
+                userId={this.state.userId}
+                userHandle={this.state.userHandle}
+                handleError={this.props.handleError} />
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <Chat
+                gameId={this.props.gameId + '-game'} />
+            </Col>
+          </Row>
+        </Container>
       </div>
     )
   }

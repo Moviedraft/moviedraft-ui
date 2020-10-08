@@ -1,9 +1,12 @@
 import React, { Component } from 'react'
 import { BarChart } from 'react-chartkick'
-import Modal from 'react-modal';
+import Button from 'react-bootstrap/Button'
+import Modal from 'react-bootstrap/Modal'
+import Form from 'react-bootstrap/Form'
 import 'chart.js'
 import { apiGet, apiPost, apiPatch } from '../utilities/apiUtility.js'
 import '../styles/poll.css'
+import '../styles/global.css'
 
 class Poll extends Component {
   _pollLoaded = false
@@ -126,12 +129,12 @@ class Poll extends Component {
   renderPollDiv() {
     return this._pollLoaded ?
       (
-        <div className='pollBox'>
+        <div>
           {this.renderCreatePollButton()}
           {this.renderPoll()}
         </div>
       ) : (
-        <div className='pollBox'>
+        <div>
           {this.renderCreatePollButton()}
         </div>
       )
@@ -141,11 +144,14 @@ class Poll extends Component {
     return this.props.commissionerId === this.props.userId ?
       (
         <div id='createPollButtonDiv'>
-          <button
+          <Button
+            variant='outline'
             id='createPollButton'
-            onClick={() => this.setState({createPollModalOpen: true})}>
-            CREATE POLL
-            </button>
+            className='icon-buttons'
+            onClick={() => this.setState({createPollModalOpen: true})}
+          >
+            <i className='material-icons icons'>create</i>
+          </Button>
         </div>
       ) : (
         null
@@ -201,17 +207,20 @@ class Poll extends Component {
       <div>
         {this.renderQuestion()}
         {this.renderChoices()}
-        <button
+        <Button
+          variant='outline'
+          className='text-buttons'
           id='voteButton'
           onClick={() => this.submitVote(this.state.vote)}
           disabled={this.state.vote === ''}>
           VOTE
-        </button>
-        <button
-          id='resultsButton'
+        </Button>
+        <Button
+          variant='outline'
+          className='text-buttons'
           onClick={() => {this.fetchPoll(); this.setState({voteSubmitted: true})}}>
           VIEW RESULTS
-        </button>
+        </Button>
       </div>
     ) : (
       <div>
@@ -226,61 +235,80 @@ class Poll extends Component {
     }
 
     return (
-      <div id='pollBox'>
+      <div>
         <h2>Poll</h2>
         {this.renderPollDiv()}
         <Modal
-          isOpen={this.state.createPollModalOpen}
-          id='createPollModal'
-          className='modal'
-          onRequestClose={this.handleKeyPress}>
-          <button
-            id='closeModalButton'
-            onClick={this.handleCloseCreatePollModal}>
-            Close Modal
-          </button>
-          <h1>Create Poll</h1>
-          <div className='form-group'>
-            <label htmlFor='pollQuestion'>Poll Question:</label>
-            <input
-              className='form-control'
-              id='newPollQuestion'
-              name='newPollQuestion'
-              type='text'
-              placeholder='Enter poll question'
-              value={this.state.newPollQuestion}
-              onChange={this.handleChange} />
-            <label htmlFor='pollChoices'>Poll Choices:</label>
-            <input
-              className='form-control'
-              id='newPollChoice1'
-              name='newPollChoice1'
-              type='text'
-              placeholder='Enter poll choice'
-              value={this.state.newPollChoice1}
-              onChange={this.handleChange} />
-            <input
-              className='form-control'
-              id='newPollChoice2'
-              name='newPollChoice2'
-              type='text'
-              placeholder='Enter poll choice'
-              value={this.state.newPollChoice2}
-              onChange={this.handleChange} />
-            <input
-              className='form-control'
-              id='newPollChoice3'
-              name='newPollChoice3'
-              type='text'
-              placeholder='Enter poll choice'
-              value={this.state.newPollChoice3}
-              onChange={this.handleChange} />
-            <button
-              id='closeModalButton'
+          centered
+          show={this.state.createPollModalOpen}
+          onHide={this.handleCloseCreatePollModal}
+          backdrop='static'
+          animation={false}
+          dialogClassName='modal-width'
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Create Poll</Modal.Title>
+          </Modal.Header>
+
+          <Modal.Body>
+            <Form>
+              <Form.Group>
+                <Form.Label>Poll Question</Form.Label>
+                <Form.Control
+                  id='newPollQuestion'
+                  name='newPollQuestion'
+                  value={this.state.newPollQuestion}
+                  onChange={this.handleChange}
+                />
+                <Form.Text className='text-muted'>
+                  Enter the poll question.
+                </Form.Text>
+              </Form.Group>
+
+              <Form.Group>
+                <Form.Label>Poll Choices</Form.Label>
+                <Form.Text className='text-muted'>
+                  Enter the poll choices.
+                </Form.Text>
+              </Form.Group>
+
+              <Form.Group>
+                <Form.Control
+                  id='newPollChoice1'
+                  name='newPollChoice1'
+                  value={this.state.newPollChoice1}
+                  onChange={this.handleChange}
+                />
+              </Form.Group>
+
+              <Form.Group>
+                <Form.Control
+                  id='newPollChoice2'
+                  name='newPollChoice2'
+                  value={this.state.newPollChoice2}
+                  onChange={this.handleChange}
+                />
+              </Form.Group>
+
+              <Form.Group>
+                <Form.Control
+                  id='newPollChoice3'
+                  name='newPollChoice3'
+                  value={this.state.newPollChoice3}
+                  onChange={this.handleChange}
+                />
+              </Form.Group>
+            </Form>
+          </Modal.Body>
+
+          <Modal.Footer>
+            <Button
+              variant='outline'
+              id='createPollButton'
               onClick={this.handleCreatePoll}>
               CREATE POLL
-            </button>
-          </div>
+            </Button>
+          </Modal.Footer>
         </Modal>
       </div>
     )
