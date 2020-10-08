@@ -1,8 +1,11 @@
 import React, { Component } from 'react'
-import Modal from 'react-modal'
+import Button from 'react-bootstrap/Button'
+import Modal from 'react-bootstrap/Modal'
+import Form from 'react-bootstrap/Form'
 import moment from 'moment'
 import { apiGet, apiPost, apiPatch } from '../utilities/apiUtility.js'
 import '../styles/sideBet.css'
+import '../styles/global.css'
 
 class SideBet extends Component {
   _sideBetColumnNames = ['Player', 'Bet']
@@ -206,11 +209,13 @@ class SideBet extends Component {
     return this.props.commissionerId === this.props.userId ?
       (
         <div id='createSideBetButtonDiv'>
-          <button
-            id='createSideBetButton'
-            onClick={() => {this.fetchMovies()}}>
-            CREATE SIDE BET
-            </button>
+          <Button
+            variant='outline'
+            className='icon-buttons'
+            onClick={() => {this.fetchMovies()}}
+          >
+            <i className='material-icons icons'>create</i>
+          </Button>
         </div>
       ) : (
         null
@@ -222,8 +227,10 @@ class SideBet extends Component {
       return (
         <div>
           {this.renderSideBetInformation(false)}
-          <table className='playersTable'
-            id='sideBetTable'>
+          <table
+            className='responsive-table'
+            id='sideBetTable'
+          >
             <thead>
               <tr>
                 {this._sideBetColumnNames.map((columnName, i) => (
@@ -254,22 +261,25 @@ class SideBet extends Component {
             <br/><span className='sideBetSpan'>You only have one chance to make a bet... choose wisely.</span><br/><br/>
           </div>
           {this.renderSideBetInformation(true)}
-          $
-          <input
-            className='form-control'
-            id='bet'
-            name='bet'
-            type='number'
-            min='0'
-            step='1000000'
-            onChange={this.handleChange} />
+          <div id='placeBetDiv' className='input-group-prepend'>
+            <span className='input-group-text'>$</span>
+            <input
+              className='number-input-field form-control'
+              id='bet'
+              name='bet'
+              type='number'
+              min='0'
+              step='1000000'
+              onChange={this.handleChange} />
+          </div>
           <div>
-            <button
-              id='betButton'
+            <Button
+              variant='outline'
+              className='text-buttons'
               onClick={() => this.submitBet(this.state.bet)}
               disabled={this.state.bet === 0}>
               PLACE BET
-            </button>
+            </Button>
           </div>
           <div>
             {this.state.error}
@@ -349,56 +359,79 @@ class SideBet extends Component {
 
   render() {
     return (
-      <div id='sideBetBox'>
+      <div>
         {this.renderSideBetHeader()}
         {this.renderSideBetDiv()}
         <Modal
-          isOpen={this.state.createSideBetModalOpen}
-          id='createSideBetModal'
-          className='modal'
-          onRequestClose={this.handleKeyPress}>
-          <button
-            id='closeModalButton'
-            onClick={this.handleCloseCreateSideBetModal}>
-            Close Modal
-          </button>
-          <h1>Create Side Bet</h1>
-          <p>The side bets allow players to estimate the weekend opening gross total of a chosen movie.</p>
-          <p>The player who estimates closest to without going over is considered the winner.</p>
-          <p>if you choose, the winner can have a prize amount (in millions) added to their total gross earnings.</p>
-          <div className='form-group'>
-            <h3>Choose a movie to bet on:</h3>
-            {this.renderMovieDivs()}
-            <h3>How much do you want the winner to recieve (in millions)?</h3>
-            <p>If you do not want the winner to have any value added to their gross total, leave the value as 0.</p>
-            <span>
-            $
-            <input
-              className='form-control'
-              id='prizeInMillions'
-              name='prizeInMillions'
-              type='number'
-              min='0'
-              defaultValue='0'
-              onChange={this.handleChange}
-              onKeyDown={(e) => { e.preventDefault() }} />
-            </span>
-            <h3>When you do want the side bet to close (end of day)?</h3>
-            <input
-              className='form-control'
-              id='sideBetCloseDate'
-              name='sideBetCloseDate'
-              type='date'
-              min={moment().format('YYYY-MM-DD')}
-              onChange={this.handleChange}
-              onKeyDown={(e) => { e.preventDefault() }} />
-            <button
-              id='closeModalButton'
+          centered
+          show={this.state.createSideBetModalOpen}
+          onHide={this.handleCloseCreateSideBetModal}
+          backdrop='static'
+          animation={false}
+          dialogClassName='modal-width'
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Create Side Bet</Modal.Title>
+          </Modal.Header>
+
+          <Modal.Body>
+            <Form>
+              <Form.Group>
+                <Form.Text>
+                  The side bets allow players to estimate the weekend opening gross total of a chosen movie.
+                  The player who estimates closest to without going over is considered the winner.
+                  If you choose, the winner can have a prize amount (in millions) added to their total gross earnings.
+                </Form.Text>
+              </Form.Group>
+
+              <Form.Group>
+                <Form.Label>Choose a movie to bet on:</Form.Label>
+                {this.renderMovieDivs()}
+              </Form.Group>
+
+              <Form.Group>
+                <Form.Label>How much do you want the winner to recieve (in millions)?</Form.Label>
+                <div className='input-group-prepend'>
+                  <span className='input-group-text'>$</span>
+                  <Form.Control
+                    className='number-input-field'
+                    id='prizeInMillions'
+                    name='prizeInMillions'
+                    type='number'
+                    min='0'
+                    defaultValue='0'
+                    onChange={this.handleChange}
+                    onKeyDown={(e) => { e.preventDefault() }}
+                  />
+                </div>
+                <Form.Text className='text-muted'>
+                  If you do not want the winner to have any value added to their gross total, leave the value as 0.
+                </Form.Text>
+              </Form.Group>
+
+              <Form.Group>
+                <Form.Label>When you do want the side bet to close (end of day)?</Form.Label>
+                <Form.Control
+                  id='sideBetCloseDate'
+                  name='sideBetCloseDate'
+                  type='date'
+                  min={moment().format('YYYY-MM-DD')}
+                  onChange={this.handleChange}
+                  onKeyDown={(e) => { e.preventDefault() }}
+                />
+              </Form.Group>
+            </Form>
+          </Modal.Body>
+
+          <Modal.Footer>
+            <Button
+              variant='outline'
+              className='text-buttons'
               onClick={this.createSideBet}
               disabled={this.checkDisabled()}>
               CREATE SIDE BET
-            </button>
-          </div>
+            </Button>
+          </Modal.Footer>
         </Modal>
       </div>
     )

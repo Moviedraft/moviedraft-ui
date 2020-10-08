@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
+import Button from 'react-bootstrap/Button'
 import '../styles/flavorText.css'
+import '../styles/global.css'
 import { apiGet, apiPost, apiPatch } from '../utilities/apiUtility.js'
 
 class flavorText extends Component {
@@ -105,35 +107,44 @@ class flavorText extends Component {
 
     if (this.state.text === '' && this.state.editMode === false) {
       return (
-        <div>
-          <button
+        <div id='buttonWrapper'>
+          <Button
+            variant='outline'
             id='createButton'
+            className='icon-buttons'
             onClick={this.editFlavorText}>
-            <i className='material-icons'>create</i>
-          </button>
+            <i className='material-icons icons'>create</i>
+          </Button>
         </div>
       )
     }
 
       return this.state.editMode ?
-          <div>
-            <button
+          <div id='buttonWrapper'>
+            <Button
+              variant='outline'
               id='editButton'
+              className='icon-buttons'
               onClick={this.cancelEdit}>
-              <i className='material-icons'>clear</i>
-            </button>
-            <button
+              <i className='material-icons icons'>clear</i>
+            </Button>
+            <Button
+              variant='outline'
               id='editButton'
+              className='icon-buttons'
               onClick={this.saveInputValue}>
-              <i className='material-icons'>done</i>
-            </button>
+              <i className='material-icons icons'>done</i>
+            </Button>
           </div>
         :
-          <button
-            className='editFlavorTextButton'
-            onClick={this.editFlavorText}>
-            <i className='material-icons'>border_color</i>
-          </button>
+          <div id='buttonWrapper'>
+            <Button
+              variant='outline'
+              className='icon-buttons'
+              onClick={this.editFlavorText}>
+              <i className='material-icons icons'>border_color</i>
+            </Button>
+          </div>
   }
 
   render() {

@@ -30,6 +30,12 @@
   width: 45px;
 }
 
+.text-buttons {
+  border: 1px solid black;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
 .icons {
   margin-left: -2px;
   vertical-align: middle;
@@ -201,6 +207,12 @@
 
   .vertical-align-top {
     vertical-align: top;
+  }
+}
+
+@media screen and (max-width: 505px) {
+  .responsive-table {
+    table-layout:fixed;
   }
 }
 
