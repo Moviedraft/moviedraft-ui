@@ -304,7 +304,7 @@ class Poll extends Component {
           <Modal.Footer>
             <Button
               variant='outline'
-              id='createPollButton'
+              className='text-buttons'
               onClick={this.handleCreatePoll}>
               CREATE POLL
             </Button>
