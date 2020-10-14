@@ -61,7 +61,9 @@ class GamePlayers extends Component {
                 <td title='bonus earnings' className='vertical-align-top'>{this._formatter.format(player.bonusInMillions * 1000000)}</td>
                 <td title='total spent' className='vertical-align-top'>{this._formatter.format(player.totalSpent)}</td>
                 <td title='movies purchased'>
-                  {player.movies.map(movie => {
+                  {player.movies
+                    .sort((movie1, movie2) => moment(movie1.releaseDate) > moment(movie2.releaseDate) ? 1 : -1)
+                    .map(movie => {
                     return (
                       <div key={player.id + movie.title}>
                         { moment(movie.releaseDate).isBetween(this.props.startDate, this.props.endDate) ?
