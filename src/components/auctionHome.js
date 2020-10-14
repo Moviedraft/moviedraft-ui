@@ -313,8 +313,8 @@ class AuctionHome extends Component {
           {this.state.players.map((player, i) => {
             return (
               <tr key={player.id}>
-                <td title='name'>{player.userHandle}</td>
-                <td title='money remaining'>${this.props.dollarSpendingCap - player.totalSpent}</td>
+                <td title='name' className='vertical-align-top'>{player.userHandle}</td>
+                <td title='money remaining' className='vertical-align-top'>${this.props.dollarSpendingCap - player.totalSpent}</td>
                 <td title='movies purchased'>
                   {player.movies
                     .sort((movie1, movie2) => moment(movie1.releaseDate) > moment(movie2.releaseDate) ? 1 : -1)
