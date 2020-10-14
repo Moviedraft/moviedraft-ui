@@ -64,14 +64,15 @@ class GamePlayers extends Component {
                   {player.movies
                     .sort((movie1, movie2) => moment(movie1.releaseDate) > moment(movie2.releaseDate) ? 1 : -1)
                     .map(movie => {
-                    return (
-                      <div key={player.id + movie.title}>
-                        { moment(movie.releaseDate).isBetween(this.props.startDate, this.props.endDate) ?
-                          movie.title + ' ($' + movie.cost + ')' :
-                          'REMOVED - ' + movie.title + ' ($' + movie.cost + ')' }
-                      </div>
-                    )
-                  })}
+                      return (
+                        <div key={player.id + movie.title}>
+                          { moment(movie.releaseDate).isBetween(this.props.startDate, this.props.endDate) ?
+                            movie.title + ' ($' + movie.cost + ')' :
+                            'REMOVED - ' + movie.title + ' ($' + movie.cost + ')' }
+                        </div>
+                      )
+                    })
+                  }
                 </td>
               </tr>))}
           </tbody>
