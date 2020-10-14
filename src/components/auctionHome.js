@@ -316,13 +316,16 @@ class AuctionHome extends Component {
                 <td title='name'>{player.userHandle}</td>
                 <td title='money remaining'>${this.props.dollarSpendingCap - player.totalSpent}</td>
                 <td title='movies purchased'>
-                  {player.movies.map(movie => {
-                    return (
-                      <div key={player.id + movie.title}>
-                        { movie.title + ' ($' + movie.cost + ')' }
-                      </div>
-                    )
-                  })}
+                  {player.movies
+                    .sort((movie1, movie2) => moment(movie1.releaseDate) > moment(movie2.releaseDate) ? 1 : -1)
+                    .map(movie => {
+                      return (
+                        <div key={player.id + movie.title}>
+                          { movie.title + ' ($' + movie.cost + ')' }
+                        </div>
+                      )
+                    })
+                  }
                 </td>
               </tr>
             )
