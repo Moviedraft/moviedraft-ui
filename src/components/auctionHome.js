@@ -316,15 +316,16 @@ class AuctionHome extends Component {
                 <td title='name' className='vertical-align-top'>{player.userHandle}</td>
                 <td title='money remaining' className='vertical-align-top'>${this.props.dollarSpendingCap - player.totalSpent}</td>
                 <td title='movies purchased'>
-                  {player.movies
-                    .sort((movie1, movie2) => moment(movie1.releaseDate) > moment(movie2.releaseDate) ? 1 : -1)
-                    .map(movie => {
-                      return (
-                        <div key={player.id + movie.title}>
-                          { movie.title + ' ($' + movie.cost + ')' }
-                        </div>
-                      )
-                    })
+                  { !player.movies.length ? '-' :
+                      player.movies
+                      .sort((movie1, movie2) => moment(movie1.releaseDate) > moment(movie2.releaseDate) ? 1 : -1)
+                      .map(movie => {
+                        return (
+                          <div key={player.id + movie.title}>
+                            { movie.title + ' ($' + movie.cost + ')' }
+                          </div>
+                        )
+                      })
                   }
                 </td>
               </tr>
