@@ -304,7 +304,7 @@ class SideBet extends Component {
         <div>
           <span className='sideBetSpan'>Prize Amount:</span> ${this.state.previousSideBet.prizeInMillions},000,000
         </div>
-        <table className='playersTable'
+        <table className='responsive-table'
           id='sideBetTable'>
           <thead>
             <tr>
