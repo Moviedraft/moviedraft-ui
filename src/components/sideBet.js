@@ -272,7 +272,7 @@ class SideBet extends Component {
               step='1000000'
               onChange={this.handleChange} />
           </div>
-          <div>
+          <div id='placeBetButtonDiv'>
             <Button
               variant='outline'
               className='text-buttons'
